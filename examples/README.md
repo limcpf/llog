@@ -8,7 +8,6 @@ How to materialize locally
   - mkdir -p examples/site
   - rsync -a generator/src/main/resources/templates/ examples/site/
 - Optionally run the generator over it:
-  - generator/build/bloggen build --src examples/site --out dist
+  - generator/build/llog build --src examples/site --out dist
 
 Note: The root HTML files are demo-only; the generator templates are the source of truth.
-

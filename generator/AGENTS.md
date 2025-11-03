@@ -78,7 +78,7 @@
 ## 6) 네이티브 빌드 규칙
 - 동적 리플렉션/프록시/클래스패스 스캔 지양. 반드시 필요 시 GraalVM `reflect-config.json` 명시.
 - 파일 IO는 `java.nio.file` 우선. 시간은 `java.time` 사용.
-- 빌드 커맨드: `./gradlew nativeCompile` → `build/native/nativeCompile/bloggen`
+- 빌드 커맨드: `./gradlew nativeCompile` → `build/native/nativeCompile/llog`
 - 런타임 인자 파서: 표준 구현 우선. picocli 도입 시 버전 고정과 GraalVM 설정 파일 포함.
 
 ## 7) 코딩 규칙
@@ -114,7 +114,7 @@
 ## 11) 문서/워크플로우
 - 작업 전 `generator/TASKS.md` 업데이트(선행/병행/완료 체크).
 - 커밋 메시지 접두어: `gen:`(생성기 코드), `tmpl:`(템플릿 복제/동기화), `docs:`(문서).
-- 릴리스 아티팩트: `bloggen` 네이티브 바이너리.
+- 릴리스 아티팩트: `llog` 네이티브 바이너리.
 
 ## 12) 참고
 - 진행 상태/우선순위: `generator/TASKS.md` 참조.

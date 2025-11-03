@@ -37,7 +37,7 @@ jobs:
 
       - name: Rename binary
         run: |
-          cp generator/build/bloggen bloggen-${{ matrix.target }}
+          cp generator/build/llog llog-${{ matrix.target }}
 
       - name: Pack site skeleton (templates)
         run: |
@@ -45,15 +45,14 @@ jobs:
 
       - name: Checksums
         run: |
-          shasum -a 256 bloggen-${{ matrix.target }} site-skeleton.tar.gz > SHA256SUMS-${{ matrix.target }}
+          shasum -a 256 llog-${{ matrix.target }} site-skeleton.tar.gz > SHA256SUMS-${{ matrix.target }}
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            bloggen-${{ matrix.target }}
+            llog-${{ matrix.target }}
             site-skeleton.tar.gz
             SHA256SUMS-${{ matrix.target }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-

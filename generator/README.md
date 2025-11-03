@@ -11,7 +11,7 @@ Quick start
 - Native build (M4)
   - Install GraalVM (Java 21+) and Native Image
   - `./gradlew nativeCompile`
-  - Run: `./build/native/nativeCompile/bloggen --help`
+  - Run: `./build/native/nativeCompile/llog --help`
 
 Flags
 - `--dry-run`: log planned actions without writing files

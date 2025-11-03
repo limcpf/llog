@@ -25,7 +25,7 @@ bash generator/scripts/build-jvm.sh
 
 2) 샘플 사이트 생성(샘플 MD → import → dist 빌드)
 ```
-generator/build/bloggen sample --out sample-site --build
+generator/build/llog sample --out sample-site --build
 python3 -m http.server -d sample-site/dist 8080
 # http://localhost:8080
 ```
@@ -36,14 +36,14 @@ python3 -m http.server -d sample-site/dist 8080
 # skeleton 압축 해제 (예: ./work)
 mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 # 콘텐츠 주입(Markdown)
-./bloggen import:md --src /path/to/vault --root work
+./llog import:md --src /path/to/vault --root work
 # 빌드
-./bloggen build --src work --out dist --verbose
+./llog build --src work --out dist --verbose
 ```
 
 ## CLI 명령
 ```
-bloggen 0.1.0
+llog 0.1.0
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--dry-run] [--verbose]

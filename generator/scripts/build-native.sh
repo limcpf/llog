@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.."
 bash scripts/sync-templates.sh
 
 BUILD_DIR="build"
-BIN_OUT="$BUILD_DIR/bloggen"
+BIN_OUT="$BUILD_DIR/llog"
 
 if ! command -v native-image >/dev/null 2>&1; then
   echo "[build-native] ERROR: native-image not found. Install GraalVM (Java 21+) and native-image." >&2
@@ -19,11 +19,11 @@ bash "scripts/build-jvm.sh"
 echo "[build-native] Building native image..."
 native-image \
   --no-fallback \
-  -H:Name=bloggen \
+  -H:Name=llog \
   -H:Path="$BUILD_DIR" \
   -H:Class=io.site.bloggen.app.Main \
   -H:IncludeResources=^templates/.* \
-  -cp "$BUILD_DIR/bloggen.jar"
+  -cp "$BUILD_DIR/llog.jar"
 
 echo "[build-native] Done: $BIN_OUT"
 echo "[build-native] Run: $BIN_OUT --help"

@@ -25,7 +25,7 @@ application {
 graalvmNative {
     binaries {
         named("main") {
-            imageName.set("bloggen")
+            imageName.set("llog")
             buildArgs.addAll(listOf("--no-fallback"))
         }
     }

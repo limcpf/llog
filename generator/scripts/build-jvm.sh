@@ -9,7 +9,7 @@ SRC_MAIN="src/main/java"
 RES_MAIN="src/main/resources"
 BUILD_DIR="build"
 CLASSES_DIR="$BUILD_DIR/classes"
-JAR_FILE="$BUILD_DIR/bloggen.jar"
+JAR_FILE="$BUILD_DIR/llog.jar"
 
 echo "[build-jvm] Compiling sources..."
 rm -rf "$CLASSES_DIR" "$JAR_FILE"
@@ -30,12 +30,12 @@ ${JAR:-jar} --create \
   --main-class io.site.bloggen.app.Main \
   -C "$CLASSES_DIR" .
 
-cat > "$BUILD_DIR/bloggen" <<'RUN'
+cat > "$BUILD_DIR/llog" <<'RUN'
 #!/usr/bin/env bash
 DIR="$(cd "$(dirname "$0")" && pwd)"
-exec ${JAVA:-java} -jar "$DIR/bloggen.jar" "$@"
+exec ${JAVA:-java} -jar "$DIR/llog.jar" "$@"
 RUN
-chmod +x "$BUILD_DIR/bloggen"
+chmod +x "$BUILD_DIR/llog"
 
 echo "[build-jvm] Done: $JAR_FILE"
-echo "[build-jvm] Run: $BUILD_DIR/bloggen --help"
+echo "[build-jvm] Run: $BUILD_DIR/llog --help"

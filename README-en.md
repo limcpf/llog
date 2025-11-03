@@ -25,7 +25,7 @@ bash generator/scripts/build-jvm.sh
 
 2) Create a sample site (with sample MD → import → dist build)
 ```
-generator/build/bloggen sample --out sample-site --build
+generator/build/llog sample --out sample-site --build
 python3 -m http.server -d sample-site/dist 8080
 # http://localhost:8080
 ```
@@ -35,14 +35,14 @@ python3 -m http.server -d sample-site/dist 8080
 # unpack site-skeleton.tar.gz (e.g., ./work)
 mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 # import markdown content
-./bloggen import:md --src /path/to/vault --root work
+./llog import:md --src /path/to/vault --root work
 # build
-./bloggen build --src work --out dist --verbose
+./llog build --src work --out dist --verbose
 ```
 
 ## CLI
 ```
-bloggen 0.1.0
+llog 0.1.0
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--dry-run] [--verbose]
@@ -91,4 +91,3 @@ Usage:
 
 ---
 Issues and PRs are welcome. Prefer pinned release tags to keep templates and binaries in sync.
-

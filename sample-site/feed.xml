@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>{{RSS_TITLE}}</title>
+    <link>{{DOMAIN}}/</link>
+    <description>고전의 숨, 편안한 읽기</description>
+    <language>ko</language>
+    <lastBuildDate>Tue, 21 Oct 2025 00:00:00 +0900</lastBuildDate>
+
+    {{FEED_ITEMS}}
+  </channel>
+</rss>

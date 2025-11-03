@@ -1,0 +1,30 @@
+/* Layer ordering */
+@layer reset, base, layout, components, utilities, overrides;
+
+/* Tokens first (variables, not layered) */
+@import url('./tokens.css');
+
+/* Fonts (webfont declarations) */
+@import url('./fonts.css');
+
+/* Core layers */
+@import url('./base.css');
+@import url('./layout.css');
+@import url('./components.css');
+@import url('./utilities.css');
+
+/* Print (optional minimal) */
+@media print {
+  :root { color-scheme: light; }
+  body { background: #fff !important; color: #000 !important; font-size: 11pt; line-height: 1.5; }
+  header, nav, .c-nav, .c-rule, footer { display: none !important; }
+  .l-reading, .l-container { width: 100% !important; margin: 0 !important; }
+  a { color: #000; text-decoration: none; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.9em; }
+  img { break-inside: avoid; page-break-inside: avoid; }
+}
+
+/* Motion reduction */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

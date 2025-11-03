@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- example: moved from root -->
+<html lang="ko">
+  <head>
+    <!-- @include partials/head-shared.html -->
+    <link rel="preload" href="/assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
+    <title>편안한 읽기를 위한 초안 — 고전서가</title>
+    <meta name="description" content="다크 중심에서 이미지와 텍스트가 모두 편안한 읽기 경험을 제공하기 위한 초안." />
+    <link rel="canonical" href="https://site.example/posts/2025-10-21-classic-reading-draft.html" />
+    <meta property="og:title" content="편안한 읽기를 위한 초안 — 고전서가" />
+    <meta property="og:description" content="다크 중심에서 이미지와 텍스트가 모두 편안한 읽기 경험을 제공하기 위한 초안." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://site.example/posts/2025-10-21-classic-reading-draft.html" />
+    <meta property="og:image" content="https://site.example/og/default.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
+  </head>
+  <body>
+    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+    <header class="l-container l-header">
+      <div class="c-site-header">
+        <div class="c-site-title"><a href="/">고전서가</a></div>
+        <nav class="c-nav" aria-label="주요">
+          <a href="/">홈</a>
+          <a href="/about.html">소개</a>
+          <a href="/posts/" aria-current="page">글</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="l-reading" role="main">
+      <article class="c-article u-flow" aria-labelledby="post-title">
+        <header>
+          <h1 id="post-title">편안한 읽기를 위한 초안</h1>
+          <p class="c-article__meta">2025-10-21 · 태그: <a href="/tags/typography.html">typography</a></p>
+        </header>
+
+        <p class="lead dropcap">다크 중심 색 구성 위에서 대비를 과도하게 높이지 않으면서도, 이미지와 텍스트가 모두 편안하게 보이는 값을 찾았습니다. 종이의 질감을 닮은 어두운 배경 위, 따뜻한 잉크색 본문과 절제된 강조색을 사용합니다.</p>
+
+        <figure class="c-figure">
+          <a href="#view-sample">
+            <img src="/assets/img/sample.svg" alt="중성 톤의 그래디언트 샘플 이미지" loading="lazy" decoding="async" width="1200" height="675" />
+          </a>
+          <figcaption>이미지를 클릭하면 큰 보기로 열립니다.</figcaption>
+        </figure>
+
+        <h2>텍스트</h2>
+        <p>기본 본문 크기는 가변 <code>clamp</code>로 설정해 화면 크기에 따른 피로를 줄였습니다. 글줄 길이는 <strong>66ch</strong>를 목표로 하며, 문단 간 간격은 의미 단락을 드러낼 정도로만 둡니다.</p>
+
+        <h2>이미지</h2>
+        <p>이미지는 프레임과 은은한 배경, 적당한 그림자를 통해 배경과의 분리를 돕습니다. 필요 시 <em>CSS-only</em> 라이트박스를 사용해 큰 크기로 감상할 수 있습니다.</p>
+
+        <blockquote>읽기 경험은 보이지 않는 질서의 총합이다.</blockquote>
+
+        <section class="c-footnotes">
+          <h3 class="u-sr-only">주석</h3>
+          <ol>
+            <li>글줄 길이 권장 범위 45–75자, 본 프로젝트는 66ch를 기본값으로 사용.</li>
+          </ol>
+        </section>
+      </article>
+    </main>
+
+    <footer class="l-container l-footer">
+      <p class="u-text-center">© 2025 고전서가</p>
+    </footer>
+
+    <!-- Lightbox target for this post -->
+    <div id="view-sample" class="c-image-viewer" role="dialog" aria-modal="true" aria-label="이미지 큰 보기">
+      <a class="c-image-viewer__close" href="#main" aria-label="닫기">닫기</a>
+      <img class="c-image-viewer__img" src="/assets/img/sample.svg" alt="샘플 이미지 확대" />
+    </div>
+  </body>
+</html>

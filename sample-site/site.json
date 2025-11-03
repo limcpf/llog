@@ -1,0 +1,17 @@
+{
+  "domain": "https://site.example",
+  "site_name": "고전서가",
+  "rss_title": "고전서가",
+  "og_default": "/og/default.jpg"
+,
+  "copyright": "",
+  "nav_home_label": "홈",
+  "archive_more_label": "더 보기: 아카이브",
+  "pagination_next_label": "다음",
+  "posts_page_size": "10",
+  "pagination_prev_label": "이전",
+  "nav_posts_label": "글",
+  "site_description": "고전의 숨, 편안한 읽기",
+  "nav_about_label": "소개",
+  "contact_email": "hello@example.com"
+}

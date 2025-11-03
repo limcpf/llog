@@ -1,0 +1,71 @@
+# --- Build outputs (root) ---
+dist/
+build/
+
+# --- Generator subproject (Gradle) ---
+generator/build/
+generator/.gradle/
+.gradle/
+
+# --- Java/Gradle artifacts (safety) ---
+*.class
+*.jar
+*.war
+*.ear
+target/
+generator/target/
+out/
+
+# --- OS files ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- Editors/IDEs ---
+.idea/
+.vscode/
+.vs/
+*.iml
+.classpath
+.project
+.settings/
+.fleet/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# --- Editor backups/swap ---
+*~
+*.swp
+*.swo
+
+# --- Python (for lightweight scripts) ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# --- Logs / temp ---
+*.log
+*.tmp
+*.bak
+
+# --- Env / tooling files ---
+.env
+.env.*
+!.env.example
+.envrc
+.tool-versions
+.python-version
+.cache/
+tmp/
+temp/
+*.orig

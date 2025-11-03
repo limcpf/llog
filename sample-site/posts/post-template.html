@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- @include partials/head-shared.html -->
+    <title>{{TITLE}} — {{SITE_NAME}}</title>
+    <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+    <link rel="canonical" href="{{PAGE_URL}}" />
+    <meta property="og:title" content="{{TITLE}} — {{SITE_NAME}}" />
+    <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{PAGE_URL}}" />
+    <meta property="og:image" content="{{OG_IMAGE}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
+  </head>
+  <body>
+    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+    <header class="l-container l-header">
+      <div class="c-site-header">
+        <div class="c-site-title"><a href="/">고전서가</a></div>
+        <nav class="c-nav" aria-label="주요">
+          <a href="/">홈</a>
+          <a href="/about.html">소개</a>
+          <a href="/posts/" aria-current="page">글</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="l-reading" role="main">
+      <article class="c-article u-flow" aria-labelledby="post-title">
+        <header>
+          <h1 id="post-title">{{TITLE}}</h1>
+          <p class="c-article__meta">{{DATE}}</p>
+        </header>
+        <p class="lead dropcap">여기에 리드 문장을 작성하세요.</p>
+        <p>본문 문단.</p>
+      </article>
+    </main>
+
+    <footer class="l-container l-footer">
+      <p class="u-text-center">© 2025 고전서가</p>
+    </footer>
+  </body>
+</html>

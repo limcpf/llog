@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">샘플 이미지</title>
+  <desc id="desc">다크 배경에서도 보기 편한 중성 색감의 대체 샘플 이미지</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c5b8a7" />
+      <stop offset="100%" stop-color="#8fa8a0" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)" />
+  <rect x="48" y="48" width="1104" height="579" fill="none" stroke="#ffffff" opacity="0.5" stroke-width="2" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia, 'Noto Serif KR', serif" font-size="56" fill="#1d1a16" opacity="0.7">Sample · 샘플</text>
+</svg>

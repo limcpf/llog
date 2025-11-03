@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>고전서가</title>
+    <link>https://site.example/</link>
+    <description>고전의 숨, 편안한 읽기</description>
+    <language>ko</language>
+    <lastBuildDate>Tue, 21 Oct 2025 00:00:00 +0900</lastBuildDate>
+
+    <item>
+      <title>편안한 읽기를 위한 초안</title>
+      <link>https://site.example/posts/2025-10-21-classic-reading-draft.html</link>
+      <guid isPermaLink="true">https://site.example/posts/2025-10-21-classic-reading-draft.html</guid>
+      <pubDate>Tue, 21 Oct 2025 00:00:00 +0900</pubDate>
+      <description>다크 중심에서 이미지와 텍스트가 모두 편안한 읽기 경험을 제공하기 위한 초안.</description>
+    </item>
+  </channel>
+</rss>

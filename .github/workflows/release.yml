@@ -1,0 +1,59 @@
+name: Release Native + Skeleton
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-native:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux-amd64
+          - os: macos-latest
+            target: macos-amd64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          distribution: graalvm
+          java-version: '21'
+          components: 'native-image'
+
+      - name: Build JVM jar
+        run: bash generator/scripts/build-jvm.sh
+
+      - name: Build native
+        run: bash generator/scripts/build-native.sh
+
+      - name: Rename binary
+        run: |
+          cp generator/build/bloggen bloggen-${{ matrix.target }}
+
+      - name: Pack site skeleton (templates)
+        run: |
+          tar -czf site-skeleton.tar.gz -C generator/src/main/resources/templates .
+
+      - name: Checksums
+        run: |
+          shasum -a 256 bloggen-${{ matrix.target }} site-skeleton.tar.gz > SHA256SUMS-${{ matrix.target }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            bloggen-${{ matrix.target }}
+            site-skeleton.tar.gz
+            SHA256SUMS-${{ matrix.target }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

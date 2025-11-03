@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- @include partials/head-shared.html -->
+    <title>{{TAG_NAME}} 태그 — {{SITE_NAME}}</title>
+    <link rel="canonical" href="{{DOMAIN}}{{TAG_CANONICAL_PATH}}" />
+    <meta property="og:title" content="{{TAG_NAME}} 태그 — {{SITE_NAME}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{DOMAIN}}{{TAG_CANONICAL_PATH}}" />
+    <meta property="og:image" content="{{DOMAIN}}{{OG_DEFAULT}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  </head>
+  <body>
+    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+    <header class="l-container l-header">
+      <div class="c-site-header">
+        <div class="c-site-title"><a href="/">{{SITE_NAME}}</a></div>
+        <nav class="c-nav" aria-label="주요">
+          <a href="/">{{NAV_HOME_LABEL}}</a>
+          <a href="/about.html">{{NAV_ABOUT_LABEL}}</a>
+          <a href="/posts/">{{NAV_POSTS_LABEL}}</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="l-reading" role="main">
+      <article class="c-article u-flow" aria-labelledby="tag-title">
+        <header>
+          <h1 id="tag-title">#{{TAG_NAME}}</h1>
+        </header>
+
+        <ul>
+          {{TAG_POSTS}}
+        </ul>
+        <p class="u-text-center u-muted">{{TAG_PAGINATION}}</p>
+      </article>
+    </main>
+
+    <footer class="l-container l-footer">
+      <p class="u-text-center">{{COPYRIGHT}}</p>
+    </footer>
+  </body>
+</html>

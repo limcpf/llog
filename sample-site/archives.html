@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- @include partials/head-shared.html -->
+    <title>아카이브 — 고전서가</title>
+    <link rel="canonical" href="{{DOMAIN}}{{ARCHIVES_CANONICAL_PATH}}" />
+    <meta property="og:title" content="아카이브 — 고전서가" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{DOMAIN}}{{ARCHIVES_CANONICAL_PATH}}" />
+    <meta property="og:image" content="{{DOMAIN}}{{OG_DEFAULT}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
+  </head>
+  <body>
+    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+    <header class="l-container l-header">
+      <div class="c-site-header">
+        <div class="c-site-title"><a href="/">{{SITE_NAME}}</a></div>
+        <nav class="c-nav" aria-label="주요">
+          <a href="/">{{NAV_HOME_LABEL}}</a>
+          <a href="/about.html">{{NAV_ABOUT_LABEL}}</a>
+          <a href="/posts/">{{NAV_POSTS_LABEL}}</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="l-reading" role="main">
+      <article class="c-article u-flow" aria-labelledby="arch-title">
+        <header>
+          <h1 id="arch-title">아카이브</h1>
+          <p class="c-article__meta">연도별 글 모음</p>
+        </header>
+
+        {{ARCHIVE_SECTIONS}}
+        <p class="u-text-center u-muted">{{ARCHIVE_PAGINATION}}</p>
+      </article>
+    </main>
+
+    <footer class="l-container l-footer">
+      <p class="u-text-center">{{COPYRIGHT}}</p>
+    </footer>
+  </body>
+</html>

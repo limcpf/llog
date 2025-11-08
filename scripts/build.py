@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 """
-Minimal static updater:
+Minimal static updater (optional, fallback):
+
+IMPORTANT
+- The generator (generator/ — llog) is the primary build path and already
+  performs domain/token updates and builds the site. If you are using the
+  generator, you do NOT need this script.
+- This script exists only for skeleton-only/manual scenarios where Python 3
+  is available but Java/GraalVM is not.
+
+What it does
 - Reads site.json (domain, site_name, rss_title, og_default)
 - Updates canonical, og:url, og:image domain base in all HTML
 - Updates RSS <link> title
@@ -96,4 +105,3 @@ def main() -> int:
 
 if __name__ == '__main__':
     raise SystemExit(main())
-

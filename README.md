@@ -46,7 +46,7 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 llog 0.2.2
 Usage:
   init <dir> [--dry-run] [--verbose]
-  build [--src dir] [--out dir] [--dry-run] [--verbose]
+  build [--src dir] [--out dir] [--config path] [--dry-run] [--verbose]
   new:post --title "..." [--date YYYY-MM-DD] [--slug slug] [--root dir] [--dry-run] [--verbose]
   import:md --src <md_dir> [--root dir] [--dry-run] [--verbose]
   sample [--out dir] [--build] [--dry-run] [--verbose]
@@ -78,6 +78,12 @@ Usage:
   - 토큰: `{{HOME_CURRENT_ATTR}}`, `{{ABOUT_CURRENT_ATTR}}`, `{{POSTS_CURRENT_ATTR}}`
 - 홈(메인) 구성 라벨/개수 커스텀은 `site.json`의 Extras로 제어:
   - `home_latest_heading`, `home_recent_heading`, `home_more_label`, `home_recent_limit`
+
+### site.json 외부 주입(옵션)
+- 기본: `--src` 루트의 `site.json`을 사용합니다.
+- 외부 파일을 명시하고 싶다면:
+  - `llog build --src . --out dist --config /path/to/site.json`
+  - 또는 환경변수 `SITE_JSON=/path/to/site.json llog build --src . --out dist`
 
 ## Pretendard(폰트)
 - 자체 호스팅 WOFF2 포함(템플릿에 포함됨): Variable(100–900), Regular(400), SemiBold(600), Bold(700)

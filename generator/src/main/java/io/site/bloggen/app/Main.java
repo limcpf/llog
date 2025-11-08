@@ -56,17 +56,25 @@ public class Main {
     static void doBuild(String[] args) throws Exception {
         Path src = Path.of(".");
         Path out = Path.of("dist");
+        Path config = null; // optional explicit site.json path
         boolean dry = false, verb = false;
         for (int i=1;i<args.length;i++) {
             switch (args[i]) {
                 case "--src" -> src = Path.of(args[++i]);
                 case "--out" -> out = Path.of(args[++i]);
+                case "--config" -> config = Path.of(args[++i]);
                 case "--dry-run" -> dry = true;
                 case "--verbose" -> verb = true;
             }
         }
-        var cfgPath = src.resolve("site.json");
-        var cfg = java.nio.file.Files.exists(cfgPath) ? SiteConfig.fromJson(cfgPath) : SiteConfig.ofDefaults();
+        if (config == null) {
+            String env = System.getenv("SITE_JSON");
+            if (env != null && !env.isBlank()) config = Path.of(env);
+        }
+        Path srcCfg = src.resolve("site.json");
+        var cfg = config != null && java.nio.file.Files.exists(config) ? SiteConfig.fromJson(config)
+                 : java.nio.file.Files.exists(srcCfg) ? SiteConfig.fromJson(srcCfg)
+                 : SiteConfig.ofDefaults();
         var svc = new BuildService();
         var res = svc.build(src, out, cfg, dry, verb);
         if (res instanceof io.site.bloggen.util.Result.Err<?> err) {
@@ -105,7 +113,7 @@ public class Main {
         System.out.println("llog 0.2.2");
         System.out.println("Usage:");
         System.out.println("  init <dir> [--dry-run] [--verbose]");
-        System.out.println("  build [--src dir] [--out dir] [--dry-run] [--verbose]");
+        System.out.println("  build [--src dir] [--out dir] [--config path] [--dry-run] [--verbose]");
         System.out.println("  new:post --title \"...\" [--date YYYY-MM-DD] [--slug slug] [--root dir] [--dry-run] [--verbose]");
         System.out.println("  import:md --src <md_dir> [--root dir] [--dry-run] [--verbose]");
         System.out.println("  sample [--out dir] [--build] [--dry-run] [--verbose]");

@@ -11,10 +11,10 @@ public final class DomainUpdater {
     public static String apply(String html, SiteConfig cfg) {
         String domain = cfg.domain().replaceAll("/$", "");
         String siteName = cfg.siteName();
-        // canonical
-        html = html.replaceAll("(<link\\s+rel=\\\"canonical\\\"\\s+href=\\\")https?://[^\\\"<>]*", "$1" + Matcher.quoteReplacement(domain));
-        // og:url
-        html = html.replaceAll("(<meta\\s+property=\\\"og:url\\\"\\s+content=\\\")https?://[^\\\"<>]*", "$1" + Matcher.quoteReplacement(domain));
+        // canonical: preserve path
+        html = html.replaceAll("(<link\\s+rel=\\\"canonical\\\"\\s+href=\\\")https?://[^/<>\\\"]*([^\\\"<>]*)", "$1" + Matcher.quoteReplacement(domain) + "$2");
+        // og:url: preserve path
+        html = html.replaceAll("(<meta\\s+property=\\\"og:url\\\"\\s+content=\\\")https?://[^/<>\\\"]*([^\\\"<>]*)", "$1" + Matcher.quoteReplacement(domain) + "$2");
         // og:image
         Pattern p = Pattern.compile("(<meta\\s+property=\\\"og:image\\\"\\s+content=\\\")(.*?)\\\"\\s*/?>");
         Matcher m = p.matcher(html);
@@ -37,4 +37,3 @@ public final class DomainUpdater {
         return html;
     }
 }
-

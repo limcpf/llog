@@ -17,6 +17,13 @@ public final class CatalogService {
     public io.site.bloggen.util.Result<Void> generate(Path src, Path out, SiteConfig cfg, boolean dryRun) {
         try {
             var posts = new ContentScanner().scanPosts(src);
+            boolean fromOut = false;
+            if (posts.isEmpty() && !out.equals(src)) {
+                // Fallback: if src/posts empty, try out/posts (robustness for atypical layouts)
+                var alt = new ContentScanner().scanPosts(out);
+                if (!alt.isEmpty()) { posts = alt; fromOut = true; }
+            }
+            io.site.bloggen.util.Log.debug("posts found: " + posts.size() + (fromOut?" (from out)":" (from src)"));
             var tokens = TemplateVars.from(cfg);
             // homepage (index.html) — latest post featured + recent list
             try {

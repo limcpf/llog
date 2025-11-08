@@ -16,16 +16,7 @@
   <body>
     <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
 
-    <header class="l-container l-header">
-      <div class="c-site-header">
-        <div class="c-site-title"><a href="/">{{SITE_NAME}}</a></div>
-        <nav class="c-nav" aria-label="주요">
-          <a href="/" aria-current="page">{{NAV_HOME_LABEL}}</a>
-          <a href="./about.html">{{NAV_ABOUT_LABEL}}</a>
-          <a href="./posts/">{{NAV_POSTS_LABEL}}</a>
-        </nav>
-      </div>
-    </header>
+    <!-- @include partials/site-header.html -->
 
     <main id="main" class="l-reading" role="main">
       <section class="u-flow" aria-labelledby="latest-title">
@@ -42,15 +33,9 @@
       </section>
     </main>
 
-    <footer class="l-container l-footer">
-      <p class="u-text-center">{{COPYRIGHT}} · 모든 글은 각 저자에게 귀속됩니다.</p>
-    </footer>
+    <!-- @include partials/site-footer.html -->
 
-    <!-- CSS-only Lightbox target -->
-    <div id="img-view-1" class="c-image-viewer" role="dialog" aria-modal="true" aria-label="이미지 큰 보기">
-      <a class="c-image-viewer__close" href="#main" aria-label="닫기">닫기</a>
-      <img class="c-image-viewer__img" src="./assets/img/sample.svg" alt="중성 톤의 그래디언트 샘플 이미지 확대" />
-    </div>
+    <!-- (optional) image-viewer include could go here -->
   </body>
   
 </html>

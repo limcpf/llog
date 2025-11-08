@@ -33,6 +33,8 @@ assets/fonts/Pretendard-Bold.woff2
 assets/fonts/PretendardVariable.woff2
 assets/fonts/README.txt
 assets/fonts/LICENSE-Pretendard.txt
+partials/site-header.html
+partials/site-footer.html
 partials/skeleton.html
 partials/head.html
 partials/head-shared.html

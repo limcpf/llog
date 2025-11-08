@@ -66,6 +66,19 @@ Usage:
 - 페이지 메타(.meta.json): `<파일>.meta.json`의 값이 토큰으로 주입됩니다.
   - 예: `{ "PAGE_DESCRIPTION": "요약", "OG_IMAGE": "/og/custom.jpg" }`
 
+### 헤더/푸터 커스텀 방법
+- 공통 헤더/푸터는 Partial로 분리되어 있습니다.
+  - 헤더: `generator/src/main/resources/templates/partials/site-header.html`
+  - 푸터: `generator/src/main/resources/templates/partials/site-footer.html`
+- 프로젝트별 커스텀은 루트의 `partials/`에 동일 경로/이름으로 파일을 두면 우선 사용됩니다.
+  - 예: `partials/site-header.html`를 만들면 템플릿의 헤더를 대체합니다.
+- 내비게이션 라벨은 `site.json`에서 변경:
+  - `nav_home_label`, `nav_about_label`, `nav_posts_label`
+- 현재 페이지 강조(aria-current)는 빌드가 자동으로 설정합니다.
+  - 토큰: `{{HOME_CURRENT_ATTR}}`, `{{ABOUT_CURRENT_ATTR}}`, `{{POSTS_CURRENT_ATTR}}`
+- 홈(메인) 구성 라벨/개수 커스텀은 `site.json`의 Extras로 제어:
+  - `home_latest_heading`, `home_recent_heading`, `home_more_label`, `home_recent_limit`
+
 ## Pretendard(폰트)
 - 자체 호스팅 WOFF2 포함(템플릿에 포함됨): Variable(100–900), Regular(400), SemiBold(600), Bold(700)
 - 선언은 `assets/css/fonts.css`에서 @font-face로 정의, `--font-sans`가 최우선으로 Pretendard를 사용합니다.

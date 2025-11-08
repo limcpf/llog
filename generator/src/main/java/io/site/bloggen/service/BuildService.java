@@ -112,6 +112,26 @@ public final class BuildService {
                     }
                 });
             }
+        // Ensure default template assets exist in output (overlay missing files)
+        try (java.io.InputStream list = BuildService.class.getResourceAsStream("/templates/.filelist")) {
+            if (list != null) {
+                String all = new String(list.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+                for (String line : all.split("\\R")) {
+                    if (line == null || line.isBlank()) continue;
+                    if (!line.startsWith("assets/")) continue;
+                    if (line.endsWith("/")) { // directory marker
+                        java.nio.file.Files.createDirectories(out.resolve(line));
+                        continue;
+                    }
+                    java.nio.file.Path target = out.resolve(line);
+                    if (java.nio.file.Files.exists(target)) continue; // keep user's file
+                    java.nio.file.Files.createDirectories(target.getParent());
+                    try (java.io.InputStream is = BuildService.class.getResourceAsStream("/templates/" + line)) {
+                        if (is != null) java.nio.file.Files.copy(is, target);
+                    }
+                }
+            }
+        } catch (java.io.IOException ignored) {}
         // Prepare token map
         var tokens = TemplateVars.from(cfg);
 

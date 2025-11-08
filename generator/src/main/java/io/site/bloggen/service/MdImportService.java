@@ -20,13 +20,18 @@ public final class MdImportService {
             try (var walk = Files.walk(mdDir)) {
                 for (Path p : (Iterable<Path>) walk.filter(f -> Files.isRegularFile(f) && f.getFileName().toString().toLowerCase().endsWith(".md"))::iterator) {
                     String md = Files.readString(p, StandardCharsets.UTF_8);
+                    // detect presence of front matter block
+                    String s = md.stripLeading();
+                    boolean hasFM = s.startsWith("---") && s.indexOf('\n') >= 0 && s.indexOf("\n---", s.indexOf('\n')) >= 0;
                     Map<String,String> fm = FrontMatter.parse(md);
                     String publish = fm.getOrDefault("publish", "false");
-                    if (!"true".equalsIgnoreCase(publish)) { io.site.bloggen.util.Log.debug("skip: publish!=true " + p); continue; }
+                    if (!"true".equalsIgnoreCase(publish)) { if (hasFM) io.site.bloggen.util.Log.info("skip: publish!=true " + p); continue; }
                     String title = fm.getOrDefault("title", "");
                     String dateStr = fm.getOrDefault("createdDate", "");
-                    if (title.isBlank() || dateStr.isBlank()) { io.site.bloggen.util.Log.warn("missing title/date: " + p); continue; }
-                    LocalDate date = LocalDate.parse(dateStr);
+                    if (title.isBlank() || dateStr.isBlank()) { if (hasFM) io.site.bloggen.util.Log.warn("skip: missing title/date: " + p); continue; }
+                    LocalDate date;
+                    try { date = LocalDate.parse(dateStr); }
+                    catch (Exception ex) { if (hasFM) io.site.bloggen.util.Log.warn("skip: invalid createdDate (YYYY-MM-DD): " + p); continue; }
                     String slug = slugFromFile(p.getFileName().toString(), title);
                     String htmlContent = Markdown.toHtml(md);
                     String excerpt = Markdown.firstParagraphText(md);
@@ -34,14 +39,14 @@ public final class MdImportService {
                     String tpl = loadTemplate();
                     String html = tpl.replace("{{TITLE}}", escape(title)).replace("{{DATE}}", date.toString()).replace("{{CONTENT_HTML}}", htmlContent);
                     if (dryRun) {
-                        io.site.bloggen.util.Log.info("[dry-run] would write post: " + out);
-                        io.site.bloggen.util.Log.info("[dry-run] would write meta:  " + out.resolveSibling(out.getFileName().toString() + ".meta.json"));
+                        io.site.bloggen.util.Log.info("[dry-run] import: " + p + " -> " + out);
                     } else {
                         FS.ensureDir(out.getParent());
                         Files.writeString(out, html, StandardCharsets.UTF_8);
                         Path meta = out.resolveSibling(out.getFileName().toString() + ".meta.json");
                         String metaJson = "{\n  \"PAGE_DESCRIPTION\": \"" + escape(excerpt) + "\"\n}\n";
                         Files.writeString(meta, metaJson, StandardCharsets.UTF_8);
+                        io.site.bloggen.util.Log.info("imported: " + p + " -> " + out);
                     }
                     count++;
                 }
@@ -70,4 +75,3 @@ public final class MdImportService {
 
     private static String escape(String s) { return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;"); }
 }
-

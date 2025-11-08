@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+BIN="$ROOT/generator/build/llog"
+
+if [ ! -x "$BIN" ] && [ ! -f "$BIN" ]; then
+  echo "[llog] generator binary not found; building JVM wrapper..." >&2
+  bash "$ROOT/generator/scripts/build-jvm.sh"
+fi
+
+exec "$BIN" "$@"
+

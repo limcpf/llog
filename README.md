@@ -16,16 +16,16 @@
 - 퍼포먼스: 불필요 산출 제거(문서/partials), 이미지/지연로딩 기본
 
 ## 빠른 시작(로컬)
-사전 준비: Java 21 (JVM 실행), 네이티브 빌드는 GraalVM + native-image 필요(선택).
+사전 준비: Java 21 (JVM 실행), 네이티브 빌드는 GraalVM + native-image 필요(선택). 이 저장소의 메인은 generator입니다.
 
-1) 제너레이터 빌드(JVM)
+1) 제너레이터 실행(래퍼 스크립트)
 ```
-bash generator/scripts/build-jvm.sh
+bash scripts/llog --help
 ```
 
 2) 샘플 사이트 생성(샘플 MD → import → dist 빌드)
 ```
-generator/build/llog sample --out sample-site --build
+bash scripts/llog sample --out sample-site --build
 python3 -m http.server -d sample-site/dist 8080
 # http://localhost:8080
 ```
@@ -99,8 +99,3 @@ Usage:
 
 ---
 피드백/개선 제안은 이슈로 남겨주세요. 릴리스 태그 고정 사용을 권장합니다(템플릿·바이너리 버전 일치).
-
-## 참고: 루트 `scripts/build.py` (선택사항)
-- 목적: 스켈레톤만으로 수동 운영할 때, `site.json`의 도메인/메타를 HTML·feed/sitemap/robots에 간단히 반영하는 경량 파이썬 스크립트입니다.
-- 제너레이터 사용 시 불필요: `llog build`가 동일/상위 처리를 수행하므로, 일반 운영에서는 제너레이터만 사용하세요.
-- 실행: `python3 scripts/build.py`

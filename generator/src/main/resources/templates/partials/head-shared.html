@@ -7,3 +7,12 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/css/index.css" />
 
+<!-- Syntax highlight (one external library; minimal JS) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script defer>
+  window.addEventListener('DOMContentLoaded', function(){
+    if (window.hljs) { hljs.highlightAll(); }
+  });
+  // code fences already emit <code class="language-*"></code>; hljs will use that or auto-detect
+</script>

@@ -85,4 +85,23 @@
   .c-pagination a:hover { color: var(--color-fg); border-color: var(--color-border); }
   .c-pagination strong.is-current { color: var(--color-fg); border: 1px solid var(--color-border); background: color-mix(in oklab, var(--color-surface), black 6%); }
   .c-pagination__ellipsis { color: var(--color-muted); }
+
+  /* Code block styling + lightweight tokens */
+  pre[class^="language-"], pre .code-block, pre.c-code {
+    background: color-mix(in oklab, var(--color-surface), black 15%);
+    color: var(--color-fg);
+    padding: var(--space-4);
+    border-radius: 8px;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+  code[class^="language-"], pre code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.95em;
+  }
+  .tok-k { color: #93c5fd; }      /* keyword */
+  .tok-s { color: #fca5a5; }      /* string */
+  .tok-n { color: #fde68a; }      /* number */
+  .tok-c { color: #9ca3af; font-style: italic; }  /* comment */
+  .tok-p { color: var(--color-fg); }      /* punctuation */
 }

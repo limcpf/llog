@@ -43,7 +43,7 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI 명령
 ```
-llog 0.2.4
+llog 0.2.5
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]
@@ -125,6 +125,13 @@ Usage:
 - 루트의 `examples/`는 참고용 데모입니다. 운영/배포는 skeleton 기반 워킹 디렉토리를 대상으로 하세요.
 - dist는 배포 최소셋만 포함(문서/partials 제외). 필요한 정적 자산은 템플릿 내 `assets/`에 추가하세요.
 - 네이티브 바이너리 사용 시 런타임 의존성 0으로 CI/CD를 단순화할 수 있습니다.
+
+## 코드 하이라이트(외부 라이브러리 1개)
+- 하이라이트 라이브러리: highlight.js(CDN)
+  - 포함 위치: `partials/head-shared.html`에 CSS/JS 링크가 추가되어 있습니다.
+  - 마크다운 코드펜스는 `<pre><code class="language-*"></code></pre>`로 렌더링되며, 하이라이트가 자동 적용됩니다.
+- 자체 호스팅이 필요하면:
+  - `assets/js/highlight.min.js`, `assets/css/hljs-theme.min.css`를 추가한 뒤, `head-shared.html`에서 CDN 링크를 자산 경로로 교체하세요.
 
 ---
 피드백/개선 제안은 이슈로 남겨주세요. 릴리스 태그 고정 사용을 권장합니다(템플릿·바이너리 버전 일치).

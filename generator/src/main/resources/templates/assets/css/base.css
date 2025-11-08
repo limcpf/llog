@@ -41,7 +41,7 @@
     font-weight: 600;
   }
 
-  h1 { font-size: clamp(var(--fs-4), 6vw, var(--fs-5)); font-variant-caps: small-caps; }
+  h1 { font-size: clamp(var(--fs-4), 6vw, var(--fs-5)); }
   h2 { font-size: clamp(var(--fs-3), 3vw, var(--fs-4)); }
   h3 { font-size: clamp(var(--fs-2), 2vw, var(--fs-3)); }
 

@@ -8,8 +8,8 @@
   }
   .c-site-title {
     font-size: clamp(1.5rem, 4vw, 2rem);
-    font-variant-caps: small-caps;
-    letter-spacing: 0.04em;
+    font-variant-caps: normal;
+    letter-spacing: normal;
     font-weight: 600;
   }
   .c-site-title a { color: inherit; text-decoration: none; }
@@ -24,8 +24,8 @@
   .c-hero { margin-block: var(--space-8) var(--space-6); }
   .c-hero__kicker {
     color: var(--color-accent-2);
-    font-variant-caps: all-small-caps;
-    letter-spacing: 0.06em;
+    font-variant-caps: normal;
+    letter-spacing: normal;
   }
   .c-hero__title { margin-block: var(--space-2); }
   .c-hero__lede { color: var(--color-muted); font-size: var(--fs-2); }

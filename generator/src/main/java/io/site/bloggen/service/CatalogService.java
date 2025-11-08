@@ -18,14 +18,20 @@ public final class CatalogService {
         try {
             var posts = new ContentScanner().scanPosts(src);
             var tokens = TemplateVars.from(cfg);
-            // homepage (index.html) — ensure root has an index
+            // homepage (index.html) — latest post featured + recent list
             try {
-                java.nio.file.Path homeOut = out.resolve("index.html");
-                if (!java.nio.file.Files.exists(homeOut)) {
-                    String homeTpl = loadResource("/templates/index.html");
-                    String homeHtml = TokenEngine.apply(homeTpl, tokens);
-                    write(homeOut, homeHtml, dryRun);
-                }
+                String homeTpl = loadResource("/templates/index.html");
+                String featured = posts.isEmpty() ? "<p>아직 게시글이 없습니다.</p>" : buildHomeFeatured(posts.get(0), cfg);
+                int recentLimit = homeRecentLimit(cfg);
+                String recent = posts.size() <= 1 ? "" : buildHomeRecent(posts.subList(1, Math.min(1 + Math.max(0, recentLimit), posts.size())));
+                var local = new LinkedHashMap<>(tokens);
+                local.put("HOME_LATEST_HEADING", cfg.extras().getOrDefault("home_latest_heading", "최신 글"));
+                local.put("HOME_RECENT_HEADING", cfg.extras().getOrDefault("home_recent_heading", "최근 글"));
+                local.put("HOME_MORE_LABEL", cfg.extras().getOrDefault("home_more_label", "더 보기: 전체 글"));
+                local.put("HOME_FEATURED", featured);
+                local.put("HOME_RECENT", recent);
+                String homeHtml = TokenEngine.apply(homeTpl, local);
+                write(out.resolve("index.html"), homeHtml, dryRun);
             } catch (IOException e) {
                 // If template missing, continue without failing build
             }
@@ -138,6 +144,38 @@ public final class CatalogService {
         } catch (IOException e) {
             return io.site.bloggen.util.Result.err(io.site.bloggen.util.Exit.IO, e.getMessage());
         }
+    }
+
+    private static int homeRecentLimit(SiteConfig cfg) {
+        String v = cfg.extras().getOrDefault("home_recent_limit", "5");
+        try { return Math.max(0, Integer.parseInt(v.trim())); } catch (NumberFormatException e) { return 5; }
+    }
+
+    private static String buildHomeFeatured(io.site.bloggen.core.Post p, SiteConfig cfg) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("      <article class=\"c-article u-flow\" aria-labelledby=\"home-latest-title\">\n");
+        sb.append("        <header>\n");
+        sb.append("          <h2 id=\"home-latest-title\"><a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a></h2>\n");
+        sb.append("          <p class=\"c-article__meta\">").append(p.date()).append("</p>\n");
+        sb.append("        </header>\n");
+        if (p.description() != null && !p.description().isBlank()) {
+            sb.append("        <p class=\"lead\">").append(escape(p.description())).append("</p>\n");
+        }
+        sb.append("        <p><a class=\"c-button\" href=\"").append(p.url()).append("\">전체 글 읽기</a></p>\n");
+        sb.append("      </article>\n");
+        return sb.toString();
+    }
+
+    private static String buildHomeRecent(java.util.List<io.site.bloggen.core.Post> posts) {
+        if (posts == null || posts.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder();
+        for (io.site.bloggen.core.Post p : posts) {
+            sb.append("          <li>\n");
+            sb.append("            <time datetime=\"").append(p.date()).append("\">").append(p.date()).append("</time> — ");
+            sb.append("            <a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a>\n");
+            sb.append("          </li>\n");
+        }
+        return sb.toString();
     }
 
     private static String loadResource(String path) throws IOException {

@@ -19,7 +19,7 @@ public class Main {
         // global flags (best-effort per command as well)
         try {
             switch (cmd) {
-                case "--version" -> { System.out.println("llog 0.2.3"); System.exit(0);} 
+                case "--version" -> { System.out.println("llog 0.2.4"); System.exit(0);} 
                 case "init" -> doInit(args);
                 case "build" -> doBuild(args);
                 case "new:post" -> doNewPost(args);
@@ -57,12 +57,14 @@ public class Main {
         Path src = Path.of(".");
         Path out = Path.of("dist");
         Path config = null; // optional explicit site.json path
+        Path importMd = null; // optional import markdown dir before build
         boolean dry = false, verb = false;
         for (int i=1;i<args.length;i++) {
             switch (args[i]) {
                 case "--src" -> src = Path.of(args[++i]);
                 case "--out" -> out = Path.of(args[++i]);
                 case "--config" -> config = Path.of(args[++i]);
+                case "--import-src" -> importMd = Path.of(args[++i]);
                 case "--dry-run" -> dry = true;
                 case "--verbose" -> verb = true;
             }
@@ -75,6 +77,13 @@ public class Main {
         var cfg = config != null && java.nio.file.Files.exists(config) ? SiteConfig.fromJson(config)
                  : java.nio.file.Files.exists(srcCfg) ? SiteConfig.fromJson(srcCfg)
                  : SiteConfig.ofDefaults();
+        // Optional import step to ensure homepage lists posts correctly
+        if (importMd != null) {
+            var imp = new io.site.bloggen.service.MdImportService().importAll(importMd, src, dry, verb);
+            if (imp instanceof io.site.bloggen.util.Result.Err<?> err) {
+                io.site.bloggen.util.Log.warn("import failed: " + err.message());
+            }
+        }
         var svc = new BuildService();
         var res = svc.build(src, out, cfg, dry, verb);
         if (res instanceof io.site.bloggen.util.Result.Err<?> err) {
@@ -110,10 +119,10 @@ public class Main {
     }
 
     static void printHelp() {
-        System.out.println("llog 0.2.3");
+        System.out.println("llog 0.2.4");
         System.out.println("Usage:");
         System.out.println("  init <dir> [--dry-run] [--verbose]");
-        System.out.println("  build [--src dir] [--out dir] [--config path] [--dry-run] [--verbose]");
+        System.out.println("  build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]");
         System.out.println("  new:post --title \"...\" [--date YYYY-MM-DD] [--slug slug] [--root dir] [--dry-run] [--verbose]");
         System.out.println("  import:md --src <md_dir> [--root dir] [--dry-run] [--verbose]");
         System.out.println("  sample [--out dir] [--build] [--dry-run] [--verbose]");

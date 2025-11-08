@@ -43,10 +43,10 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI 명령
 ```
-llog 0.2.3
+llog 0.2.4
 Usage:
   init <dir> [--dry-run] [--verbose]
-  build [--src dir] [--out dir] [--config path] [--dry-run] [--verbose]
+  build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]
   new:post --title "..." [--date YYYY-MM-DD] [--slug slug] [--root dir] [--dry-run] [--verbose]
   import:md --src <md_dir> [--root dir] [--dry-run] [--verbose]
   sample [--out dir] [--build] [--dry-run] [--verbose]
@@ -84,6 +84,16 @@ Usage:
 - 외부 파일을 명시하고 싶다면:
   - `llog build --src . --out dist --config /path/to/site.json`
   - 또는 환경변수 `SITE_JSON=/path/to/site.json llog build --src . --out dist`
+
+### import → build 순서 보장(중요)
+- 메인/글 목록이 비면 대부분 import가 빌드보다 “나중에” 실행된 경우입니다.
+- 한 번의 커맨드로 보장:
+  - `llog build --src . --out dist --import-src /path/to/vault`
+  - 또는 `llog import:md --src /path/to/vault --root . && llog build --src . --out dist`
+
+### Cloudflare Pages 예시
+- 빌드 명령: `./llog build --src . --out dist --import-src $VAULT_DIR`
+- 아티팩트 디렉터리: `dist`
 
 ## Pretendard(폰트)
 - 자체 호스팅 WOFF2 포함(템플릿에 포함됨): Variable(100–900), Regular(400), SemiBold(600), Bold(700)

@@ -21,17 +21,30 @@ public final class MdImportService {
                 for (Path p : (Iterable<Path>) walk.filter(f -> Files.isRegularFile(f) && f.getFileName().toString().toLowerCase().endsWith(".md"))::iterator) {
                     String md = Files.readString(p, StandardCharsets.UTF_8);
                     // detect presence of front matter block
-                    String s = md.stripLeading();
+                    String s = md;
+                    if (s.startsWith("\uFEFF")) s = s.substring(1);
+                    s = s.stripLeading();
                     boolean hasFM = s.startsWith("---") && s.indexOf('\n') >= 0 && s.indexOf("\n---", s.indexOf('\n')) >= 0;
                     Map<String,String> fm = FrontMatter.parse(md);
-                    String publish = fm.getOrDefault("publish", "false");
+                    String publish = firstOf(fm, "publish");
+                    if (publish == null) publish = "false";
                     if (!"true".equalsIgnoreCase(publish)) { if (hasFM) io.site.bloggen.util.Log.info("skip: publish!=true " + p); continue; }
-                    String title = fm.getOrDefault("title", "");
-                    String dateStr = fm.getOrDefault("createdDate", "");
+                    String title = defaultString(firstOf(fm, "title", "subject", "name"));
+                    String dateStr = defaultString(firstOf(fm, "createdDate", "createDate", "created_at", "created", "date"));
                     if (title.isBlank() || dateStr.isBlank()) { if (hasFM) io.site.bloggen.util.Log.warn("skip: missing title/date: " + p); continue; }
                     LocalDate date;
                     try { date = LocalDate.parse(dateStr); }
-                    catch (Exception ex) { if (hasFM) io.site.bloggen.util.Log.warn("skip: invalid createdDate (YYYY-MM-DD): " + p); continue; }
+                    catch (Exception ex) {
+                        // try to extract YYYY-MM-DD from a datetime string
+                        java.util.regex.Matcher m = java.util.regex.Pattern.compile("(\\d{4}-\\d{2}-\\d{2})").matcher(dateStr);
+                        if (m.find()) {
+                            try { date = LocalDate.parse(m.group(1)); }
+                            catch (Exception ex2) { if (hasFM) io.site.bloggen.util.Log.warn("skip: invalid createdDate (YYYY-MM-DD): " + p); continue; }
+                        } else {
+                            if (hasFM) io.site.bloggen.util.Log.warn("skip: invalid createdDate (YYYY-MM-DD): " + p);
+                            continue;
+                        }
+                    }
                     String slug = slugFromFile(p.getFileName().toString(), title);
                     String htmlContent = Markdown.toHtml(md);
                     String excerpt = Markdown.firstParagraphText(md);
@@ -56,6 +69,19 @@ public final class MdImportService {
             return io.site.bloggen.util.Result.err(io.site.bloggen.util.Exit.IO, e.getMessage());
         }
     }
+
+    private static String firstOf(Map<String,String> map, String... keys) {
+        for (String k : keys) { if (map.containsKey(k)) return map.get(k); }
+        // case-insensitive fallback
+        for (String k : keys) {
+            for (var entry : map.entrySet()) {
+                if (entry.getKey() != null && entry.getKey().equalsIgnoreCase(k)) return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    private static String defaultString(String s) { return s == null ? "" : s; }
 
     private static String loadTemplate() throws IOException {
         try (var is = MdImportService.class.getResourceAsStream("/templates/posts/post-md-template.html")) {

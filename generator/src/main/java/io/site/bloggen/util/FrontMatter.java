@@ -7,7 +7,9 @@ public final class FrontMatter {
     public static Map<String,String> parse(String markdown) {
         Map<String,String> out = new HashMap<>();
         if (markdown == null) return out;
-        String s = markdown.stripLeading();
+        String s = markdown;
+        if (s.startsWith("\uFEFF")) s = s.substring(1); // strip UTF-8 BOM if present
+        s = s.stripLeading();
         if (!s.startsWith("---")) return out;
         int start = s.indexOf("\n");
         if (start < 0) return out;
@@ -29,4 +31,3 @@ public final class FrontMatter {
         return out;
     }
 }
-

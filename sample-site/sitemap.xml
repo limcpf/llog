@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>{{DOMAIN}}/</loc><priority>1.0</priority></url>
-  <url><loc>{{DOMAIN}}/about</loc></url>
-  <url><loc>{{DOMAIN}}/posts/</loc></url>
-  <url><loc>{{DOMAIN}}/archives.html</loc></url>
-  <url><loc>{{DOMAIN}}/tags/</loc></url>
-  {{SITEMAP_POST_URLS}}
-</urlset>

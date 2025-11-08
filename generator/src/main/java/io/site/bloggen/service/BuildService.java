@@ -45,7 +45,13 @@ public final class BuildService {
                                 || name.equals("scripts") || name.equals("dist") || name.equals("node_modules")) {
                             return java.nio.file.FileVisitResult.SKIP_SUBTREE;
                         }
+                        // Allowlist top-level site directories only: assets, posts, tags, partials(read-only for includes)
                         java.nio.file.Path rel = absSrc.relativize(dir);
+                        if (rel.getNameCount() == 1) {
+                            String top = rel.getName(0).toString();
+                            boolean allow = top.equals("assets") || top.equals("posts") || top.equals("tags") || top.equals("partials");
+                            if (!allow) return java.nio.file.FileVisitResult.SKIP_SUBTREE;
+                        }
                         java.nio.file.Path target = absOut.resolve(rel);
                         java.nio.file.Files.createDirectories(target);
                         return java.nio.file.FileVisitResult.CONTINUE;
@@ -59,7 +65,46 @@ public final class BuildService {
                         if (baseName.equals("AGENTS.md") || baseName.equals("DECISIONS.md")) {
                             return java.nio.file.FileVisitResult.CONTINUE;
                         }
+                        // Exclude markdown and other source notes by default
+                        String lower = baseName.toLowerCase();
+                        if (lower.endsWith(".md")) return java.nio.file.FileVisitResult.CONTINUE;
+
                         java.nio.file.Path rel = absSrc.relativize(file);
+                        boolean underAssets = rel.getNameCount() >= 1 && rel.getName(0).toString().equals("assets");
+                        boolean underPosts  = rel.getNameCount() >= 1 && rel.getName(0).toString().equals("posts");
+                        boolean underTags   = rel.getNameCount() >= 1 && rel.getName(0).toString().equals("tags");
+                        boolean underPartials = rel.getNameCount() >= 1 && rel.getName(0).toString().equals("partials");
+
+                        // Only copy:
+                        //  - files under assets/posts/tags
+                        //  - root-level site entry files (html/xml/txt/ico/webmanifest/svg/png/jpg/jpeg/webp/avif)
+                        boolean isRootLevel = rel.getNameCount() == 1;
+                        boolean allowedRoot = false;
+                        if (isRootLevel) {
+                            allowedRoot = lower.endsWith(".html") || lower.endsWith(".xml") || lower.endsWith(".txt")
+                                    || lower.endsWith(".ico") || lower.endsWith(".webmanifest")
+                                    || lower.endsWith(".svg") || lower.endsWith(".png") || lower.endsWith(".jpg")
+                                    || lower.endsWith(".jpeg") || lower.endsWith(".webp") || lower.endsWith(".avif");
+                        }
+
+                        // Restrict file types inside posts/tags
+                        if (underPosts) {
+                            // allow only .html and .meta.json (sidecar removed later)
+                            if (!(lower.endsWith(".html") || lower.endsWith(".html.meta.json") || lower.endsWith(".meta.json"))) {
+                                return java.nio.file.FileVisitResult.CONTINUE;
+                            }
+                        }
+                        if (underTags) {
+                            if (!lower.endsWith(".html")) {
+                                return java.nio.file.FileVisitResult.CONTINUE;
+                            }
+                        }
+
+                        if (!(underAssets || underPosts || underTags || allowedRoot)) {
+                            // Do not copy partials or any other directories/files
+                            return java.nio.file.FileVisitResult.CONTINUE;
+                        }
+
                         java.nio.file.Path target = absOut.resolve(rel);
                         java.nio.file.Files.createDirectories(target.getParent());
                         java.nio.file.Files.copy(file, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.COPY_ATTRIBUTES);

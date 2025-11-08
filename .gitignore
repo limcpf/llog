@@ -1,6 +1,8 @@
 # --- Build outputs (root) ---
 dist/
 build/
+sample-site/
+examples/
 
 # --- Generator subproject (Gradle) ---
 generator/build/

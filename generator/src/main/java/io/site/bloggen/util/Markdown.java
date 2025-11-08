@@ -93,7 +93,7 @@ public final class Markdown {
     }
 
     private static String inline(String s) {
-        // images ![alt](url)
+        // images ![alt](url) -> <img src="url" alt="alt" />
         s = s.replaceAll("!\\[([^]]*)\\]\\(([^)]+)\\)", "<img src=\"$2\" alt=\"$1\" />");
         // links [text](url)
         s = s.replaceAll("\\[([^]]*)\\]\\(([^)]+)\\)", "<a href=\"$2\">$1</a>");

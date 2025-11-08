@@ -18,6 +18,17 @@ public final class CatalogService {
         try {
             var posts = new ContentScanner().scanPosts(src);
             var tokens = TemplateVars.from(cfg);
+            // homepage (index.html) — ensure root has an index
+            try {
+                java.nio.file.Path homeOut = out.resolve("index.html");
+                if (!java.nio.file.Files.exists(homeOut)) {
+                    String homeTpl = loadResource("/templates/index.html");
+                    String homeHtml = TokenEngine.apply(homeTpl, tokens);
+                    write(homeOut, homeHtml, dryRun);
+                }
+            } catch (IOException e) {
+                // If template missing, continue without failing build
+            }
             // posts/index.html
             String postsTpl = loadResource("/templates/posts/index.html");
             int pageSize = postsPageSize(cfg);

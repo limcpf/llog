@@ -19,7 +19,7 @@ public class Main {
         // global flags (best-effort per command as well)
         try {
             switch (cmd) {
-                case "--version" -> { System.out.println("llog 0.2.1"); System.exit(0);} 
+                case "--version" -> { System.out.println("llog 0.2.2"); System.exit(0);} 
                 case "init" -> doInit(args);
                 case "build" -> doBuild(args);
                 case "new:post" -> doNewPost(args);
@@ -102,7 +102,7 @@ public class Main {
     }
 
     static void printHelp() {
-        System.out.println("llog 0.2.1");
+        System.out.println("llog 0.2.2");
         System.out.println("Usage:");
         System.out.println("  init <dir> [--dry-run] [--verbose]");
         System.out.println("  build [--src dir] [--out dir] [--dry-run] [--verbose]");

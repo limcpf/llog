@@ -15,16 +15,7 @@
   </head>
   <body>
     <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
-    <header class="l-container l-header">
-      <div class="c-site-header">
-        <div class="c-site-title"><a href="/">{{SITE_NAME}}</a></div>
-        <nav class="c-nav" aria-label="주요">
-          <a href="/">{{NAV_HOME_LABEL}}</a>
-          <a href="/about.html">{{NAV_ABOUT_LABEL}}</a>
-          <a href="/posts/" aria-current="page">{{NAV_POSTS_LABEL}}</a>
-        </nav>
-      </div>
-    </header>
+    <!-- @include partials/site-header.html -->
 
     <main id="main" class="l-reading" role="main">
       <article class="c-article u-flow" aria-labelledby="post-title">
@@ -106,8 +97,6 @@ npx quartz create
       </article>
     </main>
 
-    <footer class="l-container l-footer">
-      <p class="u-text-center">{{COPYRIGHT}}</p>
-    </footer>
+    <!-- @include partials/site-footer.html -->
   </body>
 </html>

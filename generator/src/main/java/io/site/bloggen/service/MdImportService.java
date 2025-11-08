@@ -92,11 +92,20 @@ public final class MdImportService {
 
     private static String slugFromFile(String fileName, String titleFallback) {
         String base = fileName.replaceAll("\\.md$", "");
+        // 1) try filename slug
         String s1 = Slug.of(base);
         if (!"post".equals(s1)) return s1;
+        // 2) try title slug
         String s2 = Slug.of(titleFallback);
         if (!"post".equals(s2)) return s2;
-        return base.toLowerCase().replaceAll("[^a-z0-9\\-]+", "-").replaceAll("-+", "-").replaceAll("^-|-$", "");
+        // 3) final sanitize of base; if empty, stable fallback with hash suffix
+        String sanitized = base.toLowerCase().replaceAll("[^a-z0-9\\-]+", "-")
+                .replaceAll("-+", "-").replaceAll("^-|-$", "");
+        if (sanitized == null || sanitized.isBlank()) {
+            String hex = Integer.toHexString(Math.abs(base.hashCode()));
+            return "post-" + hex;
+        }
+        return sanitized;
     }
 
     private static String escape(String s) { return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;"); }

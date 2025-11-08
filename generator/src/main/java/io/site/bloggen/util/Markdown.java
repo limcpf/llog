@@ -24,7 +24,8 @@ public final class Markdown {
         StringBuilder para = new StringBuilder();
         boolean inUl = false, inOl = false;
         StringBuilder list = new StringBuilder();
-        for (String line : lines) {
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
             String ltrim = line.stripLeading();
             if (ltrim.startsWith("```") ){
                 if (!inCode) {
@@ -38,6 +39,32 @@ public final class Markdown {
                 continue;
             }
             if (inCode) { code.append(line).append('\n'); continue; }
+
+            // Table detection: header row | separator row present
+            if (!line.isBlank() && i + 1 < lines.length) {
+                String next = lines[i+1].trim();
+                if (looksLikeTableHeader(line) && isTableSeparatorRow(next)) {
+                    // close open structures
+                    if (para.length() > 0) { out.add("<p>" + inline(para.toString().trim()) + "</p>"); para.setLength(0);} 
+                    if (inUl) { out.add("<ul>\n" + list + "</ul>"); list.setLength(0); inUl = false; }
+                    if (inOl) { out.add("<ol>\n" + list + "</ol>"); list.setLength(0); inOl = false; }
+
+                    java.util.List<String> headers = splitTableRow(line);
+                    java.util.List<String> aligns = parseAlignRow(lines[i+1], headers.size());
+                    i += 2; // advance past header + separator
+                    java.util.List<java.util.List<String>> rows = new java.util.ArrayList<>();
+                    while (i < lines.length) {
+                        String r = lines[i];
+                        if (r.isBlank()) break;
+                        if (!r.contains("|")) break;
+                        rows.add(splitTableRow(r));
+                        i++;
+                    }
+                    i--; // step back one since for-loop will increment
+                    out.add(renderTable(headers, aligns, rows));
+                    continue;
+                }
+            }
 
             if (line.isBlank()) {
                 if (para.length() > 0) { out.add("<p>" + inline(para.toString().trim()) + "</p>"); para.setLength(0);} 
@@ -79,6 +106,85 @@ public final class Markdown {
         if (inUl) out.add("<ul>\n" + list + "</ul>");
         if (inOl) out.add("<ol>\n" + list + "</ol>");
         return String.join("\n", out);
+    }
+
+    private static boolean looksLikeTableHeader(String line) {
+        String t = line.trim();
+        return t.contains("|");
+    }
+
+    private static boolean isTableSeparatorRow(String line) {
+        if (!line.contains("|")) return false;
+        var cells = splitTableRow(line);
+        int ok = 0;
+        for (String c : cells) {
+            String x = c.trim().replace(" ", "");
+            if (x.isEmpty()) continue;
+            // at least 3 dashes, optional leading/trailing colon
+            String y = x.replace(":", "");
+            if (y.matches("-{-}{1,}".replace("{-}{1,}", "{3,}"))) { // trick to avoid escaping braces in patch
+                ok++;
+            } else if (y.matches("-{3,}")) {
+                ok++;
+            }
+        }
+        return ok >= Math.max(1, cells.size() - 1); // tolerate empty trailing cell
+    }
+
+    private static java.util.List<String> splitTableRow(String line) {
+        String t = line.trim();
+        if (t.startsWith("|")) t = t.substring(1);
+        if (t.endsWith("|")) t = t.substring(0, t.length()-1);
+        String[] parts = t.split("\\|", -1);
+        java.util.List<String> cells = new java.util.ArrayList<>();
+        for (String p : parts) cells.add(p.trim());
+        return cells;
+    }
+
+    private static java.util.List<String> parseAlignRow(String line, int cols) {
+        var raw = splitTableRow(line);
+        java.util.List<String> out = new java.util.ArrayList<>();
+        for (int i=0;i<Math.max(cols, raw.size());i++) {
+            String cell = i < raw.size() ? raw.get(i) : "";
+            String x = cell.trim().replace(" ", "");
+            boolean left = x.startsWith(":");
+            boolean right = x.endsWith(":");
+            String core = x.replace(":", "");
+            if (!core.matches("-{3,}")) { out.add(""); continue; }
+            if (left && right) out.add("center");
+            else if (right) out.add("right");
+            else if (left) out.add("left");
+            else out.add("");
+        }
+        // ensure size == cols
+        while (out.size() < cols) out.add("");
+        if (out.size() > cols) return out.subList(0, cols);
+        return out;
+    }
+
+    private static String renderTable(java.util.List<String> headers, java.util.List<String> aligns, java.util.List<java.util.List<String>> rows) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table>\n");
+        sb.append("  <thead><tr>\n");
+        for (int i=0;i<headers.size();i++) {
+            String a = i < aligns.size() ? aligns.get(i) : "";
+            String style = a.isEmpty()?"":" style=\"text-align: "+a+"\"";
+            sb.append("    <th").append(style).append(">").append(inline(headers.get(i))).append("</th>\n");
+        }
+        sb.append("  </tr></thead>\n");
+        sb.append("  <tbody>\n");
+        for (var r : rows) {
+            sb.append("    <tr>\n");
+            for (int i=0;i<headers.size();i++) {
+                String cell = i < r.size() ? r.get(i) : "";
+                String a = i < aligns.size() ? aligns.get(i) : "";
+                String style = a.isEmpty()?"":" style=\"text-align: "+a+"\"";
+                sb.append("      <td").append(style).append(">").append(inline(cell)).append("</td>\n");
+            }
+            sb.append("    </tr>\n");
+        }
+        sb.append("  </tbody>\n</table>");
+        return sb.toString();
     }
 
     public static String firstParagraphText(String md) {

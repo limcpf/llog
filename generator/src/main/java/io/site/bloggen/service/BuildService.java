@@ -132,6 +132,47 @@ public final class BuildService {
                 }
             }
         } catch (java.io.IOException ignored) {}
+        // Extra safety: ensure project's src/assets is fully copied (in case earlier traversal skipped for any reason)
+        try {
+            Path srcAssets = src.resolve("assets");
+            Path outAssets = out.resolve("assets");
+            if (Files.exists(srcAssets)) {
+                java.nio.file.Files.createDirectories(outAssets);
+                try (var s = Files.walk(srcAssets)) {
+                    s.filter(Files::isRegularFile).forEach(p -> {
+                        String name = p.getFileName().toString().toLowerCase();
+                        if (name.endsWith(".md")) return; // do not copy markdown under assets
+                        Path rel = srcAssets.relativize(p);
+                        Path target = outAssets.resolve(rel);
+                        try {
+                            java.nio.file.Files.createDirectories(target.getParent());
+                            java.nio.file.Files.copy(p, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.COPY_ATTRIBUTES);
+                        } catch (IOException ignored) {}
+                    });
+                }
+            }
+        } catch (IOException ignored) {}
+
+        // Ensure posts html files are present
+        try {
+            Path srcPosts = src.resolve("posts");
+            Path outPosts = out.resolve("posts");
+            if (Files.exists(srcPosts)) {
+                java.nio.file.Files.createDirectories(outPosts);
+                try (var s = Files.list(srcPosts)) {
+                    for (Path p : (Iterable<Path>) s::iterator) {
+                        if (!Files.isRegularFile(p)) continue;
+                        String lower = p.getFileName().toString().toLowerCase();
+                        if (!(lower.endsWith(".html") || lower.endsWith(".meta.json"))) continue;
+                        Path target = outPosts.resolve(p.getFileName().toString());
+                        try {
+                            java.nio.file.Files.copy(p, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.COPY_ATTRIBUTES);
+                        } catch (IOException ignored) {}
+                    }
+                }
+            }
+        } catch (IOException ignored) {}
+
         // Prepare token map
         var tokens = TemplateVars.from(cfg);
 

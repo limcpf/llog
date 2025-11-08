@@ -23,7 +23,9 @@ public final class Markdown {
         String codeLang = "";
         StringBuilder para = new StringBuilder();
         boolean inUl = false, inOl = false;
+        boolean inBq = false;
         StringBuilder list = new StringBuilder();
+        StringBuilder bq = new StringBuilder();
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             String ltrim = line.stripLeading();
@@ -66,10 +68,22 @@ public final class Markdown {
                 }
             }
 
+            // Horizontal rule (---, ***, ___)
+            String tline = line.trim();
+            if (tline.matches("^[-*_]{3,}$")) {
+                if (para.length() > 0) { out.add("<p>" + inline(para.toString().trim()) + "</p>"); para.setLength(0);} 
+                if (inUl) { out.add("<ul>\n" + list + "</ul>"); list.setLength(0); inUl = false; }
+                if (inOl) { out.add("<ol>\n" + list + "</ol>"); list.setLength(0); inOl = false; }
+                if (inBq) { out.add(renderBlockquote(bq.toString())); bq.setLength(0); inBq = false; }
+                out.add("<hr />");
+                continue;
+            }
+
             if (line.isBlank()) {
                 if (para.length() > 0) { out.add("<p>" + inline(para.toString().trim()) + "</p>"); para.setLength(0);} 
                 if (inUl) { out.add("<ul>\n" + list + "</ul>"); list.setLength(0); inUl = false; }
                 if (inOl) { out.add("<ol>\n" + list + "</ol>"); list.setLength(0); inOl = false; }
+                if (inBq) { out.add(renderBlockquote(bq.toString())); bq.setLength(0); inBq = false; }
                 continue;
             }
             // headings
@@ -77,9 +91,20 @@ public final class Markdown {
                 if (para.length() > 0) { out.add("<p>" + inline(para.toString().trim()) + "</p>"); para.setLength(0);} 
                 if (inUl) { out.add("<ul>\n" + list + "</ul>"); list.setLength(0); inUl = false; }
                 if (inOl) { out.add("<ol>\n" + list + "</ol>"); list.setLength(0); inOl = false; }
+                if (inBq) { out.add(renderBlockquote(bq.toString())); bq.setLength(0); inBq = false; }
                 int level = Math.min(6, (int) ltrim.chars().takeWhile(ch -> ch == '#').count());
                 String text = ltrim.substring(level).trim();
                 out.add("<h"+level+">" + inline(text) + "</h"+level+">");
+                continue;
+            }
+            // blockquote line
+            if (ltrim.startsWith(">")) {
+                if (para.length() > 0) { out.add("<p>" + inline(para.toString().trim()) + "</p>"); para.setLength(0);} 
+                if (inUl) { out.add("<ul>\n" + list + "</ul>"); list.setLength(0); inUl = false; }
+                if (inOl) { out.add("<ol>\n" + list + "</ol>"); list.setLength(0); inOl = false; }
+                inBq = true;
+                String content = ltrim.substring(1).stripLeading();
+                bq.append(content).append(' ');
                 continue;
             }
             // unordered list item
@@ -87,6 +112,7 @@ public final class Markdown {
             if (mUL.find()) {
                 if (para.length() > 0) { out.add("<p>" + inline(para.toString().trim()) + "</p>"); para.setLength(0);} 
                 if (inOl) { out.add("<ol>\n" + list + "</ol>"); list.setLength(0); inOl = false; }
+                if (inBq) { out.add(renderBlockquote(bq.toString())); bq.setLength(0); inBq = false; }
                 inUl = true;
                 list.append("  <li>").append(inline(mUL.group(1).trim())).append("</li>\n");
                 continue;
@@ -96,6 +122,7 @@ public final class Markdown {
             if (mOL.find()) {
                 if (para.length() > 0) { out.add("<p>" + inline(para.toString().trim()) + "</p>"); para.setLength(0);} 
                 if (inUl) { out.add("<ul>\n" + list + "</ul>"); list.setLength(0); inUl = false; }
+                if (inBq) { out.add(renderBlockquote(bq.toString())); bq.setLength(0); inBq = false; }
                 inOl = true;
                 list.append("  <li>").append(inline(mOL.group(1).trim())).append("</li>\n");
                 continue;
@@ -105,6 +132,7 @@ public final class Markdown {
         if (para.length() > 0) out.add("<p>" + inline(para.toString().trim()) + "</p>");
         if (inUl) out.add("<ul>\n" + list + "</ul>");
         if (inOl) out.add("<ol>\n" + list + "</ol>");
+        if (inBq) out.add(renderBlockquote(bq.toString()));
         return String.join("\n", out);
     }
 
@@ -189,13 +217,28 @@ public final class Markdown {
 
     public static String firstParagraphText(String md) {
         String html = toHtml(md);
-        int i = html.indexOf("<p>");
-        int j = html.indexOf("</p>", i+3);
-        if (i >= 0 && j > i) {
-            String inner = html.substring(i+3, j);
-            return inner.replaceAll("<[^>]+>", "");
-        }
-        return "";
+        String text = extractBetween(html, "<p>", "</p>");
+        if (text == null || text.isBlank()) text = extractBetween(html, "<li>", "</li>");
+        if (text == null || text.isBlank()) text = extractBetween(html, "<blockquote>", "</blockquote>");
+        if (text == null) text = html.replaceAll("<[^>]+>", " ");
+        text = text.replaceAll("\s+", " ").trim();
+        if (text.length() > 180) text = text.substring(0, 177) + "…";
+        return text;
+    }
+
+    private static String extractBetween(String s, String open, String close) {
+        int i = s.indexOf(open);
+        if (i < 0) return null;
+        int j = s.indexOf(close, i + open.length());
+        if (j < 0) return null;
+        String inner = s.substring(i + open.length(), j);
+        return inner.replaceAll("<[^>]+>", "");
+    }
+
+    private static String renderBlockquote(String content) {
+        String inner = inline(content.trim());
+        if (inner.isBlank()) return "";
+        return "<blockquote>" + inner + "</blockquote>";
     }
 
     private static String inline(String s) {

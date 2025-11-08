@@ -72,6 +72,23 @@
   .c-figure img { width: 100%; height: auto; display: block; border-radius: calc(var(--radius-2) - 1px); background: var(--color-bg); box-shadow: 0 1px 0 rgba(0,0,0,.25), 0 10px 30px rgba(0,0,0,.45); }
   .c-figure figcaption { color: var(--color-muted); font-size: 0.95em; margin-top: var(--space-2); text-align: center; }
 
+  /* Blockquote */
+  blockquote {
+    border-left: 3px solid var(--color-border);
+    margin: var(--space-6) 0;
+    padding: 0 var(--space-4);
+    color: var(--color-muted);
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: var(--space-6) 0; }
+  th, td { padding: .6rem .8rem; border: 1px solid var(--color-border); vertical-align: top; }
+  thead th { background: color-mix(in oklab, var(--color-surface), black 6%); text-align: left; }
+  tbody tr:nth-child(odd) { background: color-mix(in oklab, var(--color-surface), black 2%); }
+
+  /* Horizontal rule */
+  hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-6) 0; }
+
   /* CSS-only lightbox using :target */
   .c-image-viewer { position: fixed; inset: 0; background: #0f0e0d; background: color-mix(in oklab, var(--color-bg), black 40%); display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 1000; }
   .c-image-viewer:target { opacity: 1; pointer-events: auto; }

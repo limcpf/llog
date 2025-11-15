@@ -126,6 +126,11 @@ Usage:
 - dist는 배포 최소셋만 포함(문서/partials 제외). 필요한 정적 자산은 템플릿 내 `assets/`에 추가하세요.
 - 네이티브 바이너리 사용 시 런타임 의존성 0으로 CI/CD를 단순화할 수 있습니다.
 
+## 코드 스타일(들여쓰기 2칸)
+- 이 저장소는 들여쓰기 2칸을 기본으로 합니다(HTML/CSS/JS/MD/Java 포함).
+- 루트 `.editorconfig`로 2칸 들여쓰기와 공백 규칙을 강제합니다. IDE에서 EditorConfig 지원을 활성화하세요.
+- 대규모 리포맷은 PR 단위로 진행해주세요(기능 변경과 분리). 필요 시 IDE의 Reformat Code로 일괄 적용 가능합니다.
+
 ## 코드 하이라이트(외부 라이브러리 1개)
 - 하이라이트 라이브러리: highlight.js(CDN)
   - 포함 위치: `partials/head-shared.html`에 CSS/JS 링크가 추가되어 있습니다.

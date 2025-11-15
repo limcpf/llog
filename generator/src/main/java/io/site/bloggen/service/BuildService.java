@@ -132,6 +132,19 @@ public final class BuildService {
                 }
             }
         } catch (java.io.IOException ignored) {}
+        // Ensure common root icons/manifests exist if missing
+        try {
+            String[] roots = new String[] { "favicon.svg", "site.webmanifest" };
+            for (String r : roots) {
+                Path target = out.resolve(r);
+                if (Files.exists(target)) continue;
+                try (java.io.InputStream is = BuildService.class.getResourceAsStream("/templates/" + r)) {
+                    if (is != null) {
+                        Files.copy(is, target);
+                    }
+                }
+            }
+        } catch (IOException ignored) {}
         // Extra safety: ensure project's src/assets is fully copied (in case earlier traversal skipped for any reason)
         try {
             Path srcAssets = src.resolve("assets");

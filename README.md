@@ -79,6 +79,41 @@ Usage:
 - 홈(메인) 구성 라벨/개수 커스텀은 `site.json`의 Extras로 제어:
   - `home_latest_heading`, `home_recent_heading`, `home_more_label`, `home_recent_limit`
 
+### 소개 페이지(About)
+- 기본 제공: `about.html` 템플릿이 포함되어 있으며, `build` 시 소스(`--src`) 루트에 `about.html`이 없으면 기본 템플릿을 `dist/about.html`로 자동 생성합니다.
+- 직접 작성: 프로젝트 루트(소스)에 `about.html`을 추가하면 템플릿 대신 해당 파일이 사용됩니다. 공통 헤드/헤더/푸터는 include를 그대로 사용할 수 있습니다.
+  - 예시 스켈레톤
+    ```html
+    <!doctype html>
+    <html lang="ko">
+      <head>
+        <!-- @include partials/head-shared.html -->
+        <title>소개 — {{SITE_NAME}}</title>
+        <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+        <link rel="canonical" href="{{DOMAIN}}/about" />
+      </head>
+      <body>
+        <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+        <!-- @include partials/site-header.html -->
+        <main id="main" class="l-reading" role="main">
+          <article class="c-article u-flow" aria-labelledby="about-title">
+            <header>
+              <h1 id="about-title">{{SITE_NAME}}</h1>
+              <p class="c-article__meta">소개</p>
+            </header>
+            <p>문의: <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></p>
+          </article>
+        </main>
+        <!-- @include partials/site-footer.html -->
+      </body>
+    </html>
+    ```
+- 메타 커스텀: `about.html.meta.json`을 같은 위치에 두면 페이지 설명/OG 이미지를 오버라이드할 수 있습니다.
+  - 예: `{ "PAGE_DESCRIPTION": "사이트 소개", "OG_IMAGE": "/og/about.jpg" }`
+- 내비 라벨: `site.json`의 Extras에서 `nav_about_label`로 변경합니다.
+- 연락처: `site.json`의 Extras `contact_email` 값을 설정하면 템플릿에 주입됩니다.
+- 메뉴에서 제거: `partials/site-header.html`을 프로젝트에 복사 후 About 링크를 삭제하면 됩니다.
+
 ### 메타/파비콘/테마 컬러 커스텀
 - 전역 사이트 설명: `site_description` → 각 페이지 `PAGE_DESCRIPTION` 기본값으로 사용
 - 파비콘: `favicon_path` (기본 `/favicon.svg`)

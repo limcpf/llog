@@ -65,5 +65,9 @@ public final class ContentScanner {
     }
     private static String stripTags(String s) { return s.replaceAll("<[^>]+>", ""); }
     private static String slugify(String s) { return s.toLowerCase().replaceAll("[^a-z0-9\\-\\s]", "").trim().replaceAll("\\s+", "-"); }
-    private static String sanitize(String s) { return s == null ? "" : s.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim(); }
+    private static String sanitize(String s) {
+        if (s == null) return "";
+        String t = s.replace("\\n", " ").replace("\\r", " ").replace("\\t", " ").replace("\\b", " ");
+        return t.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim();
+    }
 }

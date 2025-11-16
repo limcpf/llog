@@ -13,18 +13,18 @@ public final class TemplateVars {
         String domain = cfg.domain().replaceAll("/$", "");
         Map<String,String> m = new LinkedHashMap<>();
         m.put("DOMAIN", domain);
-        m.put("SITE_NAME", cfg.siteName());
-        m.put("RSS_TITLE", cfg.rssTitle());
+        m.put("SITE_NAME", sanitizeVisible(cfg.siteName()));
+        m.put("RSS_TITLE", sanitizeVisible(cfg.rssTitle()));
         m.put("OG_DEFAULT", cfg.ogDefault());
         m.put("OG_IMAGE", domain + cfg.ogDefault());
         m.put("YEAR", String.valueOf(Year.now().getValue()));
         // Optional site-wide tokens
         var ex = cfg.extras();
-        m.put("SITE_DESCRIPTION", ex.getOrDefault("site_description", ""));
-        m.put("CONTACT_EMAIL", ex.getOrDefault("contact_email", ""));
-        m.put("NAV_HOME_LABEL", ex.getOrDefault("nav_home_label", "홈"));
-        m.put("NAV_ABOUT_LABEL", ex.getOrDefault("nav_about_label", "소개"));
-        m.put("NAV_POSTS_LABEL", ex.getOrDefault("nav_posts_label", "글"));
+        m.put("SITE_DESCRIPTION", sanitizeVisible(ex.getOrDefault("site_description", "")));
+        m.put("CONTACT_EMAIL", sanitizeVisible(ex.getOrDefault("contact_email", "")));
+        m.put("NAV_HOME_LABEL", sanitizeVisible(ex.getOrDefault("nav_home_label", "홈")));
+        m.put("NAV_ABOUT_LABEL", sanitizeVisible(ex.getOrDefault("nav_about_label", "소개")));
+        m.put("NAV_POSTS_LABEL", sanitizeVisible(ex.getOrDefault("nav_posts_label", "글")));
         m.put("FAVICON_PATH", ex.getOrDefault("favicon_path", "/favicon.svg"));
         m.put("THEME_COLOR_LIGHT", ex.getOrDefault("theme_color_light", "#f7f3e9"));
         m.put("THEME_COLOR_DARK", ex.getOrDefault("theme_color_dark", "#151311"));
@@ -69,5 +69,11 @@ public final class TemplateVars {
     private static String escapeAttr(String s) {
         if (s == null) return "";
         return s.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+    }
+
+    private static String sanitizeVisible(String s) {
+        if (s == null) return "";
+        String t = s.replace("\\n", " ").replace("\\r", " ").replace("\\t", " ").replace("\\b", " ");
+        return t.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim();
     }
 }

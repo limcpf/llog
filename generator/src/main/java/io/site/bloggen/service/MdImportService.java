@@ -94,8 +94,11 @@ public final class MdImportService {
 
     private static String sanitizeVisible(String s) {
         if (s == null) return "";
-        // remove control characters (e.g., \b), collapse whitespace
-        String t = s.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim();
+        String t = s;
+        // remove literal escape sequences like "\n", "\r", "\t", "\b"
+        t = t.replace("\\n", " ").replace("\\r", " ").replace("\\t", " ").replace("\\b", " ");
+        // remove actual control characters and collapse whitespace
+        t = t.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim();
         return t;
     }
 

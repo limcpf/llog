@@ -51,9 +51,9 @@ public final class CatalogService {
                     int from = (page - 1) * pageSize;
                     int to = Math.min(from + pageSize, posts.size());
                     List<Post> slice = posts.subList(from, to);
-                    String postsSections = buildYearSections(slice);
+                    String postsCards = buildPostCards(slice);
                     String pagination = buildPaginationNav(page, totalPages, cfg, i -> pageHref("/posts", i));
-                    String postsHtml = postsTpl.replace("{{POSTS_SECTIONS}}", postsSections)
+                    String postsHtml = postsTpl.replace("{{POSTS_CARDS}}", postsCards)
                                                .replace("{{POSTS_PAGINATION}}", pagination);
                     var local = new LinkedHashMap<>(tokens);
                     local.put("POSTS_CANONICAL_PATH", pageHref("/posts", page));
@@ -63,8 +63,8 @@ public final class CatalogService {
                     write(target, postsHtml, dryRun);
                 }
             } else {
-                String postsSections = buildYearSections(posts);
-                String postsHtml = postsTpl.replace("{{POSTS_SECTIONS}}", postsSections)
+                String postsCards = buildPostCards(posts);
+                String postsHtml = postsTpl.replace("{{POSTS_CARDS}}", postsCards)
                                            .replace("{{POSTS_PAGINATION}}", "");
                 var local = new LinkedHashMap<>(tokens);
                 local.put("POSTS_CANONICAL_PATH", pageHref("/posts", 1));
@@ -139,8 +139,8 @@ public final class CatalogService {
             Map<String, List<Post>> byCat = groupByCategory(posts);
             if (!byCat.isEmpty()) {
                 String catsIndexTpl = loadResource("/templates/categories/index.html");
-                String catsList = buildCategoriesList(byCat.keySet());
-                String catsIndexHtml = TokenEngine.apply(catsIndexTpl.replace("{{CATEGORIES_LIST}}", catsList), tokens);
+                String explorer = buildCategoryExplorer(posts, cfg);
+                String catsIndexHtml = TokenEngine.apply(catsIndexTpl.replace("{{CATEGORIES_EXPLORER}}", explorer), tokens);
                 write(out.resolve("categories/index.html"), catsIndexHtml, dryRun);
 
                 String catTpl = loadResource("/templates/categories/category-template.html");
@@ -181,28 +181,32 @@ public final class CatalogService {
 
     private static String buildHomeFeatured(io.site.bloggen.core.Post p, SiteConfig cfg) {
         StringBuilder sb = new StringBuilder();
-        sb.append("      <article class=\"c-article u-flow\" aria-labelledby=\"home-latest-title\">\n");
-        sb.append("        <header>\n");
-        sb.append("          <h2 id=\"home-latest-title\"><a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a></h2>\n");
-        sb.append("          <p class=\"c-article__meta\">").append(p.date()).append("</p>\n");
-        sb.append("        </header>\n");
-        if (p.description() != null && !p.description().isBlank()) {
-            sb.append("        <p class=\"lead\">").append(escape(p.description())).append("</p>\n");
-        }
-        sb.append("        <p><a class=\"c-button\" href=\"").append(p.url()).append("\">전체 글 읽기</a></p>\n");
-        sb.append("      </article>\n");
+        sb.append("<div class=\"c-cards\">\n");
+        sb.append(cardItem(p));
+        sb.append("</div>\n");
         return sb.toString();
     }
 
     private static String buildHomeRecent(java.util.List<io.site.bloggen.core.Post> posts) {
         if (posts == null || posts.isEmpty()) return "";
         StringBuilder sb = new StringBuilder();
-        for (io.site.bloggen.core.Post p : posts) {
-            sb.append("          <li>\n");
-            sb.append("            <time datetime=\"").append(p.date()).append("\">").append(p.date()).append("</time> — ");
-            sb.append("            <a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a>\n");
-            sb.append("          </li>\n");
-        }
+        for (io.site.bloggen.core.Post p : posts) sb.append(cardItem(p));
+        return sb.toString();
+    }
+
+    private static String buildPostCards(java.util.List<Post> posts) {
+        StringBuilder sb = new StringBuilder();
+        for (Post p : posts) sb.append(cardItem(p));
+        return sb.toString();
+    }
+
+    private static String cardItem(Post p) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<article class=\"c-card\">");
+        sb.append("<h3 class=\"c-card__title\"><a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a></h3>");
+        sb.append("<div class=\"c-card__meta\"><time datetime=\"").append(p.date()).append("\">").append(p.date()).append("</time></div>");
+        if (p.description() != null && !p.description().isBlank()) sb.append("<p class=\"c-card__desc\">").append(escape(p.description())).append("</p>");
+        sb.append("</article>\n");
         return sb.toString();
     }
 
@@ -251,13 +255,51 @@ public final class CatalogService {
         return sb.toString();
     }
 
-    private static String buildCategoriesList(Set<String> cats) {
-        List<String> sorted = new ArrayList<>(cats);
-        Collections.sort(sorted);
-        StringBuilder sb = new StringBuilder();
-        for (String p : sorted) {
-            sb.append("          <li><a href=\"/categories/").append(p).append("/\">").append(escape(prettyPath(p))).append("</a></li>\n");
+    private static String buildCategoryExplorer(List<Post> posts, SiteConfig cfg) {
+        // Build tree
+        CatNode root = new CatNode("", "");
+        for (Post p : posts) {
+            String cp = p.categoryPath();
+            if (cp == null || cp.isBlank()) continue;
+            String[] segs = cp.split("/");
+            CatNode cur = root;
+            StringBuilder full = new StringBuilder();
+            for (String s : segs) {
+                if (s.isBlank()) continue;
+                if (full.length() > 0) full.append('/');
+                full.append(s);
+                cur = cur.children.computeIfAbsent(s, k -> new CatNode(s, full.toString()));
+            }
+            cur.posts.add(p);
         }
+        // Render
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div class=\"c-tree\">\n");
+        for (String key : root.children.keySet()) {
+            sb.append(renderCatNode(root.children.get(key), cfg));
+        }
+        sb.append("</div>\n");
+        return sb.toString();
+    }
+
+    private static String renderCatNode(CatNode n, SiteConfig cfg) {
+        StringBuilder sb = new StringBuilder();
+        String label = catSegLabel(n.name, cfg);
+        sb.append("<details>\n");
+        sb.append("  <summary>📁 <a href=\"/categories/").append(n.full).append("/\">")
+          .append(escape(label)).append("</a></summary>\n");
+        // children
+        for (String key : n.children.keySet()) sb.append(renderCatNode(n.children.get(key), cfg));
+        // posts
+        if (!n.posts.isEmpty()) {
+            sb.append("  <ul class=\"c-tree__posts\">\n");
+            for (Post p : n.posts) {
+                sb.append("    <li>📄 <a href=\"").append(p.url()).append("\">")
+                  .append(escape(p.title())).append("</a></li>\n");
+            }
+            sb.append("  </ul>\n");
+        }
+        sb.append("</details>\n");
         return sb.toString();
     }
 
@@ -305,6 +347,32 @@ public final class CatalogService {
             }
         }
         return sb.toString();
+    }
+
+    private static String catSegLabel(String seg, SiteConfig cfg) {
+        String mapStr = cfg.extras().getOrDefault("category_labels", "");
+        if (!mapStr.isBlank()) {
+            String[] pairs = mapStr.split(",");
+            for (String pr : pairs) {
+                String[] kv = pr.split(":", 2);
+                if (kv.length == 2) {
+                    String k = kv[0].trim().toLowerCase();
+                    String val = kv[1].trim();
+                    if (k.equals(seg)) return val.isEmpty()? seg : val;
+                }
+            }
+        }
+        String s = seg.replace('-', ' ');
+        if (s.isEmpty()) return seg;
+        return Character.toUpperCase(s.charAt(0)) + (s.length()>1? s.substring(1):"");
+    }
+
+    private static final class CatNode {
+        final String name; // segment
+        final String full; // full path e.g., a/b
+        final java.util.TreeMap<String, CatNode> children = new java.util.TreeMap<>();
+        final java.util.List<Post> posts = new java.util.ArrayList<>();
+        CatNode(String name, String full) { this.name = name; this.full = full; }
     }
 
     private static String buildFeedItems(List<Post> posts, SiteConfig cfg) {

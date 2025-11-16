@@ -127,13 +127,48 @@
   .c-breadcrumb a { color: inherit; text-decoration: none; }
   .c-breadcrumb a:hover { text-decoration: underline; }
 
-  /* Front matter block */
-  .c-fm { margin: var(--space-4) 0; }
-  .c-fm > summary { cursor: pointer; color: var(--color-muted); }
-  .c-fm__table { width: 100%; border-collapse: collapse; margin-top: var(--space-2); }
-  .c-fm__table th, .c-fm__table td { padding: .5rem .75rem; border: 1px solid var(--color-border); vertical-align: top; }
-  .c-fm__table th { width: 14rem; text-align: left; background: color-mix(in oklab, var(--color-surface), black 6%); }
-  .c-fm__sep { margin-block: var(--space-4); }
+  /* Front matter block (modern, soft) */
+  .c-fm {
+    margin: var(--space-6) 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2);
+    background: color-mix(in oklab, var(--color-surface), black 3%);
+    overflow: hidden;
+  }
+  .c-fm > summary {
+    display: block;
+    width: 100%;
+    padding: .75rem 1rem;
+    background: color-mix(in oklab, var(--color-surface), black 6%);
+    color: var(--color-fg);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  .c-fm > summary::-webkit-details-marker { display: none; }
+  .c-fm > summary::after {
+    content: "▾";
+    float: right;
+    color: var(--color-muted);
+    transition: transform .15s ease;
+  }
+  .c-fm[open] > summary::after { transform: rotate(180deg); }
+  .c-fm:focus-within > summary { outline: 2px dotted var(--color-accent); outline-offset: 2px; }
+
+  .c-fm__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+  }
+  .c-fm__table th, .c-fm__table td {
+    padding: .65rem 1rem;
+    vertical-align: top;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .c-fm__table tr:last-child th, .c-fm__table tr:last-child td { border-bottom: 0; }
+  .c-fm__table th { width: 16rem; text-align: left; color: var(--color-muted); font-weight: 500; }
+  .c-fm__sep { margin-block: var(--space-4); opacity: .6; }
 
   /* Category explorer */
   .c-tree { margin-top: var(--space-4); }
@@ -142,32 +177,15 @@
   .c-tree__posts { list-style: none; padding-left: 1.2rem; }
   .c-tree__posts li { margin: .25rem 0; }
 
-  /* Cards (post list) */
-  .c-cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-  @media (min-width: 48rem) { /* md */
-    .c-cards { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (min-width: 64rem) { /* lg */
-    .c-cards { grid-template-columns: repeat(3, 1fr); }
-  }
-  .c-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-2);
-    background: color-mix(in oklab, var(--color-surface), black 3%);
-    padding: var(--space-4);
-    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-  }
-  .c-card:hover { transform: translateY(-1px); border-color: color-mix(in oklab, var(--color-border), var(--color-accent) 30%); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
-  .c-card__title { font-size: var(--fs-2); line-height: var(--lh-heading); }
-  .c-card__title a { text-decoration: none; color: var(--color-fg); }
-  .c-card__title a:hover { text-decoration: underline; }
-  .c-card__meta { color: var(--color-muted); font-size: .95em; }
-  .c-card__desc { color: var(--color-muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  /* Cards (banner style) */
+  .c-cards { display: flex; flex-direction: column; gap: var(--space-4); }
+  .c-card { border: 1px solid var(--color-border); border-radius: var(--radius-2); background: color-mix(in oklab, var(--color-surface), black 3%); overflow: hidden; }
+  .c-card__link { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-4); text-decoration: none; color: inherit; width: 100%; }
+  .c-card__content { flex: 1; min-width: 0; }
+  .c-card__title { font-size: var(--fs-2); line-height: var(--lh-heading); margin: 0 0 .25rem; }
+  .c-card__desc { color: var(--color-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .c-card__meta { color: var(--color-muted); font-size: .95em; white-space: nowrap; display: flex; align-items: center; gap: .5rem; }
+  .c-card__arrow { transition: transform .12s ease; }
+  .c-card:hover { border-color: color-mix(in oklab, var(--color-border), var(--color-accent) 30%); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
+  .c-card:hover .c-card__arrow { transform: translateX(2px); }
 }

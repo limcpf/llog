@@ -151,8 +151,8 @@ public final class MdImportService {
         for (String k : keys) {
             String v = fm.get(k);
             if (v == null) v = "";
-            String key = escape(k);
-            String val = escape(v);
+            String key = escape(sanitizeVisible(k));
+            String val = escape(sanitizeVisible(v));
             rows.append("        <tr><th scope=\"row\">").append(key).append("</th><td>").append(val).append("</td></tr>\n");
         }
         return "<!--FM_BLOCK_START-->\n" +

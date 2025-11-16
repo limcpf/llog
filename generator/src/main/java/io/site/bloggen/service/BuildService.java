@@ -148,6 +148,18 @@ public final class BuildService {
                 }
             }
         } catch (IOException ignored) {}
+        // Ensure about page exists if not provided in src
+        try {
+            Path about = out.resolve("about.html");
+            if (!Files.exists(about)) {
+                try (java.io.InputStream is = BuildService.class.getResourceAsStream("/templates/about.html")) {
+                    if (is != null) {
+                        Files.createDirectories(about.getParent());
+                        Files.copy(is, about);
+                    }
+                }
+            }
+        } catch (IOException ignored) {}
         // Extra safety: ensure project's src/assets is fully copied (in case earlier traversal skipped for any reason)
         try {
             Path srcAssets = src.resolve("assets");
@@ -237,7 +249,7 @@ public final class BuildService {
                          var mm = FlatJson.parse(mj);
                          for (var e : mm.entrySet()) {
                              String k = e.getKey() == null ? "" : e.getKey().trim();
-                             String v = e.getValue();
+                             String v = sanitizeForOutput(e.getValue());
                              if (!k.isEmpty() && v != null && !v.isBlank()) {
                                  local.put(k.toUpperCase(), v);
                              }
@@ -339,9 +351,11 @@ public final class BuildService {
                         boolean isHome = "index.html".equals(rel2) || rel2.isEmpty();
                         boolean isAbout = "about.html".equals(rel2);
                         boolean isPosts = rel2.startsWith("posts/");
+                        boolean isCats = rel2.startsWith("categories/");
                         local2.put("HOME_CURRENT_ATTR", isHome ? "aria-current=\"page\"" : "");
                         local2.put("ABOUT_CURRENT_ATTR", isAbout ? "aria-current=\"page\"" : "");
                         local2.put("POSTS_CURRENT_ATTR", isPosts ? "aria-current=\"page\"" : "");
+                        local2.put("CATS_CURRENT_ATTR", isCats ? "aria-current=\"page\"" : "");
                          String nt2 = TokenEngine.apply(t, local2);
                          nt2 = DomainUpdater.apply(nt2, cfg);
                          if (!nt2.equals(orig)) {

@@ -202,10 +202,14 @@ public final class CatalogService {
 
     private static String cardItem(Post p) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<article class=\"c-card\">");
-        sb.append("<h3 class=\"c-card__title\"><a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a></h3>");
-        sb.append("<div class=\"c-card__meta\"><time datetime=\"").append(p.date()).append("\">").append(p.date()).append("</time></div>");
+        sb.append("<article class=\"c-card c-card--banner\">");
+        sb.append("<a class=\"c-card__link\" href=\"").append(p.url()).append("\">");
+        sb.append("<div class=\"c-card__content\">");
+        sb.append("<h3 class=\"c-card__title\">").append(escape(p.title())).append("</h3>");
         if (p.description() != null && !p.description().isBlank()) sb.append("<p class=\"c-card__desc\">").append(escape(p.description())).append("</p>");
+        sb.append("</div>");
+        sb.append("<div class=\"c-card__meta\"><time datetime=\"").append(p.date()).append("\">").append(p.date()).append("</time><span class=\"c-card__arrow\">→</span></div>");
+        sb.append("</a>");
         sb.append("</article>\n");
         return sb.toString();
     }

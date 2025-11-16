@@ -24,6 +24,7 @@ public final class TemplateVars {
         m.put("CONTACT_EMAIL", sanitizeVisible(ex.getOrDefault("contact_email", "")));
         m.put("NAV_HOME_LABEL", sanitizeVisible(ex.getOrDefault("nav_home_label", "홈")));
         m.put("NAV_ABOUT_LABEL", sanitizeVisible(ex.getOrDefault("nav_about_label", "소개")));
+        m.put("NAV_CATEGORIES_LABEL", sanitizeVisible(ex.getOrDefault("nav_categories_label", "카테고리")));
         m.put("NAV_POSTS_LABEL", sanitizeVisible(ex.getOrDefault("nav_posts_label", "글")));
         m.put("FAVICON_PATH", ex.getOrDefault("favicon_path", "/favicon.svg"));
         m.put("THEME_COLOR_LIGHT", ex.getOrDefault("theme_color_light", "#f7f3e9"));
@@ -53,7 +54,7 @@ public final class TemplateVars {
         String cfToken = ex.getOrDefault("cf_beacon_token", "").trim();
         if (!cfToken.isBlank()) {
             String cf = "<script defer src=\\\"https://static.cloudflareinsights.com/beacon.min.js\\\" data-cf-beacon='{" +
-                     "\\\"token\\\":\\\"" + escapeAttr(cfToken) + "\\\"}'></script>\\n";
+                     "\\\"token\\\":\\\"" + escapeAttr(cfToken) + "\\\"}'></script>\n";
             m.put("CF_SNIPPET", cf);
         } else {
             m.put("CF_SNIPPET", "");

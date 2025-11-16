@@ -1,9 +1,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="color-scheme" content="light dark" />
-<meta name="theme-color" content="#151311" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f7f3e9" media="(prefers-color-scheme: light)">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="{{THEME_COLOR_DARK}}" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="{{THEME_COLOR_LIGHT}}" media="(prefers-color-scheme: light)">
+<link rel="icon" href="{{FAVICON_PATH}}" type="image/svg+xml">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/css/index.css" />
 
@@ -16,3 +16,6 @@
   });
   // code fences already emit <code class="language-*"></code>; hljs will use that or auto-detect
 </script>
+
+{{GA_SNIPPET}}
+{{CF_SNIPPET}}

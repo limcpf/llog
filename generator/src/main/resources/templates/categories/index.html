@@ -2,27 +2,26 @@
 <html lang="ko">
   <head>
     <!-- @include partials/head-shared.html -->
-    <title>태그 — {{SITE_NAME}}</title>
-    <link rel="canonical" href="{{DOMAIN}}/tags/" />
-    <meta property="og:title" content="태그 — {{SITE_NAME}}" />
+    <title>카테고리 — {{SITE_NAME}}</title>
+    <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+    <link rel="canonical" href="{{DOMAIN}}/categories/" />
+    <meta property="og:title" content="카테고리 — {{SITE_NAME}}" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{DOMAIN}}/tags/" />
+    <meta property="og:url" content="{{DOMAIN}}/categories/" />
     <meta property="og:image" content="{{OG_IMAGE}}" />
     <meta name="twitter:card" content="{{TWITTER_CARD}}" />
-    <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
   </head>
   <body>
     <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
     <!-- @include partials/site-header.html -->
 
     <main id="main" class="l-reading" role="main">
-      <article class="c-article u-flow" aria-labelledby="tags-title">
+      <article class="c-article u-flow" aria-labelledby="cats-title">
         <header>
-          <h1 id="tags-title">태그</h1>
+          <h1 id="cats-title">카테고리</h1>
         </header>
-
         <ul>
-          {{TAGS_LIST}}
+{{CATEGORIES_LIST}}
         </ul>
       </article>
     </main>
@@ -30,4 +29,4 @@
     <!-- @include partials/site-footer.html -->
   </body>
 </html>
-    <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+

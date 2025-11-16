@@ -135,6 +135,27 @@ public final class CatalogService {
                 }
             }
 
+            // categories index + pages (CATEGORY_PATH)
+            Map<String, List<Post>> byCat = groupByCategory(posts);
+            if (!byCat.isEmpty()) {
+                String catsIndexTpl = loadResource("/templates/categories/index.html");
+                String catsList = buildCategoriesList(byCat.keySet());
+                String catsIndexHtml = TokenEngine.apply(catsIndexTpl.replace("{{CATEGORIES_LIST}}", catsList), tokens);
+                write(out.resolve("categories/index.html"), catsIndexHtml, dryRun);
+
+                String catTpl = loadResource("/templates/categories/category-template.html");
+                for (String cat : byCat.keySet()) {
+                    List<Post> inCat = byCat.get(cat);
+                    String items = buildPostsList(inCat);
+                    var local = new LinkedHashMap<>(tokens);
+                    local.put("CATEGORY_PATH", "/categories/" + cat + "/");
+                    local.put("CATEGORY_LABEL", prettyPath(cat));
+                    String html = TokenEngine.apply(catTpl.replace("{{CATEGORY_POSTS}}", items), local);
+                    Path target = out.resolve("categories").resolve(cat).resolve("index.html");
+                    write(target, html, dryRun);
+                }
+            }
+
             // feed.xml
             String feedTpl = loadResource("/templates/feed.xml");
             String feedItems = buildFeedItems(posts, cfg);
@@ -230,6 +251,16 @@ public final class CatalogService {
         return sb.toString();
     }
 
+    private static String buildCategoriesList(Set<String> cats) {
+        List<String> sorted = new ArrayList<>(cats);
+        Collections.sort(sorted);
+        StringBuilder sb = new StringBuilder();
+        for (String p : sorted) {
+            sb.append("          <li><a href=\"/categories/").append(p).append("/\">").append(escape(prettyPath(p))).append("</a></li>\n");
+        }
+        return sb.toString();
+    }
+
     private static Map<String, List<Post>> groupByTag(List<Post> posts) {
         Map<String, List<Post>> by = new TreeMap<>();
         for (Post p : posts) {
@@ -241,6 +272,17 @@ public final class CatalogService {
         return by;
     }
 
+    private static Map<String, List<Post>> groupByCategory(List<Post> posts) {
+        Map<String, List<Post>> by = new TreeMap<>();
+        for (Post p : posts) {
+            String cp = p.categoryPath();
+            if (cp == null || cp.isBlank()) continue;
+            by.computeIfAbsent(cp, k -> new ArrayList<>()).add(p);
+        }
+        for (var list : by.values()) list.sort(Comparator.comparing(Post::date).reversed());
+        return by;
+    }
+
     private static String buildPostsList(List<Post> posts) {
         StringBuilder sb = new StringBuilder();
         for (Post p : posts) {
@@ -248,6 +290,19 @@ public final class CatalogService {
             sb.append("            <time datetime=\"").append(p.date()).append("\">").append(p.date()).append("</time>\n");
             sb.append("            — <a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a>\n");
             sb.append("          </li>\n");
+        }
+        return sb.toString();
+    }
+
+    private static String prettyPath(String p) {
+        String[] parts = p.split("/");
+        StringBuilder sb = new StringBuilder();
+        for (int i=0;i<parts.length;i++) {
+            if (i>0) sb.append(" / ");
+            String seg = parts[i].replace('-', ' ');
+            if (!seg.isEmpty()) {
+                sb.append(Character.toUpperCase(seg.charAt(0))).append(seg.length()>1?seg.substring(1):"");
+            }
         }
         return sb.toString();
     }

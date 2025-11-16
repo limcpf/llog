@@ -30,6 +30,7 @@ public final class MdImportService {
                     if (publish == null) publish = "false";
                     if (!"true".equalsIgnoreCase(publish)) { if (hasFM) io.site.bloggen.util.Log.info("skip: publish!=true " + p); continue; }
                     String title = defaultString(firstOf(fm, "title", "subject", "name"));
+                    String rawPath = defaultString(firstOf(fm, "path", "category", "categories", "category_path"));
                     String dateStr = defaultString(firstOf(fm, "createdDate", "createDate", "created_at", "created", "date"));
                     if (title.isBlank() || dateStr.isBlank()) { if (hasFM) io.site.bloggen.util.Log.warn("skip: missing title/date: " + p); continue; }
                     LocalDate date;
@@ -52,12 +53,15 @@ public final class MdImportService {
                     String tpl = loadTemplate();
                     String html = tpl.replace("{{TITLE}}", escape(title)).replace("{{DATE}}", date.toString()).replace("{{CONTENT_HTML}}", htmlContent);
                     if (dryRun) {
-                        io.site.bloggen.util.Log.info("[dry-run] import: " + p + " -> " + out);
+                        io.site.bloggen.util.Log.info("[dry-run] import: " + p + " -> " + out + (rawPath.isBlank()?"":" (cat: "+normalizeCatPath(rawPath)+")"));
                     } else {
                         FS.ensureDir(out.getParent());
                         Files.writeString(out, html, StandardCharsets.UTF_8);
                         Path meta = out.resolveSibling(out.getFileName().toString() + ".meta.json");
-                        String metaJson = "{\n  \"PAGE_DESCRIPTION\": \"" + escape(excerpt) + "\"\n}\n";
+                        String cat = normalizeCatPath(rawPath);
+                        String metaJson = "{\n  \"PAGE_DESCRIPTION\": \"" + escape(excerpt) + "\"" 
+                                + (cat.isBlank()?"":"\n,  \"CATEGORY_PATH\": \"" + escape(cat) + "\"")
+                                + "\n}\n";
                         Files.writeString(meta, metaJson, StandardCharsets.UTF_8);
                         io.site.bloggen.util.Log.info("imported: " + p + " -> " + out);
                     }
@@ -82,6 +86,20 @@ public final class MdImportService {
     }
 
     private static String defaultString(String s) { return s == null ? "" : s; }
+
+    private static String normalizeCatPath(String raw) {
+        if (raw == null) return "";
+        String s = raw.trim();
+        if (s.isBlank()) return "";
+        // split by '/'; slugify each segment
+        String[] parts = s.split("/");
+        java.util.List<String> segs = new java.util.ArrayList<>();
+        for (String part : parts) {
+            String seg = io.site.bloggen.infra.Slug.of(part.trim());
+            if (!seg.isBlank() && !"post".equals(seg)) segs.add(seg);
+        }
+        return String.join("/", segs);
+    }
 
     private static String loadTemplate() throws IOException {
         try (var is = MdImportService.class.getResourceAsStream("/templates/posts/post-md-template.html")) {

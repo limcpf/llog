@@ -19,6 +19,9 @@ site.webmanifest
 sitemap.xml
 robots.txt
 archives.html
+categories/
+categories/index.html
+categories/category-template.html
 assets/css/tokens.css
 assets/css/index.css
 assets/css/layout.css

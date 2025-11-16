@@ -79,6 +79,25 @@ Usage:
 - 홈(메인) 구성 라벨/개수 커스텀은 `site.json`의 Extras로 제어:
   - `home_latest_heading`, `home_recent_heading`, `home_more_label`, `home_recent_limit`
 
+### 메타/파비콘/테마 컬러 커스텀
+- 전역 사이트 설명: `site_description` → 각 페이지 `PAGE_DESCRIPTION` 기본값으로 사용
+- 파비콘: `favicon_path` (기본 `/favicon.svg`)
+- 테마 색상: `theme_color_light`, `theme_color_dark`
+- Twitter 카드 타입: `twitter_card` (기본 `summary_large_image`)
+- OG 기본 이미지 경로: `og_default` (전역), 페이지별 오버라이드: `.meta.json`에 `OG_IMAGE`
+- 페이지별 설명/타이틀 등: 해당 페이지 옆에 `<파일>.meta.json` 생성 후 키를 넣어 오버라이드
+  - 예: `{ "PAGE_DESCRIPTION": "이 페이지 설명", "OG_IMAGE": "/og/custom.jpg" }`
+
+### 분석(Analytics)
+- Cloudflare Web Analytics(권장, 무쿠키/프라이버시 친화)
+  - site.json Extras: `cf_beacon_token`: Cloudflare Analytics 토큰
+  - 빌드 후 각 페이지 `<head>`에 beacon 스크립트가 삽입됩니다.
+  - 별도 쿠키/식별자 없이 페이지뷰/유입을 확인할 수 있습니다.
+- Google Analytics(GA4, 선택)
+  - site.json Extras: `ga_measurement_id`(`G-…`), 선택 `ga_send_page_view`(`true|false`)
+  - 각 페이지 `<head>`에 gtag.js 스니펫이 자동 삽입됩니다.
+  - GA 사용 시 개인정보 처리방침/동의 절차를 마련하세요.
+
 ### site.json 외부 주입(옵션)
 - 기본: `--src` 루트의 `site.json`을 사용합니다.
 - 외부 파일을 명시하고 싶다면:

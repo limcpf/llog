@@ -33,12 +33,14 @@ public final class ContentScanner {
                 String title = extractTitle(html);
                 // sidecar meta
                 String desc = "";
+                String catPath = "";
                 List<String> tags = new ArrayList<>();
                 Path meta = p.resolveSibling(name + ".meta.json");
                 if (Files.exists(meta)) {
                     String mj = Files.readString(meta, StandardCharsets.UTF_8);
                     var mm = FlatJson.parse(mj);
                     desc = mm.getOrDefault("PAGE_DESCRIPTION", "");
+                    catPath = mm.getOrDefault("CATEGORY_PATH", "");
                     var tagStr = mm.getOrDefault("TAGS", "");
                     if (tagStr != null && !tagStr.isBlank()) {
                         for (String t : tagStr.split(",")) {
@@ -47,7 +49,7 @@ public final class ContentScanner {
                         }
                     }
                 }
-                posts.add(new Post(name, url, date, title, List.copyOf(tags), desc));
+                posts.add(new Post(name, url, date, title, List.copyOf(tags), desc, catPath));
             }
         }
         posts.sort(Comparator.comparing(Post::date).reversed());
@@ -64,4 +66,3 @@ public final class ContentScanner {
     private static String stripTags(String s) { return s.replaceAll("<[^>]+>", ""); }
     private static String slugify(String s) { return s.toLowerCase().replaceAll("[^a-z0-9\\-\\s]", "").trim().replaceAll("\\s+", "-"); }
 }
-

@@ -205,6 +205,9 @@ public final class BuildService {
                      String pagePath = "/" + rel;
                      local.put("PAGE_PATH", pagePath);
                      local.put("PAGE_URL", cfg.domain().replaceAll("/$", "") + pagePath);
+                     if (!local.containsKey("PAGE_DESCRIPTION") || local.get("PAGE_DESCRIPTION") == null || local.get("PAGE_DESCRIPTION").isBlank()) {
+                         local.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
+                     }
                      // Sidecar meta: <filename>.meta.json
                      var meta = p.resolveSibling(name + ".meta.json");
                      if (java.nio.file.Files.exists(meta)) {
@@ -287,10 +290,13 @@ public final class BuildService {
                          String orig = Files.readString(p, StandardCharsets.UTF_8);
                          String t = expandIncludes(orig, src);
                          var local2 = new java.util.LinkedHashMap<>(tokens);
-                        var rel2 = out.relativize(p).toString().replace(java.io.File.separatorChar, '/');
-                        String pagePath2 = "/" + rel2;
-                        local2.put("PAGE_PATH", pagePath2);
-                        local2.put("PAGE_URL", cfg.domain().replaceAll("/$", "") + pagePath2);
+                         var rel2 = out.relativize(p).toString().replace(java.io.File.separatorChar, '/');
+                         String pagePath2 = "/" + rel2;
+                         local2.put("PAGE_PATH", pagePath2);
+                         local2.put("PAGE_URL", cfg.domain().replaceAll("/$", "") + pagePath2);
+                         if (!local2.containsKey("PAGE_DESCRIPTION") || local2.get("PAGE_DESCRIPTION") == null || local2.get("PAGE_DESCRIPTION").isBlank()) {
+                             local2.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
+                         }
                         // nav current helpers
                         boolean isHome = "index.html".equals(rel2) || rel2.isEmpty();
                         boolean isAbout = "about.html".equals(rel2);

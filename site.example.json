@@ -1,0 +1,37 @@
+{
+  "domain": "https://example.com",
+  "site_name": "고전서가",
+  "rss_title": "고전서가",
+  "og_default": "/og/default.jpg",
+
+  "site_description": "글이 편안하게 읽히면서도 고전의 향수를 불러오는 정적 블로그.",
+  "contact_email": "contact@example.com",
+
+  "nav_home_label": "홈",
+  "nav_about_label": "소개",
+  "nav_posts_label": "글",
+
+  "home_latest_heading": "최신 글",
+  "home_recent_heading": "최근 글",
+  "home_more_label": "더 보기: 전체 글",
+  "home_recent_limit": "5",
+
+  "posts_page_size": "10",
+  "archives_page_size": "0",
+  "tags_page_size": "0",
+
+  "pagination_prev_label": "이전",
+  "pagination_next_label": "다음",
+
+  "favicon_path": "/favicon.svg",
+  "theme_color_light": "#f7f3e9",
+  "theme_color_dark": "#151311",
+  "twitter_card": "summary_large_image",
+
+  "tag_labels": "java:자바, spring:스프링",
+  "untagged_label": "미지정",
+
+  "ga_measurement_id": "G-XXXXXXXXXX",
+  "ga_send_page_view": "true"
+}
+

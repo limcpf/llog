@@ -42,7 +42,7 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI
 ```
-llog 0.3.6
+llog 0.3.7
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]
@@ -62,6 +62,45 @@ Usage:
   - Build looks in project `src` first, then falls back to packaged templates
 - Page tokens: `{{SITE_NAME}}`, `{{DOMAIN}}`, `{{OG_DEFAULT}}`, `{{YEAR}}` etc., read from `site.json`.
 - Page meta: overrides in `<file>.meta.json` (e.g., `PAGE_DESCRIPTION`, `OG_IMAGE`).
+
+### Header / Footer customization
+- Shared header/footer are provided as partials.
+  - Header: `generator/src/main/resources/templates/partials/site-header.html`
+  - Footer: `generator/src/main/resources/templates/partials/site-footer.html`
+- To customize per project, place files with the same path under your project `partials/` and they will override the templates.
+- Navigation labels come from `site.json` Extras: `nav_home_label`, `nav_about_label`, `nav_categories_label`, `nav_posts_label`.
+
+### About page
+- Built-in: an `about.html` template ships with the generator. During `build`, if your source (`--src`) has no `about.html`, the template is copied to `dist/about.html`.
+- Override: add your own `about.html` in the source root to replace the template. You can still use the shared includes.
+  - Example skeleton
+    ```html
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <!-- @include partials/head-shared.html -->
+        <title>About — {{SITE_NAME}}</title>
+        <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+        <link rel="canonical" href="{{DOMAIN}}/about" />
+      </head>
+      <body>
+        <a class="u-sr-only u-sr-only--focusable" href="#main">Skip to main</a>
+        <!-- @include partials/site-header.html -->
+        <main id="main" class="l-reading" role="main">
+          <article class="c-article u-flow" aria-labelledby="about-title">
+            <header>
+              <h1 id="about-title">{{SITE_NAME}}</h1>
+              <p class="c-article__meta">About</p>
+            </header>
+            <p>Contact: <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></p>
+          </article>
+        </main>
+        <!-- @include partials/site-footer.html -->
+      </body>
+    </html>
+    ```
+- Page meta override: put `about.html.meta.json` next to the page (e.g., `{ "PAGE_DESCRIPTION": "About this site", "OG_IMAGE": "/og/about.jpg" }`).
+- Contact email: set `contact_email` in `site.json` Extras.
 
 ### Meta / Favicon / Theme Colors
 - Global site description: `site_description` (default for page description)

@@ -121,4 +121,9 @@
   .tok-n { color: #fde68a; }      /* number */
   .tok-c { color: #9ca3af; font-style: italic; }  /* comment */
   .tok-p { color: var(--color-fg); }      /* punctuation */
+
+  /* Breadcrumb */
+  .c-breadcrumb { color: var(--color-muted); font-size: 0.95em; margin-block: var(--space-2) var(--space-4); }
+  .c-breadcrumb a { color: inherit; text-decoration: none; }
+  .c-breadcrumb a:hover { text-decoration: underline; }
 }

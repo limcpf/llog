@@ -205,6 +205,18 @@ public final class BuildService {
                      String pagePath = "/" + rel;
                      local.put("PAGE_PATH", pagePath);
                      local.put("PAGE_URL", cfg.domain().replaceAll("/$", "") + pagePath);
+                     // Default description
+                     if (!local.containsKey("PAGE_DESCRIPTION") || local.get("PAGE_DESCRIPTION") == null || local.get("PAGE_DESCRIPTION").isBlank()) {
+                         local.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
+                     }
+                     // Post-specific tokens: breadcrumb, article section, JSON-LD
+                     if (pagePath.startsWith("/posts/") && pagePath.endsWith(".html")) {
+                         String cat = local.getOrDefault("CATEGORY_PATH", "");
+                         local.put("BREADCRUMB", buildBreadcrumb(cat, cfg));
+                         local.put("ARTICLE_SECTION", lastSegmentLabel(cat, cfg));
+                         String htmlForTitle = orig; // before token application contains <h1>
+                         local.put("POST_JSONLD", buildJsonLd(htmlForTitle, pagePath, local, cfg));
+                     }
                      if (!local.containsKey("PAGE_DESCRIPTION") || local.get("PAGE_DESCRIPTION") == null || local.get("PAGE_DESCRIPTION").isBlank()) {
                          local.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
                      }
@@ -297,6 +309,15 @@ public final class BuildService {
                          if (!local2.containsKey("PAGE_DESCRIPTION") || local2.get("PAGE_DESCRIPTION") == null || local2.get("PAGE_DESCRIPTION").isBlank()) {
                              local2.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
                          }
+                         if (pagePath2.startsWith("/posts/") && pagePath2.endsWith(".html")) {
+                             String cat2 = local2.getOrDefault("CATEGORY_PATH", "");
+                             local2.put("BREADCRUMB", buildBreadcrumb(cat2, cfg));
+                             local2.put("ARTICLE_SECTION", lastSegmentLabel(cat2, cfg));
+                             local2.put("POST_JSONLD", buildJsonLd(orig, pagePath2, local2, cfg));
+                         }
+                         if (!local2.containsKey("PAGE_DESCRIPTION") || local2.get("PAGE_DESCRIPTION") == null || local2.get("PAGE_DESCRIPTION").isBlank()) {
+                             local2.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
+                         }
                         // nav current helpers
                         boolean isHome = "index.html".equals(rel2) || rel2.isEmpty();
                         boolean isAbout = "about.html".equals(rel2);
@@ -349,4 +370,86 @@ public final class BuildService {
         m.appendTail(sb);
         return sb.toString();
     }
+    private static String buildBreadcrumb(String catPath, io.site.bloggen.core.SiteConfig cfg) {
+        if (catPath == null || catPath.isBlank()) return "<a href=\"/categories/\">카테고리</a>";
+        String[] parts = catPath.split("/");
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a href=\"/categories/\">카테고리</a> / ");
+        String prefix = "";
+        for (int i=0;i<parts.length;i++) {
+            if (!prefix.isEmpty()) prefix += "/";
+            String seg = parts[i];
+            prefix += seg;
+            String label = mapCategoryLabel(seg, cfg);
+            sb.append("<a href=\"/categories/").append(prefix).append("/\">").append(escapeHtml(label)).append("</a>");
+            if (i < parts.length - 1) sb.append(" / ");
+        }
+        return sb.toString();
+    }
+
+    private static String lastSegmentLabel(String catPath, io.site.bloggen.core.SiteConfig cfg) {
+        if (catPath == null || catPath.isBlank()) return "";
+        String[] parts = catPath.split("/");
+        String seg = parts[parts.length - 1];
+        return mapCategoryLabel(seg, cfg);
+    }
+
+    private static String mapCategoryLabel(String seg, io.site.bloggen.core.SiteConfig cfg) {
+        String mapStr = cfg.extras().getOrDefault("category_labels", "");
+        if (!mapStr.isBlank()) {
+            String[] pairs = mapStr.split(",");
+            for (String p : pairs) {
+                String[] kv = p.split(":", 2);
+                if (kv.length == 2) {
+                    String k = kv[0].trim().toLowerCase();
+                    String val = kv[1].trim();
+                    if (k.equals(seg)) return val.isEmpty()? seg : val;
+                }
+            }
+        }
+        // default: prettify
+        String s = seg.replace('-', ' ');
+        if (s.isEmpty()) return seg;
+        return Character.toUpperCase(s.charAt(0)) + (s.length()>1? s.substring(1):"");
+    }
+
+    private static String buildJsonLd(String html, String pagePath, java.util.Map<String,String> local, io.site.bloggen.core.SiteConfig cfg) {
+        // Extract h1
+        String title = "";
+        try {
+            java.util.regex.Matcher m = java.util.regex.Pattern.compile("<h1[^>]*>(.*?)</h1>", java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL).matcher(html);
+            if (m.find()) title = m.group(1).replaceAll("<[^>]+>", "").trim();
+        } catch (Exception ignored) {}
+        if (title.isBlank()) title = cfg.siteName();
+        String date = "";
+        java.util.regex.Matcher dm = java.util.regex.Pattern.compile("/posts/(\\d{4}-\\d{2}-\\d{2})-" ).matcher(pagePath);
+        if (dm.find()) date = dm.group(1);
+        String section = lastSegmentLabel(local.getOrDefault("CATEGORY_PATH",""), cfg);
+        String desc = local.getOrDefault("PAGE_DESCRIPTION", cfg.extras().getOrDefault("site_description",""));
+        String url = local.getOrDefault("PAGE_URL", cfg.domain());
+        String tags = local.getOrDefault("TAGS", "");
+        StringBuilder kw = new StringBuilder();
+        if (!tags.isBlank()) {
+            String[] arr = tags.split(",");
+            for (int i=0;i<arr.length;i++) {
+                if (i>0) kw.append(", ");
+                kw.append(arr[i].trim());
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("<script type=\"application/ld+json\">{\n")
+          .append("\"@context\":\"https://schema.org\",\n")
+          .append("\"@type\":\"BlogPosting\",\n")
+          .append("\"headline\":\"").append(escapeJson(title)).append("\",\n");
+        if (!date.isBlank()) sb.append("\"datePublished\":\"").append(escapeJson(date)).append("\",\n");
+        if (!section.isBlank()) sb.append("\"articleSection\":\"").append(escapeJson(section)).append("\",\n");
+        if (kw.length()>0) sb.append("\"keywords\":\"").append(escapeJson(kw.toString())).append("\",\n");
+        sb.append("\"url\":\"").append(escapeJson(url)).append("\",\n")
+          .append("\"description\":\"").append(escapeJson(desc)).append("\"\n}")
+          .append("</script>");
+        return sb.toString();
+    }
+
+    private static String escapeHtml(String s) { return s == null? "" : s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;"); }
+    private static String escapeJson(String s) { return s == null? "" : s.replace("\\","\\\\").replace("\"","\\\"").replace("\n"," ").replace("\r"," "); }
 }

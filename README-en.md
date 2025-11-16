@@ -42,7 +42,7 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI
 ```
-llog 0.2.6
+llog 0.3.0
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--dry-run] [--verbose]

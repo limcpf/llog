@@ -29,9 +29,10 @@
   "twitter_card": "summary_large_image",
 
   "tag_labels": "java:자바, spring:스프링",
+  "category_labels": "backend:백엔드, java:자바, spring-batch:스프링 배치, frontend:프론트엔드, react:리액트",
   "untagged_label": "미지정",
 
-  "ga_measurement_id": "G-XXXXXXXXXX",
+  "cf_beacon_token": "", 
+  "ga_measurement_id": "",
   "ga_send_page_view": "true"
 }
-

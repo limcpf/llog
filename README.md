@@ -43,7 +43,7 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI 명령
 ```
-llog 0.2.6
+llog 0.3.0
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]
@@ -113,6 +113,42 @@ Usage:
 ### Cloudflare Pages 예시
 - 빌드 명령: `./llog build --src . --out dist --import-src $VAULT_DIR`
 - 아티팩트 디렉터리: `dist`
+
+## 샘플 마크다운(카테고리/태그/표/코드)
+- 경로: `samples-md/`
+- 바로 빌드해서 확인: `bash scripts/llog build --src . --out dist --import-src samples-md`
+
+### 예시 1 — 백엔드/자바/스프링 배치
+```md
+---
+title: "스프링 배치 DataSource 구성"
+createdDate: 2025-07-23
+publish: true
+category_path: backend/java/spring-batch
+tags: ["spring", "batch", "jdbc"]
+---
+
+| 사용 위치 | 역할 |
+|-----------|------|
+| JobRepository | JobExecution 저장 |
+| JobExplorer   | 실행 기록 조회 |
+```
+
+### 예시 2 — 프론트엔드/React
+```md
+---
+title: "React 상태 관리 개요"
+createdDate: 2025-02-11
+publish: true
+path: frontend/react
+tags: ["react", "state", "hooks"]
+---
+
+| 방식 | 규모 | 복잡도 | 비고 |
+|:-----|:---:|:-----:|----:|
+| useState | 소 | 낮음 | 컴포넌트 내부 |
+| Context  | 중 | 중간 | 전역/공유 값 |
+```
 
 ## Pretendard(폰트)
 - 자체 호스팅 WOFF2 포함(템플릿에 포함됨): Variable(100–900), Regular(400), SemiBold(600), Bold(700)

@@ -151,7 +151,7 @@ public final class MdImportService {
         for (String k : keys) {
             String v = fm.get(k);
             if (v == null) v = "";
-            String key = escape(sanitizeVisible(k));
+            String key = escape(sanitizeVisible(labelKoForFmKey(k)));
             String val = escape(sanitizeVisible(v));
             rows.append("        <tr><th scope=\"row\">").append(key).append("</th><td>").append(val).append("</td></tr>\n");
         }
@@ -165,5 +165,60 @@ public final class MdImportService {
                "</details>\n" +
                "<hr class=\"c-fm__sep\" />\n" +
                "<!--FM_BLOCK_END-->\n";
+    }
+
+    private static String labelKoForFmKey(String key) {
+        if (key == null) return "";
+        String norm = key.toLowerCase().replaceAll("[^a-z0-9]", "");
+        switch (norm) {
+            case "title":
+            case "subject":
+            case "name":
+                return "제목";
+            case "createddate":
+            case "createdat":
+            case "created":
+            case "date":
+            case "createdate":
+                return "작성일";
+            case "updateddate":
+            case "updatedat":
+            case "updated":
+            case "modified":
+            case "modifiedat":
+                return "수정일";
+            case "author":
+            case "writer":
+                return "작성자";
+            case "path":
+            case "category":
+            case "categories":
+            case "categorypath":
+                return "카테고리";
+            case "tags":
+            case "tag":
+                return "태그";
+            case "description":
+            case "summary":
+            case "excerpt":
+                return "요약";
+            case "ogimage":
+            case "image":
+            case "thumbnail":
+            case "thumb":
+                return "이미지";
+            case "publish":
+            case "published":
+            case "draft":
+                return "게시 여부";
+            case "permalink":
+            case "slug":
+                return "고유주소";
+            case "lang":
+            case "language":
+                return "언어";
+            default:
+                return key;
+        }
     }
 }

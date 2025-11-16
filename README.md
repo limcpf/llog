@@ -94,6 +94,7 @@ Usage:
   - `frontmatter_show`: `false|true` (기본 `false` → 표시 안 함)
   - `frontmatter_always_open`: `false|true` (기본 `false` → 접힘, `true`면 항상 펼침)
 - 구현 방식: `<details><summary>글 정보</summary>…</details>` + `<table>`로 렌더링. 표시/접힘은 빌드 시 제어됩니다.
+- 표 헤더(키)는 친숙한 한국어 라벨로 표시됩니다(예: `title`→"제목", `createdDate`→"작성일", `tags`→"태그").
 
 ### 분석(Analytics)
 - Cloudflare Web Analytics(권장, 무쿠키/프라이버시 친화)

@@ -35,7 +35,7 @@
   "category_labels": "backend:백엔드, java:자바, spring-batch:스프링 배치, frontend:프론트엔드, react:리액트",
   "untagged_label": "미지정",
 
-  "cf_beacon_token": "", 
+  "cf_beacon_token": "",
   "ga_measurement_id": "",
   "ga_send_page_view": "true"
 }

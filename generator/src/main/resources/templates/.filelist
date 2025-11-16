@@ -4,6 +4,7 @@ assets/
 assets/css/
 assets/img/
 assets/fonts/
+categories/
 partials/
 feed.xml
 index.html
@@ -19,9 +20,6 @@ site.webmanifest
 sitemap.xml
 robots.txt
 archives.html
-categories/
-categories/index.html
-categories/category-template.html
 assets/css/tokens.css
 assets/css/index.css
 assets/css/layout.css
@@ -36,6 +34,8 @@ assets/fonts/Pretendard-Bold.woff2
 assets/fonts/PretendardVariable.woff2
 assets/fonts/README.txt
 assets/fonts/LICENSE-Pretendard.txt
+categories/index.html
+categories/category-template.html
 partials/site-header.html
 partials/site-footer.html
 partials/skeleton.html

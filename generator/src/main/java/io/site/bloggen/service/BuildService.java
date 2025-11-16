@@ -483,4 +483,10 @@ public final class BuildService {
 
     private static String escapeHtml(String s) { return s == null? "" : s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;"); }
     private static String escapeJson(String s) { return s == null? "" : s.replace("\\","\\\\").replace("\"","\\\"").replace("\n"," ").replace("\r"," "); }
+
+    private static String sanitizeForOutput(String s) {
+        if (s == null) return "";
+        String t = s.replace("\\n", " ").replace("\\r", " ").replace("\\t", " ").replace("\\b", " ");
+        return t.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim();
+    }
 }

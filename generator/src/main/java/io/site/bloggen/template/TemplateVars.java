@@ -52,10 +52,9 @@ public final class TemplateVars {
         // Optional: Cloudflare Web Analytics (privacy-friendly)
         String cfToken = ex.getOrDefault("cf_beacon_token", "").trim();
         if (!cfToken.isBlank()) {
-            StringBuilder cf = new StringBuilder();
-            cf.append("<script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{")
-              .append("\"token\":\"").append(escapeAttr(cfToken)).append("\"}"></script>\n");
-            m.put("CF_SNIPPET", cf.toString());
+            String cf = "<script defer src=\\\"https://static.cloudflareinsights.com/beacon.min.js\\\" data-cf-beacon='{" +
+                     "\\\"token\\\":\\\"" + escapeAttr(cfToken) + "\\\"}'></script>\\n";
+            m.put("CF_SNIPPET", cf);
         } else {
             m.put("CF_SNIPPET", "");
         }

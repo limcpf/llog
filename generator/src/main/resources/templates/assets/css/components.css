@@ -126,4 +126,12 @@
   .c-breadcrumb { color: var(--color-muted); font-size: 0.95em; margin-block: var(--space-2) var(--space-4); }
   .c-breadcrumb a { color: inherit; text-decoration: none; }
   .c-breadcrumb a:hover { text-decoration: underline; }
+
+  /* Front matter block */
+  .c-fm { margin: var(--space-4) 0; }
+  .c-fm > summary { cursor: pointer; color: var(--color-muted); }
+  .c-fm__table { width: 100%; border-collapse: collapse; margin-top: var(--space-2); }
+  .c-fm__table th, .c-fm__table td { padding: .5rem .75rem; border: 1px solid var(--color-border); vertical-align: top; }
+  .c-fm__table th { width: 14rem; text-align: left; background: color-mix(in oklab, var(--color-surface), black 6%); }
+  .c-fm__sep { margin-block: var(--space-4); }
 }

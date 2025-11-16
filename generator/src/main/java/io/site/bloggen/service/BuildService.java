@@ -201,6 +201,14 @@ public final class BuildService {
                      if (!isText) return;
                      String orig = Files.readString(p, StandardCharsets.UTF_8);
                      String t = expandIncludes(orig, src);
+                     // Front matter block visibility and behavior
+                     boolean fmShow = Boolean.parseBoolean(cfg.extras().getOrDefault("frontmatter_show", "false"));
+                     boolean fmOpen = Boolean.parseBoolean(cfg.extras().getOrDefault("frontmatter_always_open", "false"));
+                     if (!fmShow) {
+                         t = t.replaceAll("(?s)<!--\\s*FM_BLOCK_START\\s*-->.*?<!--\\s*FM_BLOCK_END\\s*-->", "");
+                     } else {
+                         t = t.replace("{{FM_OPEN_ATTR}}", fmOpen ? "open" : "");
+                     }
                      var local = new java.util.LinkedHashMap<>(tokens);
                      // Page tokens
                      var rel = out.relativize(p).toString().replace(java.io.File.separatorChar, '/');
@@ -303,6 +311,13 @@ public final class BuildService {
                          if (!isText) return;
                          String orig = Files.readString(p, StandardCharsets.UTF_8);
                          String t = expandIncludes(orig, src);
+                         boolean fmShow2 = Boolean.parseBoolean(cfg.extras().getOrDefault("frontmatter_show", "false"));
+                         boolean fmOpen2 = Boolean.parseBoolean(cfg.extras().getOrDefault("frontmatter_always_open", "false"));
+                         if (!fmShow2) {
+                             t = t.replaceAll("(?s)<!--\\s*FM_BLOCK_START\\s*-->.*?<!--\\s*FM_BLOCK_END\\s*-->", "");
+                         } else {
+                             t = t.replace("{{FM_OPEN_ATTR}}", fmOpen2 ? "open" : "");
+                         }
                          var local2 = new java.util.LinkedHashMap<>(tokens);
                          var rel2 = out.relativize(p).toString().replace(java.io.File.separatorChar, '/');
                          String pagePath2 = "/" + rel2;

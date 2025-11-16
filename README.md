@@ -43,7 +43,7 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI 명령
 ```
-llog 0.3.1
+llog 0.3.2
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]
@@ -87,6 +87,13 @@ Usage:
 - OG 기본 이미지 경로: `og_default` (전역), 페이지별 오버라이드: `.meta.json`에 `OG_IMAGE`
 - 페이지별 설명/타이틀 등: 해당 페이지 옆에 `<파일>.meta.json` 생성 후 키를 넣어 오버라이드
   - 예: `{ "PAGE_DESCRIPTION": "이 페이지 설명", "OG_IMAGE": "/og/custom.jpg" }`
+
+### Front Matter 표(옵션)
+- 게시글 상단에 Front Matter를 표 형태로 보여줄 수 있습니다.
+- site.json Extras:
+  - `frontmatter_show`: `false|true` (기본 `false` → 표시 안 함)
+  - `frontmatter_always_open`: `false|true` (기본 `false` → 접힘, `true`면 항상 펼침)
+- 구현 방식: `<details><summary>글 정보</summary>…</details>` + `<table>`로 렌더링. 표시/접힘은 빌드 시 제어됩니다.
 
 ### 분석(Analytics)
 - Cloudflare Web Analytics(권장, 무쿠키/프라이버시 친화)

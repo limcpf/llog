@@ -29,7 +29,7 @@ public final class MdImportService {
                     String publish = firstOf(fm, "publish");
                     if (publish == null) publish = "false";
                     if (!"true".equalsIgnoreCase(publish)) { if (hasFM) io.site.bloggen.util.Log.info("skip: publish!=true " + p); continue; }
-                    String title = defaultString(firstOf(fm, "title", "subject", "name"));
+                    String title = sanitizeVisible(defaultString(firstOf(fm, "title", "subject", "name")));
                     String rawPath = defaultString(firstOf(fm, "path", "category", "categories", "category_path"));
                     String dateStr = defaultString(firstOf(fm, "createdDate", "createDate", "created_at", "created", "date"));
                     if (title.isBlank() || dateStr.isBlank()) { if (hasFM) io.site.bloggen.util.Log.warn("skip: missing title/date: " + p); continue; }
@@ -48,6 +48,11 @@ public final class MdImportService {
                     }
                     String slug = slugFromFile(p.getFileName().toString(), title);
                     String htmlContent = Markdown.toHtml(md);
+                    // Optional frontmatter block (always embedded; visibility controlled at build)
+                    if (!fm.isEmpty()) {
+                        String fmBlock = buildFrontMatterBlock(fm);
+                        htmlContent = fmBlock + htmlContent;
+                    }
                     String excerpt = Markdown.firstParagraphText(md);
                     Path out = siteRoot.resolve("posts").resolve(date + "-" + slug + ".html");
                     String tpl = loadTemplate();
@@ -86,6 +91,13 @@ public final class MdImportService {
     }
 
     private static String defaultString(String s) { return s == null ? "" : s; }
+
+    private static String sanitizeVisible(String s) {
+        if (s == null) return "";
+        // remove control characters (e.g., \b), collapse whitespace
+        String t = s.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim();
+        return t;
+    }
 
     private static String normalizeCatPath(String raw) {
         if (raw == null) return "";
@@ -127,4 +139,28 @@ public final class MdImportService {
     }
 
     private static String escape(String s) { return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;"); }
+
+    private static String buildFrontMatterBlock(Map<String,String> fm) {
+        // Stable order by key
+        java.util.List<String> keys = new java.util.ArrayList<>(fm.keySet());
+        java.util.Collections.sort(keys);
+        StringBuilder rows = new StringBuilder();
+        for (String k : keys) {
+            String v = fm.get(k);
+            if (v == null) v = "";
+            String key = escape(k);
+            String val = escape(v);
+            rows.append("        <tr><th scope=\"row\">").append(key).append("</th><td>").append(val).append("</td></tr>\n");
+        }
+        return "<!--FM_BLOCK_START-->\n" +
+               "<details class=\"c-fm\" {{FM_OPEN_ATTR}}>\n" +
+               "  <summary>글 정보</summary>\n" +
+               "  <table class=\"c-fm__table\">\n" +
+               "    <tbody>\n" + rows.toString() +
+               "    </tbody>\n" +
+               "  </table>\n" +
+               "</details>\n" +
+               "<hr class=\"c-fm__sep\" />\n" +
+               "<!--FM_BLOCK_END-->\n";
+    }
 }

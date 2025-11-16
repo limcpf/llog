@@ -58,11 +58,12 @@ public final class ContentScanner {
 
     private static String extractTitle(String html) {
         Matcher m = H1.matcher(html);
-        if (m.find()) return stripTags(m.group(1)).trim();
+        if (m.find()) return sanitize(stripTags(m.group(1)).trim());
         m = TITLE.matcher(html);
-        if (m.find()) return stripTags(m.group(1)).trim();
+        if (m.find()) return sanitize(stripTags(m.group(1)).trim());
         return "Untitled";
     }
     private static String stripTags(String s) { return s.replaceAll("<[^>]+>", ""); }
     private static String slugify(String s) { return s.toLowerCase().replaceAll("[^a-z0-9\\-\\s]", "").trim().replaceAll("\\s+", "-"); }
+    private static String sanitize(String s) { return s == null ? "" : s.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim(); }
 }

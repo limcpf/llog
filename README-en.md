@@ -18,9 +18,9 @@ llog is a fast, accessible, and readable static blog template bundled with a Jav
 ## Quick Start (Local)
 Prereqs: Java 21 for JVM; GraalVM native-image optional for native builds.
 
-1) Build the generator (JVM)
+1) Generator wrapper
 ```
-bash generator/scripts/build-jvm.sh
+bash scripts/llog --help
 ```
 
 2) Create a sample site (with sample MD → import → dist build)
@@ -42,10 +42,10 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI
 ```
-llog 0.3.1
+llog 0.3.2
 Usage:
   init <dir> [--dry-run] [--verbose]
-  build [--src dir] [--out dir] [--dry-run] [--verbose]
+  build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]
   new:post --title "..." [--date YYYY-MM-DD] [--slug slug] [--root dir] [--dry-run] [--verbose]
   import:md --src <md_dir> [--root dir] [--dry-run] [--verbose]
   sample [--out dir] [--build] [--dry-run] [--verbose]
@@ -60,8 +60,33 @@ Usage:
 - Shared head: include `partials/head-shared.html` in each page’s `<head>`
   - Syntax: `<!-- @include partials/head-shared.html -->`
   - Build looks in project `src` first, then falls back to packaged templates
-- Page tokens: `{{SITE_NAME}}`, `{{DOMAIN}}`, `{{OG_DEFAULT}}`, `{{YEAR}}` etc., read from `site.json`
-- Page meta: put overrides in `<file>.meta.json` and they’re injected as tokens
+- Page tokens: `{{SITE_NAME}}`, `{{DOMAIN}}`, `{{OG_DEFAULT}}`, `{{YEAR}}` etc., read from `site.json`.
+- Page meta: overrides in `<file>.meta.json` (e.g., `PAGE_DESCRIPTION`, `OG_IMAGE`).
+
+### Meta / Favicon / Theme Colors
+- Global site description: `site_description` (default for page description)
+- Favicon: `favicon_path` (default `/favicon.svg`)
+- Theme colors: `theme_color_light`, `theme_color_dark`
+- Twitter card: `twitter_card` (default `summary_large_image`)
+- Page-level overrides via `.meta.json`
+
+### Front Matter table (optional)
+- Show Front Matter at the top of posts as a neat table (details/summary + table)
+- site.json Extras:
+  - `frontmatter_show`: `false|true` (default `false`)
+  - `frontmatter_always_open`: `false|true` (default `false` → collapsed)
+
+### Analytics
+- Cloudflare Web Analytics (recommended): `cf_beacon_token`
+- Google Analytics GA4 (optional): `ga_measurement_id`, `ga_send_page_view`
+
+### External site.json (optional)
+- `llog build --src . --out dist --config /path/to/site.json`
+- or `SITE_JSON=/path/to/site.json llog build --src . --out dist`
+
+### Cloudflare Pages example
+- Build command: `./llog build --src . --out dist --import-src $VAULT_DIR`
+- Artifact directory: `dist`
 
 ## Repository Layout
 - `generator/` — generator code/templates/scripts (source of truth)

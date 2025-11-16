@@ -65,15 +65,18 @@ public final class BuildService {
                         if (baseName.equals("AGENTS.md") || baseName.equals("DECISIONS.md")) {
                             return java.nio.file.FileVisitResult.CONTINUE;
                         }
-                        // Exclude markdown and other source notes by default
-                        String lower = baseName.toLowerCase();
-                        if (lower.endsWith(".md")) return java.nio.file.FileVisitResult.CONTINUE;
-
+                        // Determine location
                         java.nio.file.Path rel = absSrc.relativize(file);
+                        String lower = baseName.toLowerCase();
                         boolean underAssets = rel.getNameCount() >= 1 && rel.getName(0).toString().equals("assets");
                         boolean underPosts  = rel.getNameCount() >= 1 && rel.getName(0).toString().equals("posts");
                         boolean underTags   = rel.getNameCount() >= 1 && rel.getName(0).toString().equals("tags");
                         boolean underPartials = rel.getNameCount() >= 1 && rel.getName(0).toString().equals("partials");
+
+                        // Exclude markdown by default, but allow any format under assets/
+                        if (!underAssets && lower.endsWith(".md")) {
+                            return java.nio.file.FileVisitResult.CONTINUE;
+                        }
 
                         // Only copy:
                         //  - files under assets/posts/tags
@@ -154,7 +157,6 @@ public final class BuildService {
                 try (var s = Files.walk(srcAssets)) {
                     s.filter(Files::isRegularFile).forEach(p -> {
                         String name = p.getFileName().toString().toLowerCase();
-                        if (name.endsWith(".md")) return; // do not copy markdown under assets
                         Path rel = srcAssets.relativize(p);
                         Path target = outAssets.resolve(rel);
                         try {

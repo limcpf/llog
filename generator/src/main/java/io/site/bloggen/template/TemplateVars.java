@@ -30,6 +30,10 @@ public final class TemplateVars {
         m.put("THEME_COLOR_LIGHT", ex.getOrDefault("theme_color_light", "#f7f3e9"));
         m.put("THEME_COLOR_DARK", ex.getOrDefault("theme_color_dark", "#151311"));
         m.put("TWITTER_CARD", ex.getOrDefault("twitter_card", "summary_large_image"));
+        // Theme: classic | retro (8-bit)
+        String theme = ex.getOrDefault("site_theme", ex.getOrDefault("theme", "retro")).trim();
+        if (!("classic".equalsIgnoreCase(theme) || "retro".equalsIgnoreCase(theme))) theme = "retro";
+        m.put("SITE_THEME", theme.toLowerCase());
         // Optional: Google Analytics (GA4) snippet via extras.ga_measurement_id
         String gaId = ex.getOrDefault("ga_measurement_id", "").trim();
         if (!gaId.isBlank()) {

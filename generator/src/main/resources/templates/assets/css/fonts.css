@@ -64,3 +64,23 @@
   font-display: swap;
   unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3;
 }
+
+/* Retro pixel fonts (SIL OFL) */
+@font-face {
+  font-family: 'Press Start 2P Local';
+  src:
+    local('Press Start 2P'),
+    url('/assets/fonts/PressStart2P.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'VT323 Local';
+  src:
+    local('VT323'),
+    url('/assets/fonts/VT323.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

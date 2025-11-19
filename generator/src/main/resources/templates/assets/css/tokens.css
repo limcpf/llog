@@ -69,3 +69,32 @@
     --color-selection: #eadfca;
   }
 }
+
+/* Retro 8-bit theme (opt-in via html[data-theme="retro"]) */
+html[data-theme="retro"] {
+  /* Deeper navy CRT palette */
+  --color-bg: #0f131a;
+  --color-surface: #0b0f15;
+  --color-fg: #e7f0ff;
+  --color-muted: #9cb3d1;
+  --color-accent: #a6d6ff;   /* cyan-ish highlight */
+  --color-accent-2: #ffd27a;  /* warm alt */
+  --color-border: #1e293b;
+  --color-code-bg: #0b0f15;
+  --color-selection: #233145;
+
+  /* Pixel fonts */
+  --font-sans: 'VT323 Local', VT323, ui-monospace, monospace;
+  --font-serif: 'VT323 Local', ui-monospace, monospace;
+  --font-mono: 'Press Start 2P Local', ui-monospace, monospace;
+
+  --fs-0: 1rem;
+  --fs-1: 1.1rem; /* slightly larger for pixel font legibility */
+  --fs-2: 1.3rem;
+  --fs-3: 1.6rem;
+  --fs-4: 2.2rem;
+  --fs-5: 2.6rem;
+
+  --radius-1: 0px; /* blocky */
+  --radius-2: 2px;
+}

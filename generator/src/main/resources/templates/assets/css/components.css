@@ -6,12 +6,7 @@
     justify-content: space-between;
     gap: var(--space-6);
   }
-  .c-site-title {
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    font-variant-caps: normal;
-    letter-spacing: normal;
-    font-weight: 600;
-  }
+  .c-site-title { font-size: clamp(1.5rem, 4vw, 2rem); font-variant-caps: normal; letter-spacing: normal; font-weight: 600; }
   .c-site-title a { color: inherit; text-decoration: none; }
 
   /* Navigation */
@@ -233,4 +228,13 @@
     box-shadow: 0 10px 22px rgba(0,0,0,.18);
     background: color-mix(in oklab, var(--color-surface), var(--color-bg) 45%);
   }
+
+  /* Retro theme overrides */
+  html[data-theme="retro"] .c-site-title { font-family: 'Press Start 2P Local', 'Press Start 2P', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
+  html[data-theme="retro"] .c-nav a { font-family: 'Press Start 2P Local', ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--color-fg); opacity: .9; }
+  html[data-theme="retro"] .c-nav a:hover { opacity: 1; }
+  html[data-theme="retro"] h1, html[data-theme="retro"] h2, html[data-theme="retro"] h3 { font-family: 'Press Start 2P Local', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; font-weight: 400; }
+  html[data-theme="retro"] .c-card { border-radius: 2px; background: color-mix(in oklab, var(--color-bg), black 10%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.03); }
+  html[data-theme="retro"] .c-card__title { text-transform: uppercase; letter-spacing: .04em; font-family: 'Press Start 2P Local', ui-monospace, monospace; }
+  html[data-theme="retro"] .c-card__meta { text-transform: uppercase; letter-spacing: .06em; font-family: 'Press Start 2P Local', ui-monospace, monospace; opacity: .85; }
 }

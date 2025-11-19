@@ -67,3 +67,17 @@
     outline-offset: 3px;
   }
 }
+
+/* CRT-like scanline overlay for retro theme */
+html[data-theme="retro"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 120% at 50% 10%, transparent 0%, transparent 60%, rgba(0,0,0,.35) 100%),
+    repeating-linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.06) 2px, transparent 2px, transparent 4px);
+  mix-blend-mode: overlay;
+  opacity: .25;
+  z-index: 0;
+}

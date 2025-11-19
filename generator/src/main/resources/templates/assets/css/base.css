@@ -36,7 +36,7 @@
   h1, h2, h3, h4, h5, h6 {
     line-height: var(--lh-heading);
     text-wrap: balance;
-    letter-spacing: 0.005em;
+    letter-spacing: 0;
     margin-block: var(--space-6) var(--space-2);
     font-weight: 600;
   }
@@ -84,7 +84,8 @@ html[data-theme="retro"] body::before {
 
 /* Pixel font rendering preferences (retro) */
 html[data-theme="retro"] body {
-  -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: auto;
-  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased; /* improve legibility */
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: 0;
 }

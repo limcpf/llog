@@ -195,10 +195,10 @@
   .c-series-nav__list a:hover { text-decoration: underline; }
 
   /* Retro theme overrides */
-  html[data-theme="retro"] .c-site-title { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
-  html[data-theme="retro"] .c-nav a { font-family: 'Galmuri Local', ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--color-fg); opacity: .9; }
+  html[data-theme="retro"] .c-site-title { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .02em; text-transform: none; }
+  html[data-theme="retro"] .c-nav a { font-family: 'Galmuri Local', ui-monospace, monospace; text-transform: none; letter-spacing: .02em; color: var(--color-fg); opacity: .9; }
   html[data-theme="retro"] .c-nav a:hover { opacity: 1; }
-  html[data-theme="retro"] h1, html[data-theme="retro"] h2, html[data-theme="retro"] h3 { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; font-weight: 400; }
+  html[data-theme="retro"] h1, html[data-theme="retro"] h2, html[data-theme="retro"] h3 { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .01em; text-transform: none; font-weight: 700; }
 
   /* Archive list (DOS style) */
   .c-dos-arch { list-style: none; padding: 0; margin: var(--space-2) 0; }

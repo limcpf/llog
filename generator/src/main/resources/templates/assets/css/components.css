@@ -187,4 +187,11 @@
   html[data-theme="retro"] .c-nav a { font-family: 'Galmuri Local', ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--color-fg); opacity: .9; }
   html[data-theme="retro"] .c-nav a:hover { opacity: 1; }
   html[data-theme="retro"] h1, html[data-theme="retro"] h2, html[data-theme="retro"] h3 { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; font-weight: 400; }
+
+  /* Archive list (DOS style) */
+  .c-dos-arch { list-style: none; padding: 0; margin: var(--space-2) 0; }
+  .c-dos-arch__link { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--color-fg); padding: .35rem 0; }
+  .c-dos-arch__date { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .08em; }
+  .c-dos-arch__rule { flex: 1 1 auto; height: 2px; background: linear-gradient(90deg, rgba(255,255,255,.15), rgba(255,255,255,.05)); }
+  .c-dos-arch__link:hover .c-dos-arch__rule { background: linear-gradient(90deg, rgba(255,255,255,.25), rgba(255,255,255,.1)); }
 }

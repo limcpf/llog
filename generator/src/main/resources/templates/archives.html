@@ -2,9 +2,9 @@
 <html lang="ko" data-theme="{{SITE_THEME}}">
   <head>
     <!-- @include partials/head-shared.html -->
-    <title>아카이브 — {{SITE_NAME}}</title>
+    <title>POST LIST — {{SITE_NAME}}</title>
     <link rel="canonical" href="{{DOMAIN}}{{ARCHIVES_CANONICAL_PATH}}" />
-    <meta property="og:title" content="아카이브 — {{SITE_NAME}}" />
+    <meta property="og:title" content="POST LIST — {{SITE_NAME}}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{DOMAIN}}{{ARCHIVES_CANONICAL_PATH}}" />
     <meta property="og:image" content="{{OG_IMAGE}}" />
@@ -18,11 +18,11 @@
     <main id="main" class="l-reading" role="main">
       <article class="c-article u-flow" aria-labelledby="arch-title">
         <header>
-          <h1 id="arch-title">아카이브</h1>
-          <p class="c-article__meta">연도별 글 모음</p>
+          <h1 id="arch-title">POST LIST</h1>
         </header>
-
-        {{ARCHIVE_SECTIONS}}
+        <ul class="c-dos-arch">
+{{ARCHIVE_LIST}}
+        </ul>
         <p class="u-text-center u-muted">{{ARCHIVE_PAGINATION}}</p>
       </article>
     </main>

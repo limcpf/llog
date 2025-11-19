@@ -81,9 +81,9 @@ public final class CatalogService {
                     int from = (page - 1) * archPageSize;
                     int to = Math.min(from + archPageSize, posts.size());
                     List<Post> slice = posts.subList(from, to);
-                    String sect = buildYearSections(slice);
+                    String items = buildArchiveList(slice);
                     String pagination = buildPaginationNav(page, total, cfg, i -> archivesHref(i));
-                    String html = archTpl.replace("{{ARCHIVE_SECTIONS}}", sect)
+                    String html = archTpl.replace("{{ARCHIVE_LIST}}", items)
                                          .replace("{{ARCHIVE_PAGINATION}}", pagination);
                     var local = new LinkedHashMap<>(tokens);
                     local.put("ARCHIVES_CANONICAL_PATH", archivesHref(page));
@@ -92,8 +92,8 @@ public final class CatalogService {
                     write(target, html, dryRun);
                 }
             } else {
-                String sect = buildYearSections(posts);
-                String html = archTpl.replace("{{ARCHIVE_SECTIONS}}", sect)
+                String items = buildArchiveList(posts);
+                String html = archTpl.replace("{{ARCHIVE_LIST}}", items)
                                      .replace("{{ARCHIVE_PAGINATION}}", "");
                 var local = new LinkedHashMap<>(tokens);
                 local.put("ARCHIVES_CANONICAL_PATH", archivesHref(1));
@@ -226,6 +226,16 @@ public final class CatalogService {
             }
             sb.append("          </ul>\n");
             sb.append("        </section>\n");
+        }
+        return sb.toString();
+    }
+
+    private static String buildArchiveList(List<Post> posts) {
+        StringBuilder sb = new StringBuilder();
+        for (Post p : posts) {
+            sb.append("          <li><a class=\"c-dos-arch__link\" href=\"")
+              .append(p.url()).append("\"><span class=\"c-dos-arch__date\">")
+              .append(p.date()).append("</span><span class=\"c-dos-arch__rule\"></span></a></li>\n");
         }
         return sb.toString();
     }

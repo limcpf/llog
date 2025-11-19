@@ -43,7 +43,7 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI 명령
 ```
-llog 0.3.7
+llog 0.3.8
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]
@@ -80,8 +80,8 @@ Usage:
   - `home_latest_heading`, `home_recent_heading`, `home_more_label`, `home_recent_limit`
 
 ### 소개 페이지(About)
-- 기본 제공: `about.html` 템플릿이 포함되어 있으며, `build` 시 소스(`--src`) 루트에 `about.html`이 없으면 기본 템플릿을 `dist/about.html`로 자동 생성합니다.
-- 직접 작성: 프로젝트 루트(소스)에 `about.html`을 추가하면 템플릿 대신 해당 파일이 사용됩니다. 공통 헤드/헤더/푸터는 include를 그대로 사용할 수 있습니다.
+- 기본 제공: `about.html` 템플릿이 포함되어 있으나 자동 생성하지 않습니다. 소스(`--src`) 루트에 `about.html`이 없으면 내비게이션 메뉴에서 소개 항목이 표시되지 않습니다.
+- 직접 작성: 프로젝트 루트(소스)에 `about.html`을 추가하면 메뉴가 나타나며 해당 파일이 사용됩니다. 공통 헤드/헤더/푸터는 include를 그대로 사용할 수 있습니다.
   - 예시 스켈레톤
     ```html
     <!doctype html>

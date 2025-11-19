@@ -148,18 +148,8 @@ public final class BuildService {
                 }
             }
         } catch (IOException ignored) {}
-        // Ensure about page exists if not provided in src
-        try {
-            Path about = out.resolve("about.html");
-            if (!Files.exists(about)) {
-                try (java.io.InputStream is = BuildService.class.getResourceAsStream("/templates/about.html")) {
-                    if (is != null) {
-                        Files.createDirectories(about.getParent());
-                        Files.copy(is, about);
-                    }
-                }
-            }
-        } catch (IOException ignored) {}
+        // Note: do not auto-create about page. Navigation will hide the link
+        // when `about.html` is absent in the source root.
         // Extra safety: ensure project's src/assets is fully copied (in case earlier traversal skipped for any reason)
         try {
             Path srcAssets = src.resolve("assets");
@@ -201,7 +191,10 @@ public final class BuildService {
         } catch (IOException ignored) {}
 
         // Prepare token map
-        var tokens = TemplateVars.from(cfg);
+        var tokens = new java.util.LinkedHashMap<>(TemplateVars.from(cfg));
+        boolean hasAbout = java.nio.file.Files.exists(src.resolve("about.html"));
+        String aboutLink = hasAbout ? "<a href=\"/about.html\" {{ABOUT_CURRENT_ATTR}}>{{NAV_ABOUT_LABEL}}</a>" : "";
+        tokens.put("ABOUT_LINK_HTML", aboutLink);
 
         // Post-process HTML/XML/TXT-like files: includes -> tokens -> domain updates
         try (var s = Files.walk(out)) {

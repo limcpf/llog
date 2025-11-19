@@ -42,7 +42,7 @@ mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
 
 ## CLI
 ```
-llog 0.3.7
+llog 0.3.8
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]
@@ -71,8 +71,8 @@ Usage:
 - Navigation labels come from `site.json` Extras: `nav_home_label`, `nav_about_label`, `nav_categories_label`, `nav_posts_label`.
 
 ### About page
-- Built-in: an `about.html` template ships with the generator. During `build`, if your source (`--src`) has no `about.html`, the template is copied to `dist/about.html`.
-- Override: add your own `about.html` in the source root to replace the template. You can still use the shared includes.
+- Built-in: an `about.html` template ships with the generator, but it is NOT copied automatically. If your source (`--src`) doesn’t contain `about.html`, the About menu item is hidden.
+- Override: add your own `about.html` in the source root to show the menu and use your content. You can still use the shared includes.
   - Example skeleton
     ```html
     <!doctype html>

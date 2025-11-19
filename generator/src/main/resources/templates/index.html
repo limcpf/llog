@@ -21,12 +21,14 @@
     <main id="main" class="l-reading" role="main">
       <section class="u-flow" aria-labelledby="latest-title">
         <h1 id="latest-title">{{HOME_LATEST_HEADING}}</h1>
-        {{HOME_FEATURED}}
+        <div class="c-dos-list">
+{{HOME_FEATURED}}
+        </div>
       </section>
       <div class="c-rule" aria-hidden="true"></div>
       <section class="u-flow" aria-labelledby="recent-title">
         <h2 id="recent-title">{{HOME_RECENT_HEADING}}</h2>
-        <div class="c-cards">
+        <div class="c-dos-list">
 {{HOME_RECENT}}
         </div>
         <p><a class="c-button" href="/posts/">{{HOME_MORE_LABEL}}</a></p>

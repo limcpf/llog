@@ -28,9 +28,9 @@ public final class CatalogService {
             // homepage (index.html) — latest post featured + recent list
             try {
                 String homeTpl = loadResource("/templates/index.html");
-                String featured = posts.isEmpty() ? "<p>아직 게시글이 없습니다.</p>" : buildHomeFeatured(posts.get(0), cfg);
+                String featured = posts.isEmpty() ? "<p>아직 게시글이 없습니다.</p>" : listItem(posts.get(0));
                 int recentLimit = homeRecentLimit(cfg);
-                String recent = posts.size() <= 1 ? "" : buildHomeRecent(posts.subList(1, Math.min(1 + Math.max(0, recentLimit), posts.size())));
+                String recent = posts.size() <= 1 ? "" : buildList(posts.subList(1, Math.min(1 + Math.max(0, recentLimit), posts.size())));
                 var local = new LinkedHashMap<>(tokens);
                 local.put("HOME_LATEST_HEADING", cfg.extras().getOrDefault("home_latest_heading", "최신 글"));
                 local.put("HOME_RECENT_HEADING", cfg.extras().getOrDefault("home_recent_heading", "최근 글"));
@@ -51,7 +51,7 @@ public final class CatalogService {
                     int from = (page - 1) * pageSize;
                     int to = Math.min(from + pageSize, posts.size());
                     List<Post> slice = posts.subList(from, to);
-                    String postsCards = buildPostCards(slice);
+                    String postsCards = buildList(slice);
                     String pagination = buildPaginationNav(page, totalPages, cfg, i -> pageHref("/posts", i));
                     String postsHtml = postsTpl.replace("{{POSTS_CARDS}}", postsCards)
                                                .replace("{{POSTS_PAGINATION}}", pagination);
@@ -63,7 +63,7 @@ public final class CatalogService {
                     write(target, postsHtml, dryRun);
                 }
             } else {
-                String postsCards = buildPostCards(posts);
+                String postsCards = buildList(posts);
                 String postsHtml = postsTpl.replace("{{POSTS_CARDS}}", postsCards)
                                            .replace("{{POSTS_PAGINATION}}", "");
                 var local = new LinkedHashMap<>(tokens);
@@ -179,37 +179,19 @@ public final class CatalogService {
         try { return Math.max(0, Integer.parseInt(v.trim())); } catch (NumberFormatException e) { return 5; }
     }
 
-    private static String buildHomeFeatured(io.site.bloggen.core.Post p, SiteConfig cfg) {
+    private static String buildList(java.util.List<Post> posts) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<div class=\"c-cards\">\n");
-        sb.append(cardItem(p));
-        sb.append("</div>\n");
+        for (Post p : posts) sb.append(listItem(p));
         return sb.toString();
     }
 
-    private static String buildHomeRecent(java.util.List<io.site.bloggen.core.Post> posts) {
-        if (posts == null || posts.isEmpty()) return "";
+    private static String listItem(Post p) {
         StringBuilder sb = new StringBuilder();
-        for (io.site.bloggen.core.Post p : posts) sb.append(cardItem(p));
-        return sb.toString();
-    }
-
-    private static String buildPostCards(java.util.List<Post> posts) {
-        StringBuilder sb = new StringBuilder();
-        for (Post p : posts) sb.append(cardItem(p));
-        return sb.toString();
-    }
-
-    private static String cardItem(Post p) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<article class=\"c-card c-card--banner\">");
-        sb.append("<a class=\"c-card__link\" href=\"").append(p.url()).append("\">");
-        sb.append("<div class=\"c-card__content\">");
-        sb.append("<h3 class=\"c-card__title\">").append(escape(p.title())).append("</h3>");
-        if (p.description() != null && !p.description().isBlank()) sb.append("<p class=\"c-card__desc\">").append(escape(p.description())).append("</p>");
-        sb.append("</div>");
-        sb.append("<div class=\"c-card__meta\"><time datetime=\"").append(p.date()).append("\">").append(p.date()).append("</time><span class=\"c-card__arrow\">→</span></div>");
-        sb.append("</a>");
+        sb.append("<article class=\"c-dos-post\">\n");
+        sb.append("  <h3 class=\"c-dos-post__title\"><a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a></h3>\n");
+        sb.append("  <div class=\"c-dos-post__meta\">[").append(p.date()).append("]</div>\n");
+        if (p.description() != null && !p.description().isBlank()) sb.append("  <p class=\"c-dos-post__desc\">").append(escape(p.description())).append("</p>\n");
+        sb.append("  <hr class=\"c-dos\" />\n");
         sb.append("</article>\n");
         return sb.toString();
     }

@@ -1,78 +1,24 @@
-/* Pretendard — Variable first, swap, local-first */
+/* Galmuri — Korean/Latin pixel font (SIL OFL) */
+/* Regular (400) */
 @font-face {
-  font-family: 'Pretendard Variable';
-  src:
-    local('Pretendard Variable'),
-    url('/assets/fonts/PretendardVariable.woff2') format('woff2-variations'),
-    url('/assets/fonts/PretendardVariable.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Static fallbacks if variable is not available */
-@font-face {
-  font-family: 'Pretendard';
-  src:
-    local('Pretendard Regular'),
-    url('/assets/fonts/Pretendard-Regular.woff2') format('woff2');
+  font-family: 'Galmuri Local';
+  src: local('Galmuri 11'), local('Galmuri'), url('/assets/fonts/Galmuri11.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+/* Bold (700) */
 @font-face {
-  font-family: 'Pretendard';
-  src:
-    local('Pretendard SemiBold'), local('Pretendard Semibold'),
-    url('/assets/fonts/Pretendard-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Pretendard';
-  src:
-    local('Pretendard Bold'),
-    url('/assets/fonts/Pretendard-Bold.woff2') format('woff2');
+  font-family: 'Galmuri Local';
+  src: local('Galmuri 11 Bold'), local('Galmuri Bold'), url('/assets/fonts/Galmuri11-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
-
-/* Noto Serif KR — Hangul-only, swap, local-first (optional) */
+/* Condensed (400) — separate family for optional use */
 @font-face {
-  font-family: 'NotoSerifKR Local';
-  src: local('Noto Serif KR'), url('/assets/fonts/NotoSerifKR-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3;
-  /* Optional metric overrides if needed
-  size-adjust: 100%;
-  ascent-override: 90%;
-  descent-override: 22%;
-  line-gap-override: 0%;
-  */
-}
-
-/* Semibold (600) for headings */
-@font-face {
-  font-family: 'NotoSerifKR Local';
-  src: local('Noto Serif KR SemiBold'), url('/assets/fonts/NotoSerifKR-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3;
-}
-
-/* Retro pixel font (SIL OFL) — Galmuri */
-
-/* Galmuri (Korean pixel font, OFL) */
-@font-face {
-  font-family: 'Galmuri Local';
-  src:
-    local('Galmuri 11'), local('Galmuri'),
-    url('/assets/fonts/Galmuri11.woff2') format('woff2');
+  font-family: 'Galmuri Condensed Local';
+  src: local('Galmuri 11 Condensed'), local('Galmuri Condensed'), url('/assets/fonts/Galmuri11-Condensed.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

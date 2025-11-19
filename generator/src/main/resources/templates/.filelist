@@ -11,6 +11,7 @@ index.html
 posts/index.html
 posts/post-md-template.html
 posts/post-template.html
+.DS_Store
 about.html
 404.html
 tags/index.html
@@ -20,6 +21,7 @@ site.webmanifest
 sitemap.xml
 robots.txt
 archives.html
+assets/.DS_Store
 assets/css/tokens.css
 assets/css/index.css
 assets/css/layout.css
@@ -28,14 +30,12 @@ assets/css/components.css
 assets/css/utilities.css
 assets/css/base.css
 assets/img/sample.svg
-assets/fonts/Pretendard-Regular.woff2
 assets/fonts/Galmuri11.woff2
-assets/fonts/Pretendard-SemiBold.woff2
-assets/fonts/Pretendard-Bold.woff2
-assets/fonts/PretendardVariable.woff2
+assets/fonts/.DS_Store
 assets/fonts/LICENSE-Galmuri.txt
+assets/fonts/Galmuri11-Bold.woff2
 assets/fonts/README.txt
-assets/fonts/LICENSE-Pretendard.txt
+assets/fonts/Galmuri11-Condensed.woff2
 categories/index.html
 categories/category-template.html
 partials/site-header.html

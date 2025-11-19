@@ -195,6 +195,10 @@ public final class BuildService {
         boolean hasAbout = java.nio.file.Files.exists(src.resolve("about.html"));
         String aboutLink = hasAbout ? "<a href=\"/about.html\" {{ABOUT_CURRENT_ATTR}}>{{NAV_ABOUT_LABEL}}</a>" : "";
         tokens.put("ABOUT_LINK_HTML", aboutLink);
+        if (!hasAbout) {
+            // Ensure any lingering label token renders as empty in custom headers
+            tokens.put("NAV_ABOUT_LABEL", "");
+        }
 
         // Post-process HTML/XML/TXT-like files: includes -> tokens -> domain updates
         try (var s = Files.walk(out)) {
@@ -206,6 +210,10 @@ public final class BuildService {
                      if (!isText) return;
                      String orig = Files.readString(p, StandardCharsets.UTF_8);
                      String t = expandIncludes(orig, src);
+                     if (!hasAbout) {
+                         // Remove any hard-coded About anchors in included headers
+                         t = t.replaceAll("(?is)\\s*<a[^>]+href=\\\"/?about(?:\\.html)?\\\"[^>]*>.*?</a>\\s*", " ");
+                     }
                      // Front matter block visibility and behavior
                      boolean fmShow = Boolean.parseBoolean(cfg.extras().getOrDefault("frontmatter_show", "false"));
                      boolean fmOpen = Boolean.parseBoolean(cfg.extras().getOrDefault("frontmatter_always_open", "false"));
@@ -316,6 +324,9 @@ public final class BuildService {
                          if (!isText) return;
                          String orig = Files.readString(p, StandardCharsets.UTF_8);
                          String t = expandIncludes(orig, src);
+                         if (!hasAbout) {
+                             t = t.replaceAll("(?is)\\s*<a[^>]+href=\\\"/?about(?:\\.html)?\\\"[^>]*>.*?</a>\\s*", " ");
+                         }
                          boolean fmShow2 = Boolean.parseBoolean(cfg.extras().getOrDefault("frontmatter_show", "false"));
                          boolean fmOpen2 = Boolean.parseBoolean(cfg.extras().getOrDefault("frontmatter_always_open", "false"));
                          if (!fmShow2) {

@@ -84,9 +84,9 @@ html[data-theme="retro"] {
   --color-selection: #233145;
 
   /* Pixel fonts */
-  --font-sans: 'VT323 Local', VT323, ui-monospace, monospace;
-  --font-serif: 'VT323 Local', ui-monospace, monospace;
-  --font-mono: 'Press Start 2P Local', ui-monospace, monospace;
+  --font-sans: 'Galmuri Local', 'Press Start 2P Local', ui-monospace, monospace;
+  --font-serif: 'Galmuri Local', ui-monospace, monospace;
+  --font-mono: 'Press Start 2P Local', 'Galmuri Local', ui-monospace, monospace;
 
   --fs-0: 1rem;
   --fs-1: 1.1rem; /* slightly larger for pixel font legibility */

@@ -12,8 +12,8 @@
   "nav_categories_label": "카테고리",
   "nav_posts_label": "글",
 
-  "home_latest_heading": "최신 글",
-  "home_recent_heading": "최근 글",
+  "home_latest_heading": "방금 올라온 글",
+  "home_recent_heading": "최근 올라온 글들",
   "home_more_label": "더 보기: 전체 글",
   "home_recent_limit": "5",
 

@@ -32,8 +32,9 @@ public final class CatalogService {
                 int recentLimit = homeRecentLimit(cfg);
                 String recent = posts.size() <= 1 ? "" : buildList(posts.subList(1, Math.min(1 + Math.max(0, recentLimit), posts.size())));
                 var local = new LinkedHashMap<>(tokens);
-                local.put("HOME_LATEST_HEADING", cfg.extras().getOrDefault("home_latest_heading", "최신 글"));
-                local.put("HOME_RECENT_HEADING", cfg.extras().getOrDefault("home_recent_heading", "최근 글"));
+                // Friendlier, more distinct defaults
+                local.put("HOME_LATEST_HEADING", cfg.extras().getOrDefault("home_latest_heading", "방금 올라온 글"));
+                local.put("HOME_RECENT_HEADING", cfg.extras().getOrDefault("home_recent_heading", "최근 올라온 글들"));
                 local.put("HOME_MORE_LABEL", cfg.extras().getOrDefault("home_more_label", "더 보기: 전체 글"));
                 local.put("HOME_FEATURED", featured);
                 local.put("HOME_RECENT", recent);

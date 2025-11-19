@@ -200,6 +200,9 @@ public final class BuildService {
             tokens.put("NAV_ABOUT_LABEL", "");
         }
 
+        // Precompute series contexts (prev/next) from output posts
+        var seriesCtx = computeSeriesContext(out);
+
         // Post-process HTML/XML/TXT-like files: includes -> tokens -> domain updates
         try (var s = Files.walk(out)) {
             s.filter(p -> Files.isRegularFile(p))
@@ -239,6 +242,21 @@ public final class BuildService {
                          local.put("ARTICLE_SECTION", lastSegmentLabel(cat, cfg));
                          String htmlForTitle = orig; // before token application contains <h1>
                          local.put("POST_JSONLD", buildJsonLd(htmlForTitle, pagePath, local, cfg));
+                         // series badge + prev/next
+                         var sc = seriesCtx.get(pagePath);
+                         if (sc != null) {
+                             local.put("SERIES_BADGE", sc.badgeHtml);
+                             // insert nav after FM block end or after header
+                             if (sc.navHtml != null && !sc.navHtml.isBlank()) {
+                                 if (t.contains("<!--FM_BLOCK_END-->")) {
+                                     t = t.replace("<!--FM_BLOCK_END-->", "<!--FM_BLOCK_END-->\n" + sc.navHtml + "\n");
+                                 } else {
+                                     t = t.replaceFirst("</header>", "</header>\n" + java.util.regex.Matcher.quoteReplacement(sc.navHtml) + "\n");
+                                 }
+                             }
+                         } else {
+                             local.put("SERIES_BADGE", "");
+                         }
                      }
                      if (!local.containsKey("PAGE_DESCRIPTION") || local.get("PAGE_DESCRIPTION") == null || local.get("PAGE_DESCRIPTION").isBlank()) {
                          local.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
@@ -342,12 +360,25 @@ public final class BuildService {
                          if (!local2.containsKey("PAGE_DESCRIPTION") || local2.get("PAGE_DESCRIPTION") == null || local2.get("PAGE_DESCRIPTION").isBlank()) {
                              local2.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
                          }
-                         if (pagePath2.startsWith("/posts/") && pagePath2.endsWith(".html")) {
-                             String cat2 = local2.getOrDefault("CATEGORY_PATH", "");
-                             local2.put("BREADCRUMB", buildBreadcrumb(cat2, cfg));
-                             local2.put("ARTICLE_SECTION", lastSegmentLabel(cat2, cfg));
-                             local2.put("POST_JSONLD", buildJsonLd(orig, pagePath2, local2, cfg));
-                         }
+                        if (pagePath2.startsWith("/posts/") && pagePath2.endsWith(".html")) {
+                            String cat2 = local2.getOrDefault("CATEGORY_PATH", "");
+                            local2.put("BREADCRUMB", buildBreadcrumb(cat2, cfg));
+                            local2.put("ARTICLE_SECTION", lastSegmentLabel(cat2, cfg));
+                            local2.put("POST_JSONLD", buildJsonLd(orig, pagePath2, local2, cfg));
+                            var sc2 = seriesCtx.get(pagePath2);
+                            if (sc2 != null) {
+                                local2.put("SERIES_BADGE", sc2.badgeHtml);
+                                if (sc2.navHtml != null && !sc2.navHtml.isBlank()) {
+                                    if (t.contains("<!--FM_BLOCK_END-->")) {
+                                        t = t.replace("<!--FM_BLOCK_END-->", "<!--FM_BLOCK_END-->\n" + sc2.navHtml + "\n");
+                                    } else {
+                                        t = t.replaceFirst("</header>", "</header>\n" + java.util.regex.Matcher.quoteReplacement(sc2.navHtml) + "\n");
+                                    }
+                                }
+                            } else {
+                                local2.put("SERIES_BADGE", "");
+                            }
+                        }
                          if (!local2.containsKey("PAGE_DESCRIPTION") || local2.get("PAGE_DESCRIPTION") == null || local2.get("PAGE_DESCRIPTION").isBlank()) {
                              local2.put("PAGE_DESCRIPTION", tokens.getOrDefault("SITE_DESCRIPTION", ""));
                          }
@@ -404,6 +435,80 @@ public final class BuildService {
         }
         m.appendTail(sb);
         return sb.toString();
+    }
+
+    private static class SeriesEntry {
+        String pagePath; String url; String title; String seriesTitle; String seriesSlug; int order; java.time.LocalDate date;
+    }
+
+    private static class SeriesCtx {
+        String badgeHtml; String navHtml;
+    }
+
+    private static java.util.Map<String, SeriesCtx> computeSeriesContext(Path out) {
+        java.util.Map<String, java.util.List<SeriesEntry>> bySeries = new java.util.LinkedHashMap<>();
+        java.nio.file.Path posts = out.resolve("posts");
+        if (!java.nio.file.Files.exists(posts)) return java.util.Map.of();
+        java.util.regex.Pattern filePat = java.util.regex.Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})-(.+)\\.html$");
+        java.util.regex.Pattern h1Pat = java.util.regex.Pattern.compile("<h1[^>]*>(.*?)</h1>", java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
+        try (var s = java.nio.file.Files.list(posts)) {
+            for (java.nio.file.Path p : (Iterable<java.nio.file.Path>) s.filter(f -> f.getFileName().toString().endsWith(".html"))::iterator) {
+                String name = p.getFileName().toString();
+                java.util.regex.Matcher fm = filePat.matcher(name);
+                if (!fm.matches()) continue;
+                java.time.LocalDate date;
+                try { date = java.time.LocalDate.parse(fm.group(1)); } catch (Exception e) { date = java.time.LocalDate.MIN; }
+                java.nio.file.Path meta = p.resolveSibling(name + ".meta.json");
+                if (!java.nio.file.Files.exists(meta)) continue;
+                String mj = java.nio.file.Files.readString(meta, java.nio.charset.StandardCharsets.UTF_8);
+                var mm = io.site.bloggen.util.FlatJson.parse(mj);
+                String series = mm.getOrDefault("SERIES", "");
+                if (series == null || series.isBlank()) continue;
+                String ord = mm.getOrDefault("SERIES_ORDER", "");
+                int order = Integer.MAX_VALUE;
+                try { if (ord != null && !ord.isBlank()) order = Integer.parseInt(ord.trim()); } catch (Exception ignored) {}
+                String html = java.nio.file.Files.readString(p, java.nio.charset.StandardCharsets.UTF_8);
+                java.util.regex.Matcher m = h1Pat.matcher(html);
+                String title = m.find()? m.group(1).replaceAll("<[^>]+>", "").trim() : name;
+                SeriesEntry se = new SeriesEntry();
+                String rel = out.relativize(p).toString().replace(java.io.File.separatorChar, '/');
+                se.pagePath = "/" + rel; se.url = se.pagePath; se.title = title; se.seriesTitle = series; se.seriesSlug = io.site.bloggen.infra.Slug.of(series); se.order = order; se.date = date;
+                bySeries.computeIfAbsent(se.seriesSlug, k -> new java.util.ArrayList<>()).add(se);
+            }
+        } catch (java.io.IOException ignored) {}
+        // sort
+        for (var e : bySeries.entrySet()) {
+            e.getValue().sort((a,b) -> {
+                int ao = a.order; int bo = b.order;
+                if (ao != Integer.MAX_VALUE || bo != Integer.MAX_VALUE) {
+                    if (ao != bo) return Integer.compare(ao, bo);
+                }
+                return a.date.compareTo(b.date);
+            });
+        }
+        // build ctx per page
+        java.util.Map<String, SeriesCtx> ctx = new java.util.HashMap<>();
+        for (var e : bySeries.entrySet()) {
+            var list = e.getValue();
+            String slug = e.getKey();
+            String title = list.isEmpty()? slug : list.get(0).seriesTitle;
+            String badge = "<div class=\"c-series-badge\"><a href=\"/series/" + slug + "/\">" + escapeHtml(title) + "</a></div>";
+            for (int i=0;i<list.size();i++) {
+                SeriesEntry cur = list.get(i);
+                SeriesEntry prev = i>0? list.get(i-1):null;
+                SeriesEntry next = i<list.size()-1? list.get(i+1):null;
+                StringBuilder nav = new StringBuilder();
+                nav.append("<nav class=\"c-series-nav\">");
+                nav.append("<strong class=\"c-series-nav__label\"><a href=\"/series/").append(slug).append("/\">").append(escapeHtml(title)).append("</a></strong>");
+                nav.append("<ul class=\"c-series-nav__list\">");
+                if (prev != null) nav.append("<li><a href=\"").append(prev.url).append("\">← ").append(escapeHtml(prev.title)).append("</a></li>");
+                if (next != null) nav.append("<li><a href=\"").append(next.url).append("\">").append(escapeHtml(next.title)).append(" →</a></li>");
+                nav.append("</ul></nav>");
+                SeriesCtx sc = new SeriesCtx(); sc.badgeHtml = badge; sc.navHtml = nav.toString();
+                ctx.put(cur.pagePath, sc);
+            }
+        }
+        return ctx;
     }
     private static String buildBreadcrumb(String catPath, io.site.bloggen.core.SiteConfig cfg) {
         if (catPath == null || catPath.isBlank()) return "<a href=\"/categories/\">카테고리</a>";

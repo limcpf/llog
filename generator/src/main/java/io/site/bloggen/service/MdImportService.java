@@ -54,6 +54,14 @@ public final class MdImportService {
                         htmlContent = fmBlock + htmlContent;
                     }
                     String excerpt = Markdown.firstParagraphText(md);
+                    String series = defaultString(firstOf(fm, "series", "Series"));
+                    String seriesOrderStr = defaultString(firstOf(fm, "series-order", "series_order", "order"));
+                    String seriesOrder = "";
+                    if (!series.isBlank()) {
+                        // try parse integer order
+                        try { Integer.parseInt(seriesOrderStr.trim()); seriesOrder = seriesOrderStr.trim(); }
+                        catch (Exception ignore) { seriesOrder = ""; }
+                    }
                     Path out = siteRoot.resolve("posts").resolve(date + "-" + slug + ".html");
                     String tpl = loadTemplate();
                     String html = tpl.replace("{{TITLE}}", escape(title)).replace("{{DATE}}", date.toString()).replace("{{CONTENT_HTML}}", htmlContent);
@@ -66,6 +74,8 @@ public final class MdImportService {
                         String cat = normalizeCatPath(rawPath);
                         String metaJson = "{\n  \"PAGE_DESCRIPTION\": \"" + escape(excerpt) + "\"" 
                                 + (cat.isBlank()?"":"\n,  \"CATEGORY_PATH\": \"" + escape(cat) + "\"")
+                                + (!series.isBlank()?"\n,  \"SERIES\": \"" + escape(series) + "\"":"")
+                                + (!series.isBlank() && !seriesOrder.isBlank()?"\n,  \"SERIES_ORDER\": \"" + escape(seriesOrder) + "\"":"")
                                 + "\n}\n";
                         Files.writeString(meta, metaJson, StandardCharsets.UTF_8);
                         io.site.bloggen.util.Log.info("imported: " + p + " -> " + out);

@@ -182,6 +182,18 @@
   .c-dos-post__desc { margin-top: .4rem; color: var(--color-fg); }
   .c-dos { border: 0; height: 2px; background: linear-gradient(90deg, rgba(255,255,255,.15), rgba(255,255,255,.05)); margin: var(--space-3) 0 var(--space-2); }
 
+  /* Series badge */
+  .c-series-badge { color: var(--color-muted); font-size: .85em; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 .25rem; }
+  .c-series-badge a { color: inherit; text-decoration: none; }
+  .c-series-badge a:hover { text-decoration: underline; }
+
+  /* Series prev/next inline nav */
+  .c-series-nav { margin: var(--space-4) 0; padding: .5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border); }
+  .c-series-nav__label { display: block; color: var(--color-muted); font-size: .9em; margin-bottom: .25rem; }
+  .c-series-nav__list { list-style: none; display: flex; gap: 1rem; padding: 0; margin: 0; }
+  .c-series-nav__list a { text-decoration: none; }
+  .c-series-nav__list a:hover { text-decoration: underline; }
+
   /* Retro theme overrides */
   html[data-theme="retro"] .c-site-title { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
   html[data-theme="retro"] .c-nav a { font-family: 'Galmuri Local', ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--color-fg); opacity: .9; }

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+  <head>
+    <!-- @include partials/head-shared.html -->
+    <title>{{SERIES_NAME}} — {{SITE_NAME}}</title>
+    <link rel="canonical" href="{{DOMAIN}}{{SERIES_CANONICAL_PATH}}" />
+    <meta property="og:title" content="{{SERIES_NAME}} — {{SITE_NAME}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{DOMAIN}}{{SERIES_CANONICAL_PATH}}" />
+    <meta property="og:image" content="{{OG_IMAGE}}" />
+    <meta name="twitter:card" content="{{TWITTER_CARD}}" />
+  </head>
+  <body>
+    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+    <!-- @include partials/site-header.html -->
+
+    <main id="main" class="l-reading" role="main">
+      <article class="c-article u-flow" aria-labelledby="series-name">
+        <header>
+          <h1 id="series-name">{{SERIES_NAME}}</h1>
+          <p class="u-muted">이 시리즈의 글 목록</p>
+        </header>
+        <ul>
+{{SERIES_POSTS}}
+        </ul>
+      </article>
+    </main>
+
+    <!-- @include partials/site-footer.html -->
+  </body>
+</html>
+

@@ -34,6 +34,8 @@ public final class ContentScanner {
                 // sidecar meta
                 String desc = "";
                 String catPath = "";
+                String series = "";
+                Integer seriesOrder = null;
                 List<String> tags = new ArrayList<>();
                 Path meta = p.resolveSibling(name + ".meta.json");
                 if (Files.exists(meta)) {
@@ -41,6 +43,11 @@ public final class ContentScanner {
                     var mm = FlatJson.parse(mj);
                     desc = mm.getOrDefault("PAGE_DESCRIPTION", "");
                     catPath = mm.getOrDefault("CATEGORY_PATH", "");
+                    series = mm.getOrDefault("SERIES", "");
+                    String ord = mm.getOrDefault("SERIES_ORDER", "");
+                    if (ord != null && !ord.isBlank()) {
+                        try { seriesOrder = Integer.parseInt(ord.trim()); } catch (Exception ignored) {}
+                    }
                     var tagStr = mm.getOrDefault("TAGS", "");
                     if (tagStr != null && !tagStr.isBlank()) {
                         for (String t : tagStr.split(",")) {
@@ -49,7 +56,7 @@ public final class ContentScanner {
                         }
                     }
                 }
-                posts.add(new Post(name, url, date, title, List.copyOf(tags), desc, catPath));
+                posts.add(new Post(name, url, date, title, List.copyOf(tags), desc, catPath, series == null?"":series, seriesOrder));
             }
         }
         posts.sort(Comparator.comparing(Post::date).reversed());

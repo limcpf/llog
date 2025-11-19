@@ -157,6 +157,35 @@ public final class CatalogService {
                 }
             }
 
+            // series index + pages
+            Map<String, List<Post>> bySeries = groupBySeries(posts);
+            if (!bySeries.isEmpty()) {
+                String seriesIndexTpl = loadResource("/templates/series/index.html");
+                StringBuilder list = new StringBuilder();
+                for (var e : bySeries.entrySet()) {
+                    String slug = e.getKey();
+                    List<Post> in = e.getValue();
+                    String title = in.isEmpty()? slug : in.get(0).series();
+                    list.append("          <li><a href=\"/series/").append(slug).append("/\">")
+                        .append(escape(title)).append("</a> ( ").append(in.size()).append(" )</li>\n");
+                }
+                String seriesIndexHtml = TokenEngine.apply(seriesIndexTpl.replace("{{SERIES_LIST}}", list.toString()), tokens);
+                write(out.resolve("series/index.html"), seriesIndexHtml, dryRun);
+
+                String seriesTpl = loadResource("/templates/series/series-template.html");
+                for (var e : bySeries.entrySet()) {
+                    String slug = e.getKey();
+                    List<Post> in = e.getValue();
+                    String items = buildPostsList(in);
+                    var local = new LinkedHashMap<>(tokens);
+                    String title = in.isEmpty()? slug : in.get(0).series();
+                    local.put("SERIES_NAME", title);
+                    local.put("SERIES_CANONICAL_PATH", "/series/" + slug + "/");
+                    String html = TokenEngine.apply(seriesTpl.replace("{{SERIES_POSTS}}", items), local);
+                    write(out.resolve("series").resolve(slug).resolve("index.html"), html, dryRun);
+                }
+            }
+
             // feed.xml
             String feedTpl = loadResource("/templates/feed.xml");
             String feedItems = buildFeedItems(posts, cfg);
@@ -189,12 +218,37 @@ public final class CatalogService {
     private static String listItem(Post p) {
         StringBuilder sb = new StringBuilder();
         sb.append("<article class=\"c-dos-post\">\n");
+        if (p.series() != null && !p.series().isBlank()) {
+            String sslug = io.site.bloggen.infra.Slug.of(p.series());
+            sb.append("  <div class=\"c-series-badge\"><a href=\"/series/").append(sslug).append("/\">")
+              .append(escape(p.series())).append("</a></div>\n");
+        }
         sb.append("  <h3 class=\"c-dos-post__title\"><a href=\"").append(p.url()).append("\">").append(escape(p.title())).append("</a></h3>\n");
         sb.append("  <div class=\"c-dos-post__meta\">[").append(p.date()).append("]</div>\n");
         if (p.description() != null && !p.description().isBlank()) sb.append("  <p class=\"c-dos-post__desc\">").append(escape(p.description())).append("</p>\n");
         sb.append("  <hr class=\"c-dos\" />\n");
         sb.append("</article>\n");
         return sb.toString();
+    }
+
+    private static Map<String, List<Post>> groupBySeries(List<Post> posts) {
+        Map<String, List<Post>> out = new LinkedHashMap<>();
+        for (Post p : posts) {
+            if (p.series() == null || p.series().isBlank()) continue;
+            String slug = io.site.bloggen.infra.Slug.of(p.series());
+            out.computeIfAbsent(slug, k -> new ArrayList<>()).add(p);
+        }
+        // sort each by seriesOrder asc then date asc
+        for (var e : out.entrySet()) {
+            e.getValue().sort((a,b) -> {
+                Integer ao = a.seriesOrder(); Integer bo = b.seriesOrder();
+                if (ao != null && bo != null && !ao.equals(bo)) return Integer.compare(ao, bo);
+                if (ao != null && bo == null) return -1;
+                if (ao == null && bo != null) return 1;
+                return a.date().compareTo(b.date());
+            });
+        }
+        return out;
     }
 
     private static String loadResource(String path) throws IOException {

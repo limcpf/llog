@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+  <head>
+    <!-- @include partials/head-shared.html -->
+    <title>시리즈 — {{SITE_NAME}}</title>
+    <link rel="canonical" href="{{DOMAIN}}/series/" />
+    <meta property="og:title" content="시리즈 — {{SITE_NAME}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{DOMAIN}}/series/" />
+    <meta property="og:image" content="{{OG_IMAGE}}" />
+    <meta name="twitter:card" content="{{TWITTER_CARD}}" />
+  </head>
+  <body>
+    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+    <!-- @include partials/site-header.html -->
+
+    <main id="main" class="l-reading" role="main">
+      <article class="c-article u-flow" aria-labelledby="series-title">
+        <header>
+          <h1 id="series-title">시리즈</h1>
+        </header>
+        <ul>
+{{SERIES_LIST}}
+        </ul>
+      </article>
+    </main>
+
+    <!-- @include partials/site-footer.html -->
+  </body>
+</html>
+

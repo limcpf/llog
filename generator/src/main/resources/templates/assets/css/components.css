@@ -183,8 +183,8 @@
   .c-dos { border: 0; height: 2px; background: linear-gradient(90deg, rgba(255,255,255,.15), rgba(255,255,255,.05)); margin: var(--space-3) 0 var(--space-2); }
 
   /* Retro theme overrides */
-  html[data-theme="retro"] .c-site-title { font-family: 'Press Start 2P Local', 'Galmuri Local', 'Press Start 2P', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
-  html[data-theme="retro"] .c-nav a { font-family: 'Press Start 2P Local', 'Galmuri Local', ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--color-fg); opacity: .9; }
+  html[data-theme="retro"] .c-site-title { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
+  html[data-theme="retro"] .c-nav a { font-family: 'Galmuri Local', ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--color-fg); opacity: .9; }
   html[data-theme="retro"] .c-nav a:hover { opacity: 1; }
-  html[data-theme="retro"] h1, html[data-theme="retro"] h2, html[data-theme="retro"] h3 { font-family: 'Press Start 2P Local', 'Galmuri Local', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; font-weight: 400; }
+  html[data-theme="retro"] h1, html[data-theme="retro"] h2, html[data-theme="retro"] h3 { font-family: 'Galmuri Local', ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; font-weight: 400; }
 }

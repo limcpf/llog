@@ -83,10 +83,10 @@ html[data-theme="retro"] {
   --color-code-bg: #0b0f15;
   --color-selection: #233145;
 
-  /* Pixel fonts */
-  --font-sans: 'Galmuri Local', 'Press Start 2P Local', ui-monospace, monospace;
+  /* Pixel font: Galmuri only */
+  --font-sans: 'Galmuri Local', ui-monospace, monospace;
   --font-serif: 'Galmuri Local', ui-monospace, monospace;
-  --font-mono: 'Press Start 2P Local', 'Galmuri Local', ui-monospace, monospace;
+  --font-mono: 'Galmuri Local', ui-monospace, monospace;
 
   --fs-0: 1rem;
   --fs-1: 1.1rem; /* slightly larger for pixel font legibility */

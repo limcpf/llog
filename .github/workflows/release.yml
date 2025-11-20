@@ -28,14 +28,14 @@ jobs:
           components: 'native-image'
 
       - name: Build JVM jar
-        run: bash generator/scripts/build-jvm.sh
+        run: bash scripts/build-jvm.sh
 
       - name: Build native
-        run: bash generator/scripts/build-native.sh
+        run: bash scripts/build-native.sh
 
       - name: Rename binary
         run: |
-          cp generator/build/llog llog-${{ matrix.target }}
+          cp build/llog llog-${{ matrix.target }}
 
       - name: Checksums
         run: |

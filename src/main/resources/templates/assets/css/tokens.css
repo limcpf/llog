@@ -71,17 +71,18 @@
 }
 
 /* Retro 8-bit theme (opt-in via html[data-theme="retro"]) */
+/* Retro 8-bit theme (opt-in via html[data-theme="retro"]) */
 html[data-theme="retro"] {
-  /* Deeper navy CRT palette */
-  --color-bg: #0f131a;
-  --color-surface: #0b0f15;
-  --color-fg: #e7f0ff;
-  --color-muted: #9cb3d1;
-  --color-accent: #a6d6ff;   /* cyan-ish highlight */
-  --color-accent-2: #ffd27a;  /* warm alt */
-  --color-border: #1e293b;
-  --color-code-bg: #0b0f15;
-  --color-selection: #233145;
+  /* B&W Palette (Light Mode Default) */
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-fg: #000000;
+  --color-muted: #666666;
+  --color-accent: #000000;       /* Black accent */
+  --color-accent-2: #333333;     /* Dark gray alt */
+  --color-border: #000000;
+  --color-code-bg: #f0f0f0;
+  --color-selection: #cccccc;
 
   /* Pixel font: Galmuri only */
   --font-sans: 'Galmuri Local', ui-monospace, monospace;
@@ -97,5 +98,20 @@ html[data-theme="retro"] {
   --fs-5: 2.1rem;
 
   --radius-1: 0px; /* blocky */
-  --radius-2: 2px;
+  --radius-2: 0px;
+}
+
+/* Retro Dark Mode Override */
+@media (prefers-color-scheme: dark) {
+  html[data-theme="retro"] {
+    --color-bg: #000000;
+    --color-surface: #000000;
+    --color-fg: #ffffff;
+    --color-muted: #aaaaaa;
+    --color-accent: #ffffff;
+    --color-accent-2: #cccccc;
+    --color-border: #ffffff;
+    --color-code-bg: #111111;
+    --color-selection: #444444;
+  }
 }

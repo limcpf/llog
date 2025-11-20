@@ -1,36 +1,41 @@
 <!doctype html>
 <html lang="ko" data-theme="{{SITE_THEME}}">
-  <head>
-    <!-- @include partials/head-shared.html -->
-    <title>{{TITLE}} — {{SITE_NAME}}</title>
-    <meta name="description" content="{{PAGE_DESCRIPTION}}" />
-    <link rel="canonical" href="{{PAGE_URL}}" />
-    <meta property="og:title" content="{{TITLE}} — {{SITE_NAME}}" />
-    <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="{{PAGE_URL}}" />
-    <meta property="og:image" content="{{OG_IMAGE}}" />
-    <meta property="article:section" content="{{ARTICLE_SECTION}}" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
-    {{POST_JSONLD}}
-  </head>
-  <body>
-    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
-    <!-- @include partials/site-header.html -->
 
-    <main id="main" class="l-reading" role="main">
-      <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav>
-      <article class="c-article u-flow" aria-labelledby="post-title">
-        <header>
-          {{SERIES_BADGE}}
-          <h1 id="post-title">{{TITLE}}</h1>
-          <p class="c-article__meta">{{DATE}}</p>
-        </header>
-        {{CONTENT_HTML}}
-      </article>
-    </main>
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>{{TITLE}} — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="{{TITLE}} — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
 
-    <!-- @include partials/site-footer.html -->
-  </body>
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">{{TITLE}}</h1>
+        <p class="c-article__meta">
+          {{DATE}} <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      {{CONTENT_HTML}}
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
 </html>

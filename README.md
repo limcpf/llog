@@ -31,10 +31,10 @@ python3 -m http.server -d sample-site/dist 8080
 ```
 
 3) 임의 워킹 디렉토리 빌드(템플릿에서 시작)
-- 릴리스의 `site-skeleton.tar.gz`를 받아 워킹 디렉토리를 구성한 뒤 빌드합니다.
+- 릴리스 스켈레톤 없이 `init`으로 바로 시작합니다.
 ```
-# skeleton 압축 해제 (예: ./work)
-mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
+# 새 작업 디렉토리 준비(예: ./work)
+./llog init work
 # 콘텐츠 주입(Markdown)
 ./llog import:md --src /path/to/vault --root work
 # 빌드
@@ -207,7 +207,7 @@ tags: ["react", "state", "hooks"]
 ## 배포(릴리스)와 콘텐츠 리포 구성
 - 템플릿 리포(본 리포)
   - GitHub Actions: `.github/workflows/release.yml`
-  - 태그 푸시(`v*`) 시 네이티브 바이너리(각 OS) + `site-skeleton.tar.gz` + 체크섬 업로드
+  - 태그 푸시(`v*`) 시 네이티브 바이너리 + 체크섬 업로드(스켈레톤 아카이브 제거)
 - 콘텐츠 리포(별도)
   - 예시 워크플로: `examples/workflows/content-build-and-deploy.yml`
   - 동작: 릴리스 자산 다운로드 → Vault(Markdown) 체크아웃 → `import:md` → `build` → Pages 배포

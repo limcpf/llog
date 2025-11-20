@@ -30,10 +30,10 @@ python3 -m http.server -d sample-site/dist 8080
 # http://localhost:8080
 ```
 
-3) Build from a working directory (using the release skeleton)
+3) Build from a working directory (no skeleton archive needed)
 ```
-# unpack site-skeleton.tar.gz (e.g., ./work)
-mkdir -p work && tar -xzf site-skeleton.tar.gz -C work
+# create a working directory from templates
+./llog init work
 # import markdown content
 ./llog import:md --src /path/to/vault --root work
 # build
@@ -137,7 +137,7 @@ Usage:
 ## Release & Deploy
 - Template repo (this repo)
   - GitHub Actions: `.github/workflows/release.yml`
-  - Tag push (`v*`) uploads native binaries and `site-skeleton.tar.gz` with checksums
+  - Tag push (`v*`) uploads native binaries with checksums (skeleton archive removed)
 - Content repo (separate)
   - See `examples/workflows/content-build-and-deploy.yml`
   - Flow: download release assets → checkout Vault (Markdown) → `import:md` → `build` → deploy to Pages

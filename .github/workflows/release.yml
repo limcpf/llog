@@ -1,4 +1,4 @@
-name: Release Native + Skeleton
+name: Release Native
 
 on:
   push:
@@ -37,20 +37,15 @@ jobs:
         run: |
           cp generator/build/llog llog-${{ matrix.target }}
 
-      - name: Pack site skeleton (templates)
-        run: |
-          tar -czf site-skeleton.tar.gz -C generator/src/main/resources/templates .
-
       - name: Checksums
         run: |
-          shasum -a 256 llog-${{ matrix.target }} site-skeleton.tar.gz > SHA256SUMS-${{ matrix.target }}
+          shasum -a 256 llog-${{ matrix.target }} > SHA256SUMS-${{ matrix.target }}
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             llog-${{ matrix.target }}
-            site-skeleton.tar.gz
             SHA256SUMS-${{ matrix.target }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

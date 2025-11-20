@@ -166,5 +166,7 @@ html[data-theme="retro"] body {
   /* improve legibility */
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  letter-spacing: 0;
+  letter-spacing: 0.02em;
+  background: var(--color-bg);
+  /* Remove gradient to match header */
 }

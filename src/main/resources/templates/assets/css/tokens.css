@@ -135,6 +135,18 @@ html[data-theme="retro"] {
   --radius-2: 0px;
 }
 
+@media (max-width: 48rem) {
+  html[data-theme="retro"] {
+    --fs-0: 0.9rem;
+    --fs-1: 1rem;
+    --fs-2: 1.1rem;
+    --fs-3: 1.25rem;
+    --fs-4: 1.4rem;
+    --fs-5: 1.6rem;
+    --lh-body: 1.6;
+  }
+}
+
 /* Retro Dark Mode Override */
 @media (prefers-color-scheme: dark) {
   html[data-theme="retro"] {

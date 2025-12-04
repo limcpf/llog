@@ -25,7 +25,7 @@ bash scripts/llog --help
 
 2) Create a sample site (with sample MD → import → dist build)
 ```
-generator/build/llog sample --out sample-site --build
+./build/llog sample --out sample-site --build
 python3 -m http.server -d sample-site/dist 8080
 # http://localhost:8080
 ```

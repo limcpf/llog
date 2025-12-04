@@ -560,6 +560,40 @@
     text-decoration: none;
   }
 
+  @media (max-width: 48rem) {
+    html[data-theme="retro"] .c-nav a {
+      border: 0;
+      box-shadow: none;
+      background: transparent;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    html[data-theme="retro"] .c-nav a:hover {
+      background: transparent;
+      color: var(--color-fg);
+      text-decoration-thickness: 2px;
+    }
+
+    html[data-theme="retro"] .c-nav [aria-current="page"] {
+      background: transparent;
+      color: var(--color-fg);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+    }
+
+    /* Tiny post info for mobile/tablet */
+    html[data-theme="retro"] .c-fm,
+    html[data-theme="retro"] .c-article__meta {
+      font-size: 0.75rem;
+    }
+
+    html[data-theme="retro"] .c-fm__table th,
+    html[data-theme="retro"] .c-fm__table td {
+      padding: .2rem .4rem;
+    }
+  }
+
   html[data-theme="retro"] h1,
   html[data-theme="retro"] h2,
   html[data-theme="retro"] h3 {
@@ -567,6 +601,8 @@
     letter-spacing: .01em;
     text-transform: none;
     font-weight: 700;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   /* Retro Card/Box Styles */

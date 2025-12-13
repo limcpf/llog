@@ -624,8 +624,7 @@ public final class BuildService {
                 SeriesEntry next = i < list.size() - 1 ? list.get(i + 1) : null;
                 StringBuilder nav = new StringBuilder();
                 nav.append("<nav class=\"c-series-nav\">");
-                nav.append("<strong class=\"c-series-nav__label\"><a href=\"/series/").append(slug).append("/\">")
-                        .append(escapeHtml(title)).append("</a></strong>");
+                // Removed redundant label: <strong class="c-series-nav__label">...</strong>
                 nav.append("<ul class=\"c-series-nav__list\">");
                 if (prev != null)
                     nav.append("<li><a href=\"").append(prev.url).append("\">← ").append(escapeHtml(prev.title))

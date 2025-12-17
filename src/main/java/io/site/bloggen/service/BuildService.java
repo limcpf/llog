@@ -284,7 +284,8 @@ public final class BuildService {
                                     if (sc != null) {
                                         local.put("SERIES_BADGE", sc.badgeHtml);
                                         // insert nav after FM block end or after header
-                                        if (sc.navHtml != null && !sc.navHtml.isBlank()) {
+                                        if (sc.navHtml != null && !sc.navHtml.isBlank()
+                                                && !t.contains("c-series-nav")) {
                                             if (t.contains("<!--FM_BLOCK_END-->")) {
                                                 t = t.replace("<!--FM_BLOCK_END-->",
                                                         "<!--FM_BLOCK_END-->\n" + sc.navHtml + "\n");
@@ -452,7 +453,8 @@ public final class BuildService {
                                     var sc2 = seriesCtx.get(pagePath2);
                                     if (sc2 != null) {
                                         local2.put("SERIES_BADGE", sc2.badgeHtml);
-                                        if (sc2.navHtml != null && !sc2.navHtml.isBlank()) {
+                                        if (sc2.navHtml != null && !sc2.navHtml.isBlank()
+                                                && !t.contains("c-series-nav")) {
                                             if (t.contains("<!--FM_BLOCK_END-->")) {
                                                 t = t.replace("<!--FM_BLOCK_END-->",
                                                         "<!--FM_BLOCK_END-->\n" + sc2.navHtml + "\n");
@@ -622,6 +624,13 @@ public final class BuildService {
                 SeriesEntry cur = list.get(i);
                 SeriesEntry prev = i > 0 ? list.get(i - 1) : null;
                 SeriesEntry next = i < list.size() - 1 ? list.get(i + 1) : null;
+                if (prev == null && next == null) {
+                    SeriesCtx sc = new SeriesCtx();
+                    sc.badgeHtml = badge;
+                    sc.navHtml = "";
+                    ctx.put(cur.pagePath, sc);
+                    continue;
+                }
                 StringBuilder nav = new StringBuilder();
                 nav.append("<nav class=\"c-series-nav\">");
                 // Removed redundant label: <strong class="c-series-nav__label">...</strong>

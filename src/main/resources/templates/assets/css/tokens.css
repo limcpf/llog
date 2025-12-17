@@ -135,6 +135,19 @@ html[data-theme="retro"] {
   --radius-2: 0px;
 }
 
+
+@media (max-width: 64rem) {
+  html[data-theme="retro"] {
+    --fs-0: 1.0rem;
+    --fs-1: 1.125rem;
+    --fs-2: 1.25rem;
+    --fs-3: 1.45rem;
+    --fs-4: 1.75rem;
+    --fs-5: 2.0rem;
+    --lh-body: 1.75;
+  }
+}
+
 @media (max-width: 48rem) {
   html[data-theme="retro"] {
     --fs-0: 0.9rem;

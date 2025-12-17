@@ -178,6 +178,9 @@
     width: 100%;
     border-collapse: collapse;
     margin: var(--space-6) 0;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   th,

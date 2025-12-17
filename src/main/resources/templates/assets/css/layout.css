@@ -44,3 +44,13 @@ html[data-theme="retro"] .l-footer {
   /* Double border for footer */
   padding-bottom: var(--space-8);
 }
+
+@media (min-width: 48rem) and (max-width: 80rem) {
+  html[data-theme="retro"] .l-container {
+    width: min(100% - 6rem, var(--measure-wide));
+  }
+
+  html[data-theme="retro"] .l-reading {
+    width: min(100% - 6rem, var(--measure));
+  }
+}

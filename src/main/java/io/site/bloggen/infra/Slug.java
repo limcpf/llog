@@ -9,6 +9,7 @@ public final class Slug {
     public static String of(String title) {
         String n = Normalizer.normalize(title, Normalizer.Form.NFKD)
                 .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        n = Normalizer.normalize(n, Normalizer.Form.NFC);
         n = n.toLowerCase()
                 .replaceAll("[^\\p{L}\\p{N}\\-\\s]", " ")
                 .trim()

@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>[Java 회고 03] 클래스와 객체 생성 : 생성자, 참조와 얕은/깊은 복사, 임시 객체와 String — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="[Java 회고 03] 클래스와 객체 생성 : 생성자, 참조와 얕은/깊은 복사, 임시 객체와 String — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">[Java 회고 03] 클래스와 객체 생성 : 생성자, 참조와 얕은/깊은 복사, 임시 객체와 String</h1>
+        <p class="c-article__meta">
+          2025-12-18 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <table class="c-fm__table">
+    <tbody>
+        <tr><th scope="row">카테고리</th><td>java/study/basic</td></tr>
+        <tr><th scope="row">작성일</th><td>2025-12-18</td></tr>
+        <tr><th scope="row">게시 여부</th><td>true</td></tr>
+        <tr><th scope="row">series</th><td>Java 회고</td></tr>
+        <tr><th scope="row">series-order</th><td>3</td></tr>
+        <tr><th scope="row">제목</th><td>[Java 회고 03] 클래스와 객체 생성 : 생성자, 참조와 얕은/깊은 복사, 임시 객체와 String</td></tr>
+    </tbody>
+  </table>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h1>클래스, 객체, 인스턴스</h1>
+<ul>
+  <li>클래스 : 객체를 구현하기 위한 <strong>문법, 형식</strong></li>
+  <li>객체 : 단위이고, 추상적임</li>
+  <li>인스턴스 : 메모리(Heap)에 실체화된 것</li>
+  <li>변수(참조자)를 사용하는 이유는 메모리 사용을 위한 <strong>인스턴스가 존재하는 메모리 주소를 가리키는 리모컨 같은 역할</strong></li>
+  <li>변수는 Stack에 존재함</li>
+</ul>
+<h1>클래스 문법</h1>
+<ul>
+  <li>구성요소(변수, 함수)를 멤버라 지칭</li>
+  <li>멤버</li>
+  <li>필드 = 변수</li>
+  <li>메서드 = 함수</li>
+  <li><strong>선언과 정의가 공존한다.</strong></li>
+  <li>C언어와 같은 대부분 언어에선 구분하나, <strong>자바는 선언과 정의가 동시에 되어야함</strong></li>
+  <li>클래스 위에는 항상 <strong>패키지가 존재한다.</strong></li>
+</ul>
+<h1>클래스 생성자</h1>
+<pre><code class="language-java">// 1. 반환 타입(void 등)을 적지 않습니다.
+// 2. 메서드 이름은 반드시 '클래스 이름'과 같아야 합니다.
+public Car() {
+    // new Car(); 를 할 때 자동으로 실행되는 코드
+    System.out.println("자동차가 생성되었습니다.");
+}
+</code></pre>
+<ul>
+  <li>사용할 수 있는 객체를 생성(<code>new</code>)할 때 초기화 하는 역할</li>
+  <li>클래스 파일은 <strong>설계도</strong>이고, 객체(또는 인스턴스)는 <strong>해당 설계도로 만든 제품</strong>이라고 볼 수 있다.</li>
+  <li>일반 메서드와 비슷하지만, <strong>리턴 타입이 아예 없다는 것이 큰 차이</strong></li>
+</ul>
+<pre><code class="language-java">class Box {
+    int size;
+    
+    // 1. 매개변수가 없는 생성자 (기본값 설정)
+    Box() { this.size = 10; }
+
+    // 2. 매개변수가 있는 생성자 (값 지정)
+    Box(int size) { this.size = size; }
+}
+
+// 사용: new Box() 또는 new Box(50) 가능
+</code></pre>
+<ul>
+  <li>일반 메서드처럼 매개변수 구성이 다른 생성자를 여러개 정의 가능</li>
+  <li>여러개가 정의 되어있더라도 <strong>new 연산 시 호출되는 생성자는 한개임</strong></li>
+  <li>생성자에서 <strong>다른 생성자도 호출 가능</strong></li>
+  <li>생성자 내에서 다른 생성자를 호출 할 때 <strong>맨 위에 위치해야함(가장 먼저 호출)</strong></li>
+</ul>
+<h1>생성자</h1>
+<ul>
+  <li>명시적 호출이 없으며 <strong>new 연산자를 사용함</strong></li>
+  <li><strong>객체의 초기화를 위해 문법적으로 들어가 있는 함수임</strong></li>
+  <li>주의사항 : 필드 선언시 멤버에 대입한 초깃값과 <strong>생성자 초기화 값이 충돌할 경우, 생성자에 기술한 코드가 우선임</strong></li>
+</ul>
+<pre><code class="language-java">public class InitTest {
+	// 1. 필드 명시적 초기화
+	int value = 10; 
+
+	public InitTest() {
+		// 2. 생성자에서 초기화 (이것이 덮어씌움)
+		this.value = 20; 
+	}
+	
+	public static void main(String[] args) {
+		InitTest t = new InitTest();
+		System.out.println(t.value); // 결과: 20
+	}
+}
+</code></pre>
+<ul>
+  <li>객체가 생성되는 시점(new)에 <strong>자동으로 호출된다.</strong></li>
+  <li>또한 어떠한 생성자도 클래스에 없는경우, <strong>컴파일러가 자동으로 빈 생성자를 추가해준다.</strong></li>
+  <li><strong>생성자를 작성할 때, 항상 클래스 자체와 관련있는 코드만 기술할것을 권장함</strong></li>
+  <li>하나의 인스턴스에 <strong>여러 참조자가 존재할 수 있다.</strong></li>
+  <li>이 경우 사이드 이펙트를 고려하라.</li>
+  <li>생성자를 <strong>private로 지정하는 경우, 생성자 사용을 제한하는 것이다.</strong></li>
+</ul>
+<h1>DeepCopy VS Swallow Copy</h1>
+<hr />
+<pre><code class="language-java">public class ShallowCopyExample {
+    public static void main(String[] args) {
+        // 원본 객체 생성
+        Person original = new Person("홍길동", new Address("서울"));
+        
+        // 얕은 복사 (생성자에서 주소값만 그대로 전달)
+        Person shallowCopied = new Person(original);
+        
+        // 복사본의 주소를 "부산"으로 변경
+        shallowCopied.address.city = "부산";
+        
+        // [Side Effect 발생]
+        // 복사본을 바꿨는데 원본인 '홍길동'의 주소도 "부산"으로 바뀜!
+        System.out.println("원본 주소: " + original.address.city); // 부산 (의도치 않은 변경)
+    }
+}
+
+class Address {
+    String city;
+    Address(String city) { this.city = city; }
+}
+
+class Person {
+    String name;
+    Address address;
+
+    Person(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    // 얕은 복사 생성자
+    Person(Person other) {
+        this.name = other.name;
+        this.address = other.address; // [위험] 주소값(참조)만 복사함
+    }
+}
+</code></pre>
+<ul>
+  <li>내용 자체를 카피한다면 Deep Copy</li>
+  <li>참조자만 카피하는 것은 Swallow Copy</li>
+  <li>얕은 복사는 사이드 이펙트의 원인이 된다.</li>
+  <li>하나의 인스턴스를 바라보는 여러개의 참조자가 있는 경우, <strong>원본 인스턴스의 변경에 따른 부수효과를 예측하기 힘들다.</strong></li>
+  <li>특히 자바에선 <strong>참조자가 파라미터로 넘어갈 때 이런 위험에 쉽게 노출된다.</strong></li>
+  <li>그래서 원본 인스턴스 자체를 복사하여 새롭게 할당하는 <strong>Deep Copy를 하는 법이 중요</strong></li>
+  <li>Swallow Copy와 달리 각각의 인스턴스를 만들어 참조가 존재</li>
+</ul>
+<pre><code class="language-java">public class DeepCopyExample {
+    public static void main(String[] args) {
+        Person original = new Person("홍길동", new Address("서울"));
+        
+        // 깊은 복사 (내부 Address도 새로 생성)
+        Person deepCopied = new Person(original);
+        
+        // 복사본의 주소 변경
+        deepCopied.address.city = "부산";
+        
+        // [안전함]
+        // 원본은 여전히 "서울"을 유지함. 서로 다른 주소 객체를 가짐.
+        System.out.println("원본 주소: " + original.address.city); // 서울
+    }
+}
+
+class Person {
+    String name;
+    Address address;
+
+    // 깊은 복사 생성자
+    Person(Person other) {
+        this.name = other.name;
+        // [핵심] new 키워드로 아예 새로운 Address 인스턴스를 생성해서 할당
+        this.address = new Address(other.address.city); 
+    }
+    
+    // 일반 생성자 생략 (위 예제와 동일) ...
+}
+</code></pre>
+<h1>참조자</h1>
+<ul>
+  <li><code>TestClass testClass = new TestClass();</code>라는 구문이 있을때, <code>testClass</code>를 참조자 라고 한다.</li>
+  <li>클래스 형식에 대한 변수 선언은 모두가 <strong>참조자</strong>이다.</li>
+  <li>참조자는 인스턴스를 가리키는 레퍼런스이다. <strong>인스턴스 자체가 아니다.</strong></li>
+</ul>
+<h2>참조자</h2>
+<pre><code class="language-java">public class ReferenceIdentity {
+    public static void main(String[] args) {
+        
+        // 1. 인스턴스 생성
+        // 힙 메모리에 "익명의 Member 인스턴스"가 생성되고, 그 주소를 p1이 가짐
+        Member p1 = new Member("Alice");
+
+        // 2. 참조자 복사 (포인터 복사)
+        // 인스턴스가 복사되는 것이 아니라, '주소값'만 p2에 복사됨
+        Member p2 = p1; 
+
+        // 3. 동일성 확인
+        // p2를 통해 내용을 바꾸면, p1이 가리키는 대상도 바뀜 (같은 곳을 보니까)
+        p2.name = "Bob";
+        System.out.println(p1.name); // Bob 출력
+        
+        // p1과 p2는 서로 다른 변수지만, 같은 주소(인스턴스)를 가리킴
+        System.out.println(p1 == p2); // true (주소값이 같음)
+    }
+}
+
+class Member {
+    String name;
+    Member(String name) { this.name = name; }
+}
+</code></pre>
+<ul>
+  <li>자바는 <strong>참조와 인스턴스의 구분이 표면적으로 되어있지 않아, 초보자들의 경우 객체 복사에 문제가 생길 수 있다.</strong></li>
+  <li>자바에게 이름이 부여되는 것은 <strong>오직 참조자뿐임</strong> = 식별자</li>
+  <li>인스턴스는 이름이 없다. <strong>오직 주소만 존재한다.</strong></li>
+  <li>그렇다고 그 인스턴스가 메모리상에 존재하는 주소가 고정이냐? <strong>그것도 아니다.</strong></li>
+  <li>그러니 <strong>인스턴스를 주소로 식별하는 것은 쉽지 않다.</strong></li>
+  <li>참조자는 <strong>단순한 포인터다.</strong></li>
+  <li>대부분 이것을 인스턴스로 착각한다.</li>
+</ul>
+<pre><code class="language-java">// 1. Cloneable 인터페이스를 반드시 구현해야 함 (마커 인터페이스)
+class Item implements Cloneable {
+    int value;
+    
+    // 2. protected인 clone()을 public으로 오버라이딩 해야 함
+    // 3. 예외(CloneNotSupportedException) 처리가 강제됨
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); // 기본적으로 얕은 복사(Shallow Copy) 수행
+    }
+}
+
+public class CloneProblem {
+    public static void main(String[] args) {
+        Item original = new Item();
+        
+        try {
+            // 4. 리턴 타입이 Object이므로 매번 형변환(Casting) 필요
+            Item copy = (Item) original.clone();
+            
+        } catch (CloneNotSupportedException e) {
+            // 5. 불필요해 보이는 예외 처리 로직 작성 필요
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+<ul>
+  <li>자바의 모든 클래스들은 <strong>Object를 상속받는다.</strong></li>
+  <li>Object에는 clone() 메서드를 사용하여 깊은 복사를 할 수 있지만</li>
+  <li>이는 규약이 모호하고 예외처리를 복잡하게 만든다.</li>
+</ul>
+<h2>깊은 복사를 하는 법</h2>
+<pre><code class="language-java">public class DeepCopyConstructor {
+    public static void main(String[] args) {
+        // 1. RHS (Right Hand Side) : 원본 객체 생성
+        Member rhs = new Member("홍길동", new Address("서울"));
+
+        // 2. LHS (Left Hand Side) : 복사 생성자를 통해 생성
+        //    rhs를 넘겼지만, 내부적으로는 새로운 Address를 만들어 가짐
+        Member lhs = new Member(rhs);
+
+        // 3. 독립성 확인
+        //    lhs의 주소를 바꿔도 rhs는 영향받지 않음
+        lhs.addr.city = "부산"; 
+
+        System.out.println("RHS(원본): " + rhs.addr.city); // 서울 (유지됨!)
+        System.out.println("LHS(복사): " + lhs.addr.city); // 부산
+    }
+}
+
+// 참조 타입 필드 (이 녀석도 복사가 필요함)
+class Address {
+    String city;
+    
+    Address(String city) { this.city = city; }
+
+    // Address용 복사 생성자 (재귀적인 깊은 복사를 위해 권장)
+    Address(Address rhs) {
+        this.city = rhs.city; // 값만 베껴옴
+    }
+}
+
+class Member {
+    String name;
+    Address addr; // 참조형 변수 (Deep Copy 대상)
+
+    // 일반 생성자
+    Member(String name, Address addr) {
+        this.name = name;
+        this.addr = addr;
+    }
+
+    // ★ 복사 생성자 (Copy Constructor) 구현 ★
+    // 파라미터로 넘어온 rhs(원본)의 데이터를 읽어 this(LHS)에 채운다.
+    Member(Member rhs) {
+        this.name = rhs.name; // String은 불변객체라 참조 복사도 무관
+        
+        // [중요] 참조형 필드는 반드시 'new'를 사용해 새로 만들어야 함!
+        // rhs.addr의 주소를 넣는게 아니라, rhs.addr의 '값'을 가진 새 객체를 연결
+        this.addr = new Address(rhs.addr); 
+    }
+}
+</code></pre>
+<ul>
+  <li>권장 방법은 <strong>복사 생성자</strong>를 만드는 것이다.</li>
+  <li><strong>복사 생성자는 항상 Deep Copy와 붙어다니는 개념</strong></li>
+  <li>애초에 복사 생성자는 Deep Copy를 위해 존재한다.</li>
+  <li>복사의 원본을 오른쪽에 둔다 하여 RHS라는 변수명을 사용한다</li>
+  <li>Right Hand Side</li>
+  <li>그러면 복사의 결과물은 LHS라고 하며, 복사 생성자는 RHS의 Value를 읽어들여 LHS로 카피</li>
+  <li>이는 C++ 스타일의 문법이며, 자바엔 없다.</li>
+  <li><em><strong>즉, 직접 만들어야 한다!</strong></em></li>
+</ul>
+<ul>
+  <li>초보때 실수를 줄이고 싶다면 <strong>객체 참조자가 멤버라면 DeepCopy 메서드를 만들고 사용하라</strong></li>
+  <li>적어도 <strong>참조로 인한 문제는 방지할 수 있다.</strong></li>
+</ul>
+<h1>임시 객체</h1>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        
+        // 1. 일반적인 방식 (참조자 O)
+        // 'p'라는 참조 변수가 힙 영역의 실제 Point 인스턴스를 가리킵니다.
+        Point p = new Point(10, 20);
+        p.print(); 
+
+        // 2. 임시 객체 사용 (참조자 X)
+        // new Point(30, 40)으로 인스턴스는 생성되지만, 이름이 없습니다.
+        // print() 실행 직후, 더 이상 접근할 수 없어 가비지 컬렉션(GC) 대상이 됩니다.
+        new Point(30, 40).print();
+    }
+}
+
+// 간단한 Point 클래스 (설명용)
+class Point {
+    int x, y;
+    Point(int x, int y) { this.x = x; this.y = y; }
+    void print() { System.out.println("좌표: " + x + ", " + y); }
+}
+</code></pre>
+<ul>
+  <li>객체를 만들 때 항상 <strong>참조자와 실제 인스턴스가 구분됨을 생각해라</strong></li>
+  <li>인스턴스가 생성되는 경우 접근할 참조자가 없는 경우 해당 인스턴스를 <strong>임시객체</strong>라고 한다.</li>
+  <li>또는 코드에서 명백히 드러나지 않는 인스턴스를 의미한다.</li>
+  <li>보통의 경우 클래스 형식이라 하면, new 연산을 통해 객체를 만든다.</li>
+  <li>하지만 <strong>String은 명백한 클래스이지만 리터럴을 통해 생성이 가능하다.</strong></li>
+</ul>
+<h2>String</h2>
+<pre><code class="language-java">public class StringMemory {
+    public static void main(String[] args) {
+        
+        // 1. new 연산자 사용 (Heap 메모리)
+        // 매번 새로운 객체가 힙 영역에 생성됩니다. 같은 문자열이라도 주소값이 다릅니다.
+        String strHeap = new String("Java"); 
+
+        // 2. 리터럴 사용 (Runtime Constant Pool)
+        // JVM이 관리하는 풀(Pool)에 저장됩니다. 이미 같은 문자열이 있다면 재사용합니다.
+        String strPool = "Java";
+
+        // 주소값 비교 (==)
+        // strHeap은 힙, strPool은 상수 풀에 있으므로 서로 다른 주소를 가집니다.
+        System.out.println(strHeap == strPool); // false 출력
+    }
+}
+</code></pre>
+<pre><code class="language-java">public class StringConcatProblem {
+    public static void main(String[] args) {
+        
+        // 코드상으로는 한 줄이지만, 내부적으로는 여러 임시 객체가 생성됩니다.
+        String result = "Hello" + "World" + "!!";
+        
+        // [내부 동작 과정]
+        // 1. "Hello"와 "World"가 리터럴로 존재
+        // 2. 둘을 합친 "HelloWorld"라는 **임시 객체(Instance)**가 힙에 생성됨 (사용자가 볼 수 없음)
+        // 3. 생성된 "HelloWorld"와 "!!"를 합쳐서 최종 결과 "HelloWorld!!" 생성
+        // 4. 중간에 생겼던 "HelloWorld"는 참조자가 없어 가비지(Garbage)가 됨
+    }
+}
+</code></pre>
+<ul>
+  <li>String을 new 연산으로 만드는 경우 <strong>해당 String은 Heap메모리에 적재된다.</strong></li>
+  <li>하지만 <strong>리터럴(<code>"</code>)로 만드는 경우 JVM이 Runtime constant pool에 적재된다.</strong></li>
+  <li>문제는? <strong>덧셈연산이 된다는 것!</strong></li>
+  <li>"Hello" + "World" + "!!" 를 한다면 순서대로 처리되면서 "HelloWorld"가 임시객체가 된다!</li>
+  <li>"HelloWorld" + "!!" 처럼 순서대로 처리되기에, JVM이 내부에서 만든 임시객체가 된다.</li>
+  <li>임시객체는 메모리상 <strong>비효율의 직접적인 원인이 된다.</strong></li>
+  <li>특히 <strong>String은 이를 자주 유발함으로 주의해서 사용해야한다.</strong></li>
+</ul>
+<h2>연관 문서</h2>
+<ul>
+  <li>이전: [[Java 회고 02 객체의 본질 - 메모리 구조와 설계의 관점]]</li>
+</ul>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Article Preview</title>
+    <link rel="stylesheet" href="assets/css/tokens.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <style>
+        /* Article Layout Specifics (will move to css later) */
+        .l-post-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-8);
+            margin-top: var(--space-8);
+            width: min(100% - 2rem, 1200px);
+            /* Wide container */
+            margin-inline: auto;
+        }
+
+        @media (min-width: 64rem) {
+            .l-post-grid {
+                grid-template-columns: 1fr 240px;
+                gap: var(--space-12);
+            }
+        }
+
+        .l-post-content {
+            min-width: 0;
+            /* Prevent overflow */
+        }
+
+        .l-post-sidebar {
+            display: none;
+        }
+
+        @media (min-width: 64rem) {
+            .l-post-sidebar {
+                display: block;
+            }
+        }
+
+        .c-toc {
+            position: sticky;
+            top: 120px;
+            /* Header height + spacing */
+            padding-left: var(--space-6);
+            border-left: 1px solid var(--color-border);
+        }
+
+        .c-toc__title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-fg);
+            margin-bottom: var(--space-4);
+        }
+
+        .c-toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        .c-toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .c-toc a {
+            text-decoration: none;
+            color: var(--color-muted);
+            transition: color 0.2s;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .c-toc a:hover,
+        .c-toc a.is-active {
+            color: var(--color-fg);
+        }
+
+        /* Post Header Styles */
+        .c-post-header {
+            margin-bottom: var(--space-10);
+        }
+
+        .c-back-link {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--color-muted);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-8);
+        }
+
+        .c-back-link:hover {
+            color: var(--color-fg);
+        }
+
+        .c-post-meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+            background: var(--color-code-bg);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            font-family: var(--font-mono);
+            margin-bottom: var(--space-4);
+        }
+
+        .c-post-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            margin-bottom: var(--space-6);
+            color: var(--color-fg);
+        }
+
+        .c-post-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: var(--space-8);
+        }
+
+        .c-post-divider {
+            border: 0;
+            height: 1px;
+            background: var(--color-border);
+            margin-bottom: var(--space-10);
+            width: 100px;
+            /* Small divider */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="l-header">
+        <div class="l-container c-site-header">
+            <div class="c-site-title"><a href="#">개발자 노트</a></div>
+            <nav class="c-nav">
+                <a href="#">글 목록</a>
+                <a href="#">소개</a>
+                <a href="#">아카이브</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="l-post-grid">
+        <main class="l-post-content">
+            <a href="#" class="c-back-link">← 목록으로 돌아가기</a>
+
+            <header class="c-post-header">
+                <div class="c-post-meta-pill">
+                    <span>📅 2025. 01. 15.</span>
+                    <span style="opacity: 0.3">|</span>
+                    <span>⏱️ 8분</span>
+                </div>
+                <h1 class="c-post-title">Next.js 15에서 Server Actions로 폼 처리하기</h1>
+                <div class="c-post-tags">
+                    <span class="c-tag">Next.js</span>
+                    <span class="c-tag">React</span>
+                    <span class="c-tag">TypeScript</span>
+                </div>
+                <hr class="c-post-divider">
+            </header>
+
+            <article class="c-article">
+                <p class="lead">Server Actions는 Next.js 15에서 안정화된 강력한 기능으로, 클라이언트-서버 간 데이터 통신을 매우 간단하게 만들어줍니다.</p>
+
+                <h2 id="section-1">Server Actions란?</h2>
+                <p>Server Actions는 서버에서 실행되는 비동기 함수로, 클라이언트 컴포넌트나 서버 컴포넌트에서 직접 호출할 수 있습니다. 별도의 API 라우트를 만들 필요가 없어 코드가 훨씬
+                    간결해집니다.</p>
+
+                <h2 id="section-2">기본 사용법</h2>
+                <p>가장 기본적인 Server Action은 다음과 같이 작성합니다:</p>
+
+                <pre><code class="language-typescript">// app/actions.ts
+'use server'
+
+export async function createPost(formData: FormData) {
+  const title = formData.get('title')
+  await db.create({ title })
+}</code></pre>
+
+                <h2 id="section-3">진보된 패턴</h2>
+                <p>useFormStatus 훅을 사용하면 폼의 제출 상태를 추적할 수 있습니다.</p>
+
+                <pre><code class="language-typescript">// app/form.tsx
+'use client'
+import { useFormStatus } from 'react-dom'
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    &lt;button disabled={pending}&gt;
+      {pending ? '저장 중...' : '제출'}
+    &lt;/button&gt;
+  )
+}</code></pre>
+
+                <h2 id="section-4">에러 처리</h2>
+                <p>Server Actions에서 발생한 에러는 try-catch로 처리하거나 error boundary를 사용할 수 있습니다.</p>
+
+                <h2 id="section-5">결론</h2>
+                <p>Server Actions는 풀스택 개발을 더욱 쉽게 만들어주는 혁신적인 기능입니다.</p>
+            </article>
+
+            <!-- Series Nav (Existing Component) -->
+            <nav class="c-series-nav">
+                <ul class="c-series-nav__list">
+                    <li><a href="#">← 이전 글: Next.js 14 회고</a></li>
+                    <li><a href="#">다음 글: React 19 미리보기 →</a></li>
+                </ul>
+            </nav>
+
+        </main>
+
+        <aside class="l-post-sidebar">
+            <nav class="c-toc">
+                <div class="c-toc__title">목차</div>
+                <ul>
+                    <li><a href="#section-1" class="is-active">Server Actions란?</a></li>
+                    <li><a href="#section-2">기본 사용법</a></li>
+                    <li><a href="#section-3">진보된 패턴</a></li>
+                    <li><a href="#section-4">에러 처리</a></li>
+                    <li><a href="#section-5">결론</a></li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
+
+    <footer class="l-footer l-container" style="text-align: center; font-size: 0.85em; opacity: 0.6;">
+        © 2025 개발자 노트. 선의 마음으로 제작.
+    </footer>
+
+</body>
+
+</html>

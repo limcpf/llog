@@ -20,7 +20,7 @@ public class Main {
         try {
             switch (cmd) {
                 case "--version" -> {
-                    System.out.println("llog 0.4.9");
+                    System.out.println("llog 0.4.15");
                     System.exit(0);
                 }
                 case "init" -> doInit(args);
@@ -141,7 +141,7 @@ public class Main {
     }
 
     static void printHelp() {
-        System.out.println("llog 0.4.9");
+        System.out.println("llog 0.4.15");
         System.out.println("Usage:");
         System.out.println("  init <dir> [--dry-run] [--verbose]");
         System.out.println(

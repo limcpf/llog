@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>스프링 배치 DataSource 구성 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="스프링 배치 DataSource 구성 — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">스프링 배치 DataSource 구성</h1>
+        <p class="c-article__meta">
+          2025-07-23 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <table class="c-fm__table">
+    <tbody>
+        <tr><th scope="row">카테고리</th><td>backend/java/spring-batch</td></tr>
+        <tr><th scope="row">작성일</th><td>2025-07-23</td></tr>
+        <tr><th scope="row">게시 여부</th><td>true</td></tr>
+        <tr><th scope="row">태그</th><td>[&quot;spring&quot;, &quot;batch&quot;, &quot;jdbc&quot;]</td></tr>
+        <tr><th scope="row">제목</th><td>스프링 배치 DataSource 구성</td></tr>
+    </tbody>
+  </table>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<p>이 문서는 스프링 배치 환경에서 <code>DataSource</code>를 설정하는 기본 원칙을 정리합니다.</p>
+<h2>핵심</h2>
+<table>
+  <thead><tr>
+    <th>사용 위치</th>
+    <th>역할</th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td>JobRepository</td>
+      <td>JobInstance, JobExecution 저장</td>
+    </tr>
+    <tr>
+      <td>JobExplorer</td>
+      <td>실행 기록 조회</td>
+    </tr>
+    <tr>
+      <td>JobLauncher</td>
+      <td>Job 실행 시 메타정보 저장</td>
+    </tr>
+    <tr>
+      <td>StepExecution</td>
+      <td>Step의 상태 저장</td>
+    </tr>
+  </tbody>
+</table>
+<hr />
+<blockquote>배치 메타 데이터는 일관성 있는 트랜잭션 경계로 관리하세요.</blockquote>
+<h3>예시 코드(Java)</h3>
+<pre><code class="language-java">@Configuration
+public class BatchDataSourceConfig {
+  @Bean
+  public DataSource dataSource() {
+    HikariConfig cfg = new HikariConfig();
+    cfg.setJdbcUrl("jdbc:postgresql://localhost:5432/app");
+    cfg.setUsername("app");
+    cfg.setPassword("secret");
+    return new HikariDataSource(cfg);
+  }
+}
+</code></pre>
+<p>필요에 따라 읽기/쓰기 분리와 커넥션 풀 파라미터를 조정합니다.</p>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

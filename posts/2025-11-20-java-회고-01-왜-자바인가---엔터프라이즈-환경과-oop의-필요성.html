@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>[Java 회고 01] 왜 자바인가? : 엔터프라이즈 환경과 OOP의 필요성 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="[Java 회고 01] 왜 자바인가? : 엔터프라이즈 환경과 OOP의 필요성 — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">[Java 회고 01] 왜 자바인가? : 엔터프라이즈 환경과 OOP의 필요성</h1>
+        <p class="c-article__meta">
+          2025-11-20 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <table class="c-fm__table">
+    <tbody>
+        <tr><th scope="row">카테고리</th><td>java/study/basic</td></tr>
+        <tr><th scope="row">작성일</th><td>2025-11-20</td></tr>
+        <tr><th scope="row">게시 여부</th><td>true</td></tr>
+        <tr><th scope="row">series</th><td>Java 회고</td></tr>
+        <tr><th scope="row">series-order</th><td>1</td></tr>
+        <tr><th scope="row">제목</th><td>[Java 회고 01] 왜 자바인가? : 엔터프라이즈 환경과 OOP의 필요성</td></tr>
+    </tbody>
+  </table>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h1>자바를 왜 쓰는가?</h1>
+<ul>
+  <li>우리는 회사에서 대규모 소프트웨어를 개발한다</li>
+  <li>수십~수백명 이상이 함께 관리 및 개발</li>
+  <li>이런 개발에서 아래 요소가 중요</li>
+  <li>코드 재사용</li>
+  <li>모듈화</li>
+  <li>확장성 유연성</li>
+  <li>추상화를 통한 복잡도 관리</li>
+  <li>유지 보수</li>
+  <li>자바는 <strong>캡슐화, 상속 다형성, 추상화</strong>와 같은 객체 지향 개념을 통해 해당 문제를 해결</li>
+</ul>
+<h1>객체지향의 개념</h1>
+<ul>
+  <li>대부분이 자바 문법 위주로 학습함</li>
+  <li>하지만 <strong>객체지향 개념은 문법보단 어떤 상황에 왜 써야하는지를 이해하는게 핵심</strong></li>
+</ul>
+<h1>스프링은 어렵다?</h1>
+<ul>
+  <li>스프링은 Java의 객체지향 개념을 좀 더 쉽게 사용할 수 있게 도와 주는 툴</li>
+  <li>자바 문법 위주로 학습했다면 당연히 어렵게 느껴질 것</li>
+</ul>
+<h1>인텔리제이 세팅</h1>
+<ul>
+  <li>라이트 모드를 선호해서 라이트 모드로 선택함</li>
+  <li>zulu-21 로 JDK 세팅함</li>
+  <li>한글 언어팩보단 영어를 사용하라고 함</li>
+  <li>개발하면서 필요한 기능 검색시 영어가 유용</li>
+</ul>
+<hr />
+<h2>연관 문서</h2>
+<ul>
+  <li>다음: [[Java 회고 02 객체의 본질 - 메모리 구조와 설계의 관점]]</li>
+</ul>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

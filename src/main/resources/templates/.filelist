@@ -16,11 +16,13 @@ posts/post-md-template.html
 posts/post-template.html
 .DS_Store
 about.html
+preview_article.html
 404.html
 tags/index.html
 tags/tag-template.html
 tags/typography.html
 site.webmanifest
+preview_list.html
 sitemap.xml
 robots.txt
 archives.html
@@ -39,6 +41,7 @@ assets/fonts/LICENSE-Galmuri.txt
 assets/fonts/Galmuri11-Bold.woff2
 assets/fonts/README.txt
 assets/fonts/Galmuri11-Condensed.woff2
+preview_design.html
 categories/index.html
 categories/category-template.html
 partials/site-header.html

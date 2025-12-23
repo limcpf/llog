@@ -1,43 +1,39 @@
 <!doctype html>
 <html lang="ko" data-theme="{{SITE_THEME}}">
-  <head>
-    <!-- @include partials/head-shared.html -->
-    <title>{{SITE_NAME}}</title>
-    <meta name="description" content="{{PAGE_DESCRIPTION}}" />
-    <link rel="canonical" href="{{DOMAIN}}/" />
-    <meta property="og:title" content="고전의 숨, 편안한 읽기 — 블로그" />
-    <meta property="og:description" content="서체와 여백, 따뜻한 종이의 질감에 가까운 색으로 편안한 읽기 경험을 제공합니다." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{DOMAIN}}/" />
-    <meta property="og:image" content="{{OG_IMAGE}}" />
-    <meta name="twitter:card" content="{{TWITTER_CARD}}" />
-    <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
-  </head>
-  <body>
-    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
 
-    <!-- @include partials/site-header.html -->
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>{{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{DOMAIN}}/" />
+  <meta property="og:title" content="고전의 숨, 편안한 읽기 — 블로그" />
+  <meta property="og:description" content="서체와 여백, 따뜻한 종이의 질감에 가까운 색으로 편안한 읽기 경험을 제공합니다." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{DOMAIN}}/" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta name="twitter:card" content="{{TWITTER_CARD}}" />
+  <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
+</head>
 
-    <main id="main" class="l-reading" role="main">
-      <section class="u-flow" aria-labelledby="latest-title">
-        <h1 id="latest-title">{{HOME_LATEST_HEADING}}</h1>
-        <div class="c-dos-list">
-{{HOME_FEATURED}}
-        </div>
-      </section>
-      <div class="c-rule" aria-hidden="true"></div>
-      <section class="u-flow" aria-labelledby="recent-title">
-        <h2 id="recent-title">{{HOME_RECENT_HEADING}}</h2>
-        <div class="c-dos-list">
-{{HOME_RECENT}}
-        </div>
-        <p><a class="c-button" href="/posts/">{{HOME_MORE_LABEL}}</a></p>
-      </section>
-    </main>
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
 
-    <!-- @include partials/site-footer.html -->
+  <!-- @include partials/site-header.html -->
 
-    <!-- (optional) image-viewer include could go here -->
-  </body>
-  
+  <main id="main" class="l-container" role="main">
+    <div class="l-grid">
+      {{HOME_FEATURED}}
+      {{HOME_RECENT}}
+    </div>
+
+    <div class="l-footer" style="text-align: center; border:0; margin-top: var(--space-8);">
+      <a class="c-load-more" href="/posts/">{{HOME_MORE_LABEL}}</a>
+    </div>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+
+  <!-- (optional) image-viewer include could go here -->
+</body>
+
 </html>

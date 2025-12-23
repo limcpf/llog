@@ -1,40 +1,38 @@
 <!doctype html>
 <html lang="ko" data-theme="{{SITE_THEME}}">
-  <head>
-    <!-- @include partials/head-shared.html -->
-    <title>글 — {{SITE_NAME}}</title>
-    <meta name="description" content="{{PAGE_DESCRIPTION}}" />
-    <link rel="canonical" href="{{DOMAIN}}{{POSTS_CANONICAL_PATH}}" />
-    <meta property="og:title" content="글 — {{SITE_NAME}}" />
-    <meta property="og:description" content="블로그 글 모음" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{DOMAIN}}{{POSTS_CANONICAL_PATH}}" />
-    <meta property="og:image" content="{{OG_IMAGE}}" />
-    <meta name="twitter:card" content="{{TWITTER_CARD}}" />
-    <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
-  </head>
-  <body>
-    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
-    <!-- @include partials/site-header.html -->
 
-    <main id="main" class="l-reading" role="main">
-      <article class="c-article u-flow" aria-labelledby="posts-title">
-        <header>
-          <h1 id="posts-title">글</h1>
-          <p class="c-article__meta">최신 순</p>
-        </header>
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>글 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{DOMAIN}}{{POSTS_CANONICAL_PATH}}" />
+  <meta property="og:title" content="글 — {{SITE_NAME}}" />
+  <meta property="og:description" content="블로그 글 모음" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{DOMAIN}}{{POSTS_CANONICAL_PATH}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta name="twitter:card" content="{{TWITTER_CARD}}" />
+  <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
+</head>
 
-        <div class="c-dos-list">
-{{POSTS_CARDS}}
-        </div>
-        <p class="u-text-center u-muted">{{POSTS_PAGINATION}}</p>
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
 
-        <p class="u-text-center u-muted">
-          더 보기: <a href="/archives.html">아카이브</a> · <a href="/tags/">태그</a>
-        </p>
-      </article>
-    </main>
+  <main id="main" class="l-container" role="main">
+    <header class="l-page-header">
+      <h1 class="c-page-title">모든 글</h1>
+      <p class="c-page-subtitle">기술과 사유의 기록</p>
+    </header>
 
-    <!-- @include partials/site-footer.html -->
-  </body>
+    {{POSTS_CARDS}}
+
+    <div class="u-text-center u-muted" style="margin-top: var(--space-8);">
+      {{POSTS_PAGINATION}}
+    </div>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
 </html>

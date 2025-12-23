@@ -15,17 +15,20 @@ import java.util.regex.Pattern;
 public final class ContentScanner {
     private static final Pattern FILE = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})-(.+)\\.html$");
     private static final Pattern H1 = Pattern.compile("<h1[^>]*>(.*?)</h1>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-    private static final Pattern TITLE = Pattern.compile("<title>(.*?)</title>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+    private static final Pattern TITLE = Pattern.compile("<title>(.*?)</title>",
+            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     public List<Post> scanPosts(Path srcRoot) throws IOException {
         Path dir = srcRoot.resolve("posts");
-        if (!Files.exists(dir)) return List.of();
+        if (!Files.exists(dir))
+            return List.of();
         List<Post> posts = new ArrayList<>();
         try (var s = Files.list(dir)) {
             for (Path p : (Iterable<Path>) s.filter(f -> f.getFileName().toString().endsWith(".html"))::iterator) {
                 String name = p.getFileName().toString();
                 Matcher fm = FILE.matcher(name);
-                if (!fm.matches()) continue;
+                if (!fm.matches())
+                    continue;
                 LocalDate date = LocalDate.parse(fm.group(1), DateTimeFormatter.ISO_LOCAL_DATE);
                 String slug = fm.group(2);
                 String url = "/posts/" + name;
@@ -46,17 +49,29 @@ public final class ContentScanner {
                     series = mm.getOrDefault("SERIES", "");
                     String ord = mm.getOrDefault("SERIES_ORDER", "");
                     if (ord != null && !ord.isBlank()) {
-                        try { seriesOrder = Integer.parseInt(ord.trim()); } catch (Exception ignored) {}
+                        try {
+                            seriesOrder = Integer.parseInt(ord.trim());
+                        } catch (Exception ignored) {
+                        }
                     }
                     var tagStr = mm.getOrDefault("TAGS", "");
                     if (tagStr != null && !tagStr.isBlank()) {
                         for (String t : tagStr.split(",")) {
                             var tt = t.trim();
-                            if (!tt.isEmpty()) tags.add(slugify(tt));
+                            if (!tt.isEmpty())
+                                tags.add(slugify(tt));
                         }
                     }
                 }
-                posts.add(new Post(name, url, date, title, List.copyOf(tags), desc, catPath, series == null?"":series, seriesOrder));
+
+                // Calculate reading time
+                String plainText = stripTags(html);
+                int wordCount = plainText.split("\\s+").length;
+                int minutes = Math.max(1, (int) Math.ceil(wordCount / 200.0));
+                String readingTime = minutes + " min read";
+
+                posts.add(new Post(name, url, date, title, List.copyOf(tags), desc, readingTime, catPath,
+                        series == null ? "" : series, seriesOrder));
             }
         }
         posts.sort(Comparator.comparing(Post::date).reversed());
@@ -65,15 +80,25 @@ public final class ContentScanner {
 
     private static String extractTitle(String html) {
         Matcher m = H1.matcher(html);
-        if (m.find()) return sanitize(stripTags(m.group(1)).trim());
+        if (m.find())
+            return sanitize(stripTags(m.group(1)).trim());
         m = TITLE.matcher(html);
-        if (m.find()) return sanitize(stripTags(m.group(1)).trim());
+        if (m.find())
+            return sanitize(stripTags(m.group(1)).trim());
         return "Untitled";
     }
-    private static String stripTags(String s) { return s.replaceAll("<[^>]+>", ""); }
-    private static String slugify(String s) { return s.toLowerCase().replaceAll("[^a-z0-9\\-\\s]", "").trim().replaceAll("\\s+", "-"); }
+
+    private static String stripTags(String s) {
+        return s.replaceAll("<[^>]+>", "");
+    }
+
+    private static String slugify(String s) {
+        return s.toLowerCase().replaceAll("[^a-z0-9\\-\\s]", "").trim().replaceAll("\\s+", "-");
+    }
+
     private static String sanitize(String s) {
-        if (s == null) return "";
+        if (s == null)
+            return "";
         String t = s.replace("\\n", " ").replace("\\r", " ").replace("\\t", " ").replace("\\b", " ");
         return t.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim();
     }

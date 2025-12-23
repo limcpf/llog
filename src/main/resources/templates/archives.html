@@ -1,33 +1,37 @@
 <!doctype html>
 <html lang="ko" data-theme="{{SITE_THEME}}">
-  <head>
-    <!-- @include partials/head-shared.html -->
-    <title>POST LIST — {{SITE_NAME}}</title>
-    <link rel="canonical" href="{{DOMAIN}}{{ARCHIVES_CANONICAL_PATH}}" />
-    <meta property="og:title" content="POST LIST — {{SITE_NAME}}" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{DOMAIN}}{{ARCHIVES_CANONICAL_PATH}}" />
-    <meta property="og:image" content="{{OG_IMAGE}}" />
-    <meta name="twitter:card" content="{{TWITTER_CARD}}" />
-    <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
-  </head>
-  <body>
-    <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
-    <!-- @include partials/site-header.html -->
 
-    <main id="main" class="l-reading" role="main">
-      <article class="c-article u-flow" aria-labelledby="arch-title">
-        <header>
-          <h1 id="arch-title">POST LIST</h1>
-        </header>
-        <ul class="c-dos-arch">
-{{ARCHIVE_LIST}}
-        </ul>
-        <p class="u-text-center u-muted">{{ARCHIVE_PAGINATION}}</p>
-      </article>
-    </main>
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>POST LIST — {{SITE_NAME}}</title>
+  <link rel="canonical" href="{{DOMAIN}}{{ARCHIVES_CANONICAL_PATH}}" />
+  <meta property="og:title" content="POST LIST — {{SITE_NAME}}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{DOMAIN}}{{ARCHIVES_CANONICAL_PATH}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta name="twitter:card" content="{{TWITTER_CARD}}" />
+  <link rel="alternate" type="application/rss+xml" title="고전서가" href="/feed.xml" />
+</head>
 
-    <!-- @include partials/site-footer.html -->
-  </body>
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-container" role="main">
+    <header class="l-page-header">
+      <h1 class="c-page-title">아카이브</h1>
+      <p class="c-page-subtitle">지난 모든 기록</p>
+    </header>
+
+    {{ARCHIVE_LIST}}
+
+    <div class="u-text-center u-muted" style="margin-top: var(--space-8);">
+      {{ARCHIVE_PAGINATION}}
+    </div>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
 </html>
-    <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+<meta name="description" content="{{PAGE_DESCRIPTION}}" />

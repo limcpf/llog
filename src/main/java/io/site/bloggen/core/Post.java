@@ -3,7 +3,10 @@ package io.site.bloggen.core;
 import java.time.LocalDate;
 import java.util.List;
 
-public record Post(String fileName, String url, LocalDate date, String title, List<String> tags, String description, String categoryPath,
-                   String series, Integer seriesOrder) {
-    public String year() { return String.valueOf(date.getYear()); }
+public record Post(String fileName, String url, LocalDate date, String title, List<String> tags, String description,
+        String readingTime, String categoryPath,
+        String series, Integer seriesOrder) {
+    public String year() {
+        return String.valueOf(date.getYear());
+    }
 }

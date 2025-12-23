@@ -1,3 +1,6 @@
+/* Pretendard Webfont */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
 /* Galmuri — Korean/Latin pixel font (SIL OFL) */
 /* Regular (400) */
 @font-face {
@@ -7,6 +10,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 /* Bold (700) */
 @font-face {
   font-family: 'Galmuri Local';
@@ -15,6 +19,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 /* Condensed (400) — separate family for optional use */
 @font-face {
   font-family: 'Galmuri Condensed Local';

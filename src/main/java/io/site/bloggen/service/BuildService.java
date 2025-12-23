@@ -283,19 +283,15 @@ public final class BuildService {
                                     var sc = seriesCtx.get(pagePath);
                                     if (sc != null) {
                                         local.put("SERIES_BADGE", sc.badgeHtml);
-                                        // insert nav after FM block end or after header
-                                        if (sc.navHtml != null && !sc.navHtml.isBlank()
-                                                && !t.contains("c-series-nav")) {
-                                            if (t.contains("<!--FM_BLOCK_END-->")) {
-                                                t = t.replace("<!--FM_BLOCK_END-->",
-                                                        "<!--FM_BLOCK_END-->\n" + sc.navHtml + "\n");
-                                            } else {
-                                                t = t.replaceFirst("</header>", "</header>\n"
-                                                        + java.util.regex.Matcher.quoteReplacement(sc.navHtml) + "\n");
-                                            }
+                                        // Replace token if present
+                                        if (t.contains("{{SERIES_NAV}}")) {
+                                            t = t.replace("{{SERIES_NAV}}", sc.navHtml == null ? "" : sc.navHtml);
+                                        } else {
+                                            // Fallback removed to prevent header injection ghosting
                                         }
                                     } else {
                                         local.put("SERIES_BADGE", "");
+                                        t = t.replace("{{SERIES_NAV}}", "");
                                     }
                                 }
                                 if (!local.containsKey("PAGE_DESCRIPTION") || local.get("PAGE_DESCRIPTION") == null
@@ -450,21 +446,35 @@ public final class BuildService {
                                     local2.put("BREADCRUMB", buildBreadcrumb(cat2, cfg));
                                     local2.put("ARTICLE_SECTION", lastSegmentLabel(cat2, cfg));
                                     local2.put("POST_JSONLD", buildJsonLd(orig, pagePath2, local2, cfg));
+                                    // series badge + prev/next
                                     var sc2 = seriesCtx.get(pagePath2);
                                     if (sc2 != null) {
                                         local2.put("SERIES_BADGE", sc2.badgeHtml);
-                                        if (sc2.navHtml != null && !sc2.navHtml.isBlank()
-                                                && !t.contains("c-series-nav")) {
-                                            if (t.contains("<!--FM_BLOCK_END-->")) {
-                                                t = t.replace("<!--FM_BLOCK_END-->",
-                                                        "<!--FM_BLOCK_END-->\n" + sc2.navHtml + "\n");
-                                            } else {
-                                                t = t.replaceFirst("</header>", "</header>\n"
-                                                        + java.util.regex.Matcher.quoteReplacement(sc2.navHtml) + "\n");
+                                        // Replace token if present
+                                        if (t.contains("{{SERIES_NAV}}")) {
+                                            t = t.replace("{{SERIES_NAV}}", sc2.navHtml == null ? "" : sc2.navHtml);
+                                        } else {
+                                            // Fallback injection if token missing (old templates)
+                                            if (sc2.navHtml != null && !sc2.navHtml.isBlank()
+                                                    && !t.contains("c-series-nav")) {
+                                                if (t.contains("<!--FM_BLOCK_END-->")) {
+                                                    t = t.replace("<!--FM_BLOCK_END-->",
+                                                            "<!--FM_BLOCK_END-->\n" + sc2.navHtml + "\n");
+                                                } else {
+                                                    // inject inside main
+                                                    if (t.contains("role=\"main\">")) {
+                                                        t = t.replace("role=\"main\">",
+                                                                "role=\"main\">\n" + sc2.navHtml + "\n");
+                                                    } else {
+                                                        t = t.replaceFirst("</header>",
+                                                                "</header>\n" + sc2.navHtml + "\n");
+                                                    }
+                                                }
                                             }
                                         }
                                     } else {
                                         local2.put("SERIES_BADGE", "");
+                                        t = t.replace("{{SERIES_NAV}}", "");
                                     }
                                 }
                                 if (!local2.containsKey("PAGE_DESCRIPTION") || local2.get("PAGE_DESCRIPTION") == null

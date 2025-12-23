@@ -48,7 +48,7 @@
     line-height: var(--lh-body);
     color: var(--color-fg);
     background: var(--color-bg);
-    background: linear-gradient(180deg, color-mix(in oklab, var(--color-surface), black 8%) 0%, var(--color-surface) 40%, var(--color-bg) 100%) fixed;
+    background: var(--color-bg);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     font-kerning: normal;

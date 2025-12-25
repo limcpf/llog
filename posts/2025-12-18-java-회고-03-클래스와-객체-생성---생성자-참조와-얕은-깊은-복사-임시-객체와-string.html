@@ -50,23 +50,39 @@
 <!--FM_BLOCK_END-->
 <h1>클래스, 객체, 인스턴스</h1>
 <ul>
-  <li>클래스 : 객체를 구현하기 위한 <strong>문법, 형식</strong></li>
-  <li>객체 : 단위이고, 추상적임</li>
-  <li>인스턴스 : 메모리(Heap)에 실체화된 것</li>
-  <li>변수(참조자)를 사용하는 이유는 메모리 사용을 위한 <strong>인스턴스가 존재하는 메모리 주소를 가리키는 리모컨 같은 역할</strong></li>
-  <li>변수는 Stack에 존재함</li>
+<li>클래스 : 객체를 구현하기 위한 <strong>문법, 형식</strong></li>
+<li>객체 : 단위이고, 추상적임</li>
+<li>인스턴스 : 메모리(Heap)에 실체화된 것</li>
+<ul>
+<li>변수(참조자)를 사용하는 이유는 메모리 사용을 위한 <strong>인스턴스가 존재하는 메모리 주소를 가리키는 리모컨 같은 역할</strong></li>
+<ul>
+<li>변수는 Stack에 존재함</li>
+</ul>
+</ul>
 </ul>
 <h1>클래스 문법</h1>
 <ul>
-  <li>구성요소(변수, 함수)를 멤버라 지칭</li>
-  <li>멤버</li>
-  <li>필드 = 변수</li>
-  <li>메서드 = 함수</li>
-  <li><strong>선언과 정의가 공존한다.</strong></li>
-  <li>C언어와 같은 대부분 언어에선 구분하나, <strong>자바는 선언과 정의가 동시에 되어야함</strong></li>
-  <li>클래스 위에는 항상 <strong>패키지가 존재한다.</strong></li>
+<li>구성요소(변수, 함수)를 멤버라 지칭</li>
+<ul>
+<li>멤버</li>
+<ul>
+<li>필드 = 변수</li>
+<li>메서드 = 함수</li>
+</ul>
+</ul>
+<li><strong>선언과 정의가 공존한다.</strong></li>
+<ul>
+<li>C언어와 같은 대부분 언어에선 구분하나, <strong>자바는 선언과 정의가 동시에 되어야함</strong></li>
+</ul>
+<li>클래스 위에는 항상 <strong>패키지가 존재한다.</strong></li>
 </ul>
 <h1>클래스 생성자</h1>
+<ul>
+<li>사용할 수 있는 객체를 생성(<code>new</code>)할 때 초기화 하는 역할</li>
+<ul>
+<li>클래스 파일은 <strong>설계도</strong>이고, 객체(또는 인스턴스)는 <strong>해당 설계도로 만든 제품</strong>이라고 볼 수 있다.</li>
+</ul>
+</ul>
 <pre><code class="language-java">// 1. 반환 타입(void 등)을 적지 않습니다.
 // 2. 메서드 이름은 반드시 '클래스 이름'과 같아야 합니다.
 public Car() {
@@ -75,9 +91,8 @@ public Car() {
 }
 </code></pre>
 <ul>
-  <li>사용할 수 있는 객체를 생성(<code>new</code>)할 때 초기화 하는 역할</li>
-  <li>클래스 파일은 <strong>설계도</strong>이고, 객체(또는 인스턴스)는 <strong>해당 설계도로 만든 제품</strong>이라고 볼 수 있다.</li>
-  <li>일반 메서드와 비슷하지만, <strong>리턴 타입이 아예 없다는 것이 큰 차이</strong></li>
+<li>일반 메서드와 비슷하지만, <strong>리턴 타입이 아예 없다는 것이 큰 차이</strong></li>
+<li>일반 메서드처럼 매개변수 구성이 다른 생성자를 여러개 정의 가능</li>
 </ul>
 <pre><code class="language-java">class Box {
     int size;
@@ -92,42 +107,60 @@ public Car() {
 // 사용: new Box() 또는 new Box(50) 가능
 </code></pre>
 <ul>
-  <li>일반 메서드처럼 매개변수 구성이 다른 생성자를 여러개 정의 가능</li>
-  <li>여러개가 정의 되어있더라도 <strong>new 연산 시 호출되는 생성자는 한개임</strong></li>
-  <li>생성자에서 <strong>다른 생성자도 호출 가능</strong></li>
-  <li>생성자 내에서 다른 생성자를 호출 할 때 <strong>맨 위에 위치해야함(가장 먼저 호출)</strong></li>
+<li>여러개가 정의 되어있더라도 <strong>new 연산 시 호출되는 생성자는 한개임</strong></li>
+<li>생성자에서 <strong>다른 생성자도 호출 가능</strong></li>
+<ul>
+<li>생성자 내에서 다른 생성자를 호출 할 때 <strong>맨 위에 위치해야함(가장 먼저 호출)</strong></li>
+</ul>
 </ul>
 <h1>생성자</h1>
 <ul>
-  <li>명시적 호출이 없으며 <strong>new 연산자를 사용함</strong></li>
-  <li><strong>객체의 초기화를 위해 문법적으로 들어가 있는 함수임</strong></li>
-  <li>주의사항 : 필드 선언시 멤버에 대입한 초깃값과 <strong>생성자 초기화 값이 충돌할 경우, 생성자에 기술한 코드가 우선임</strong></li>
+<li>명시적 호출이 없으며 <strong>new 연산자를 사용함</strong></li>
+<li><strong>객체의 초기화를 위해 문법적으로 들어가 있는 함수임</strong></li>
+<li>주의사항 : 필드 선언시 멤버에 대입한 초깃값과 <strong>생성자 초기화 값이 충돌할 경우, 생성자에 기술한 코드가 우선임</strong></li>
 </ul>
 <pre><code class="language-java">public class InitTest {
-	// 1. 필드 명시적 초기화
-	int value = 10; 
+    // 1. 필드 명시적 초기화
+    int value = 10; 
 
-	public InitTest() {
-		// 2. 생성자에서 초기화 (이것이 덮어씌움)
-		this.value = 20; 
-	}
-	
-	public static void main(String[] args) {
-		InitTest t = new InitTest();
-		System.out.println(t.value); // 결과: 20
-	}
+    public InitTest() {
+        // 2. 생성자에서 초기화 (이것이 덮어씌움)
+        this.value = 20; 
+    }
+    
+    public static void main(String[] args) {
+        InitTest t = new InitTest();
+        System.out.println(t.value); // 결과: 20
+    }
 }
 </code></pre>
 <ul>
-  <li>객체가 생성되는 시점(new)에 <strong>자동으로 호출된다.</strong></li>
-  <li>또한 어떠한 생성자도 클래스에 없는경우, <strong>컴파일러가 자동으로 빈 생성자를 추가해준다.</strong></li>
-  <li><strong>생성자를 작성할 때, 항상 클래스 자체와 관련있는 코드만 기술할것을 권장함</strong></li>
-  <li>하나의 인스턴스에 <strong>여러 참조자가 존재할 수 있다.</strong></li>
-  <li>이 경우 사이드 이펙트를 고려하라.</li>
-  <li>생성자를 <strong>private로 지정하는 경우, 생성자 사용을 제한하는 것이다.</strong></li>
+<li>객체가 생성되는 시점(new)에 <strong>자동으로 호출된다.</strong></li>
+<ul>
+<li>또한 어떠한 생성자도 클래스에 없는경우, <strong>컴파일러가 자동으로 빈 생성자를 추가해준다.</strong></li>
+</ul>
+<li><strong>생성자를 작성할 때, 항상 클래스 자체와 관련있는 코드만 기술할것을 권장함</strong></li>
+<li>하나의 인스턴스에 <strong>여러 참조자가 존재할 수 있다.</strong></li>
+<ul>
+<li>이 경우 사이드 이펙트를 고려하라.</li>
+</ul>
+<li>생성자를 <strong>private로 지정하는 경우, 생성자 사용을 제한하는 것이다.</strong></li>
 </ul>
 <h1>DeepCopy VS Swallow Copy</h1>
 <hr />
+<ul>
+<li>내용 자체를 카피한다면 Deep Copy</li>
+<li>참조자만 카피하는 것은 Swallow Copy</li>
+<li>얕은 복사는 사이드 이펙트의 원인이 된다.</li>
+<ul>
+<li>하나의 인스턴스를 바라보는 여러개의 참조자가 있는 경우, <strong>원본 인스턴스의 변경에 따른 부수효과를 예측하기 힘들다.</strong></li>
+<li>특히 자바에선 <strong>참조자가 파라미터로 넘어갈 때 이런 위험에 쉽게 노출된다.</strong></li>
+</ul>
+<li>그래서 원본 인스턴스 자체를 복사하여 새롭게 할당하는 <strong>Deep Copy를 하는 법이 중요</strong></li>
+<ul>
+<li>Swallow Copy와 달리 각각의 인스턴스를 만들어 참조가 존재</li>
+</ul>
+</ul>
 <pre><code class="language-java">public class ShallowCopyExample {
     public static void main(String[] args) {
         // 원본 객체 생성
@@ -166,15 +199,6 @@ class Person {
     }
 }
 </code></pre>
-<ul>
-  <li>내용 자체를 카피한다면 Deep Copy</li>
-  <li>참조자만 카피하는 것은 Swallow Copy</li>
-  <li>얕은 복사는 사이드 이펙트의 원인이 된다.</li>
-  <li>하나의 인스턴스를 바라보는 여러개의 참조자가 있는 경우, <strong>원본 인스턴스의 변경에 따른 부수효과를 예측하기 힘들다.</strong></li>
-  <li>특히 자바에선 <strong>참조자가 파라미터로 넘어갈 때 이런 위험에 쉽게 노출된다.</strong></li>
-  <li>그래서 원본 인스턴스 자체를 복사하여 새롭게 할당하는 <strong>Deep Copy를 하는 법이 중요</strong></li>
-  <li>Swallow Copy와 달리 각각의 인스턴스를 만들어 참조가 존재</li>
-</ul>
 <pre><code class="language-java">public class DeepCopyExample {
     public static void main(String[] args) {
         Person original = new Person("홍길동", new Address("서울"));
@@ -207,11 +231,28 @@ class Person {
 </code></pre>
 <h1>참조자</h1>
 <ul>
-  <li><code>TestClass testClass = new TestClass();</code>라는 구문이 있을때, <code>testClass</code>를 참조자 라고 한다.</li>
-  <li>클래스 형식에 대한 변수 선언은 모두가 <strong>참조자</strong>이다.</li>
-  <li>참조자는 인스턴스를 가리키는 레퍼런스이다. <strong>인스턴스 자체가 아니다.</strong></li>
+<li><code>TestClass testClass = new TestClass();</code>라는 구문이 있을때, <code>testClass</code>를 참조자 라고 한다.</li>
+<ul>
+<li>클래스 형식에 대한 변수 선언은 모두가 <strong>참조자</strong>이다.</li>
+<li>참조자는 인스턴스를 가리키는 레퍼런스이다. <strong>인스턴스 자체가 아니다.</strong></li>
+</ul>
 </ul>
 <h2>참조자</h2>
+<ul>
+<li>자바는 <strong>참조와 인스턴스의 구분이 표면적으로 되어있지 않아, 초보자들의 경우 객체 복사에 문제가 생길 수 있다.</strong></li>
+<ul>
+<li>자바에게 이름이 부여되는 것은 <strong>오직 참조자뿐임</strong> = 식별자</li>
+<li>인스턴스는 이름이 없다. <strong>오직 주소만 존재한다.</strong></li>
+<ul>
+<li>그렇다고 그 인스턴스가 메모리상에 존재하는 주소가 고정이냐? <strong>그것도 아니다.</strong></li>
+<li>그러니 <strong>인스턴스를 주소로 식별하는 것은 쉽지 않다.</strong></li>
+</ul>
+</ul>
+<li>참조자는 <strong>단순한 포인터다.</strong></li>
+<ul>
+<li>대부분 이것을 인스턴스로 착각한다.</li>
+</ul>
+</ul>
 <pre><code class="language-java">public class ReferenceIdentity {
     public static void main(String[] args) {
         
@@ -239,13 +280,13 @@ class Member {
 }
 </code></pre>
 <ul>
-  <li>자바는 <strong>참조와 인스턴스의 구분이 표면적으로 되어있지 않아, 초보자들의 경우 객체 복사에 문제가 생길 수 있다.</strong></li>
-  <li>자바에게 이름이 부여되는 것은 <strong>오직 참조자뿐임</strong> = 식별자</li>
-  <li>인스턴스는 이름이 없다. <strong>오직 주소만 존재한다.</strong></li>
-  <li>그렇다고 그 인스턴스가 메모리상에 존재하는 주소가 고정이냐? <strong>그것도 아니다.</strong></li>
-  <li>그러니 <strong>인스턴스를 주소로 식별하는 것은 쉽지 않다.</strong></li>
-  <li>참조자는 <strong>단순한 포인터다.</strong></li>
-  <li>대부분 이것을 인스턴스로 착각한다.</li>
+<li>자바의 모든 클래스들은 <strong>Object를 상속받는다.</strong></li>
+<ul>
+<li>Object에는 clone() 메서드를 사용하여 깊은 복사를 할 수 있지만</li>
+<ul>
+<li>이는 규약이 모호하고 예외처리를 복잡하게 만든다.</li>
+</ul>
+</ul>
 </ul>
 <pre><code class="language-java">// 1. Cloneable 인터페이스를 반드시 구현해야 함 (마커 인터페이스)
 class Item implements Cloneable {
@@ -274,12 +315,23 @@ public class CloneProblem {
     }
 }
 </code></pre>
-<ul>
-  <li>자바의 모든 클래스들은 <strong>Object를 상속받는다.</strong></li>
-  <li>Object에는 clone() 메서드를 사용하여 깊은 복사를 할 수 있지만</li>
-  <li>이는 규약이 모호하고 예외처리를 복잡하게 만든다.</li>
-</ul>
 <h2>깊은 복사를 하는 법</h2>
+<ul>
+<li>권장 방법은 <strong>복사 생성자</strong>를 만드는 것이다.</li>
+<ul>
+<li><strong>복사 생성자는 항상 Deep Copy와 붙어다니는 개념</strong></li>
+<li>애초에 복사 생성자는 Deep Copy를 위해 존재한다.</li>
+</ul>
+<li>복사의 원본을 오른쪽에 둔다 하여 RHS라는 변수명을 사용한다</li>
+<ul>
+<li>Right Hand Side</li>
+</ul>
+<li>그러면 복사의 결과물은 LHS라고 하며, 복사 생성자는 RHS의 Value를 읽어들여 LHS로 카피</li>
+<li>이는 C++ 스타일의 문법이며, 자바엔 없다.</li>
+<ul>
+<li><em><strong>즉, 직접 만들어야 한다!</strong></em></li>
+</ul>
+</ul>
 <pre><code class="language-java">public class DeepCopyConstructor {
     public static void main(String[] args) {
         // 1. RHS (Right Hand Side) : 원본 객체 생성
@@ -332,20 +384,19 @@ class Member {
 }
 </code></pre>
 <ul>
-  <li>권장 방법은 <strong>복사 생성자</strong>를 만드는 것이다.</li>
-  <li><strong>복사 생성자는 항상 Deep Copy와 붙어다니는 개념</strong></li>
-  <li>애초에 복사 생성자는 Deep Copy를 위해 존재한다.</li>
-  <li>복사의 원본을 오른쪽에 둔다 하여 RHS라는 변수명을 사용한다</li>
-  <li>Right Hand Side</li>
-  <li>그러면 복사의 결과물은 LHS라고 하며, 복사 생성자는 RHS의 Value를 읽어들여 LHS로 카피</li>
-  <li>이는 C++ 스타일의 문법이며, 자바엔 없다.</li>
-  <li><em><strong>즉, 직접 만들어야 한다!</strong></em></li>
-</ul>
+<li>초보때 실수를 줄이고 싶다면 <strong>객체 참조자가 멤버라면 DeepCopy 메서드를 만들고 사용하라</strong></li>
 <ul>
-  <li>초보때 실수를 줄이고 싶다면 <strong>객체 참조자가 멤버라면 DeepCopy 메서드를 만들고 사용하라</strong></li>
-  <li>적어도 <strong>참조로 인한 문제는 방지할 수 있다.</strong></li>
+<li>적어도 <strong>참조로 인한 문제는 방지할 수 있다.</strong></li>
+</ul>
 </ul>
 <h1>임시 객체</h1>
+<ul>
+<li>객체를 만들 때 항상 <strong>참조자와 실제 인스턴스가 구분됨을 생각해라</strong></li>
+<li>인스턴스가 생성되는 경우 접근할 참조자가 없는 경우 해당 인스턴스를 <strong>임시객체</strong>라고 한다.</li>
+<ul>
+<li>또는 코드에서 명백히 드러나지 않는 인스턴스를 의미한다.</li>
+</ul>
+</ul>
 <pre><code class="language-java">public class Main {
     public static void main(String[] args) {
         
@@ -369,13 +420,18 @@ class Point {
 }
 </code></pre>
 <ul>
-  <li>객체를 만들 때 항상 <strong>참조자와 실제 인스턴스가 구분됨을 생각해라</strong></li>
-  <li>인스턴스가 생성되는 경우 접근할 참조자가 없는 경우 해당 인스턴스를 <strong>임시객체</strong>라고 한다.</li>
-  <li>또는 코드에서 명백히 드러나지 않는 인스턴스를 의미한다.</li>
-  <li>보통의 경우 클래스 형식이라 하면, new 연산을 통해 객체를 만든다.</li>
-  <li>하지만 <strong>String은 명백한 클래스이지만 리터럴을 통해 생성이 가능하다.</strong></li>
+<li>보통의 경우 클래스 형식이라 하면, new 연산을 통해 객체를 만든다.</li>
+<ul>
+<li>하지만 <strong>String은 명백한 클래스이지만 리터럴을 통해 생성이 가능하다.</strong></li>
+</ul>
 </ul>
 <h2>String</h2>
+<ul>
+<li>String을 new 연산으로 만드는 경우 <strong>해당 String은 Heap메모리에 적재된다.</strong></li>
+<ul>
+<li>하지만 <strong>리터럴(<code>"</code>)로 만드는 경우 JVM이 Runtime constant pool에 적재된다.</strong></li>
+</ul>
+</ul>
 <pre><code class="language-java">public class StringMemory {
     public static void main(String[] args) {
         
@@ -393,6 +449,19 @@ class Point {
     }
 }
 </code></pre>
+<ul>
+<li>문제는? <strong>덧셈연산이 된다는 것!</strong></li>
+<ul>
+<li>"Hello" + "World" + "!!" 를 한다면 순서대로 처리되면서 "HelloWorld"가 임시객체가 된다!</li>
+<ul>
+<li>"HelloWorld" + "!!" 처럼 순서대로 처리되기에, JVM이 내부에서 만든 임시객체가 된다.</li>
+</ul>
+</ul>
+<li>임시객체는 메모리상 <strong>비효율의 직접적인 원인이 된다.</strong></li>
+<ul>
+<li>특히 <strong>String은 이를 자주 유발함으로 주의해서 사용해야한다.</strong></li>
+</ul>
+</ul>
 <pre><code class="language-java">public class StringConcatProblem {
     public static void main(String[] args) {
         
@@ -407,18 +476,9 @@ class Point {
     }
 }
 </code></pre>
-<ul>
-  <li>String을 new 연산으로 만드는 경우 <strong>해당 String은 Heap메모리에 적재된다.</strong></li>
-  <li>하지만 <strong>리터럴(<code>"</code>)로 만드는 경우 JVM이 Runtime constant pool에 적재된다.</strong></li>
-  <li>문제는? <strong>덧셈연산이 된다는 것!</strong></li>
-  <li>"Hello" + "World" + "!!" 를 한다면 순서대로 처리되면서 "HelloWorld"가 임시객체가 된다!</li>
-  <li>"HelloWorld" + "!!" 처럼 순서대로 처리되기에, JVM이 내부에서 만든 임시객체가 된다.</li>
-  <li>임시객체는 메모리상 <strong>비효율의 직접적인 원인이 된다.</strong></li>
-  <li>특히 <strong>String은 이를 자주 유발함으로 주의해서 사용해야한다.</strong></li>
-</ul>
 <h2>연관 문서</h2>
 <ul>
-  <li>이전: [[Java 회고 02 객체의 본질 - 메모리 구조와 설계의 관점]]</li>
+<li>이전: [[Java 회고 02 객체의 본질 - 메모리 구조와 설계의 관점]]</li>
 </ul>
     </article>
   </main>

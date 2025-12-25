@@ -24,8 +24,10 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(253, 253, 252, 0.85);
-    /* Matches warm bg */
+    background: var(--color-bg);
+    /* Fallback */
+    background: color-mix(in srgb, var(--color-bg), transparent 15%);
+    /* Modern transparency */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);

@@ -83,18 +83,34 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Dark mode temporarily disabled to ensure consistent 'Clean/Warm' design
+/* Dark Mode (Korean Aesthetic / Han-Style) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #1a1a1a;
-    --color-surface: #222222;
-    --color-fg: #eeeeee;
-    --color-muted: #999999;
-    --color-accent: #ffffff;
-    --color-accent-2: #cccccc;
-    --color-border: #333333;
-    --color-code-bg: #2a2a2a;
-    --color-selection: #444444;
+    /* Background: Deep Ink/Charcoal (Meok) - Warm, not pitch black */
+    --color-bg: #22201e;
+
+    /* Surface: Slightly lighter charcoal for cards */
+    --color-surface: #2c2a28;
+
+    /* Foreground: Hanji/Rice Paper - Soft warm white */
+    --color-fg: #eae5db;
+
+    /* Muted: Grayish brown */
+    --color-muted: #9e9a93;
+
+    /* Accent: Muted Gold/Brass or Dried Persimmon? Let's use a soft white/gold for readability */
+    --color-accent: #d4c4a3;
+
+    /* Border: Dark Grayish Brown */
+    --color-border: #3e3b38;
+
+    --color-code-bg: #2d2b29;
+    --color-selection: #5a554a;
+  }
+
+  /* Adjust images in dark mode to reduce glare */
+  img {
+    opacity: 0.9;
+    transition: opacity 0.3s;
   }
 }
-*/

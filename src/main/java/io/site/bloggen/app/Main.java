@@ -20,7 +20,7 @@ public class Main {
         try {
             switch (cmd) {
                 case "--version" -> {
-                    System.out.println("llog 0.4.15");
+                    System.out.println("llog 0.4.16");
                     System.exit(0);
                 }
                 case "init" -> doInit(args);

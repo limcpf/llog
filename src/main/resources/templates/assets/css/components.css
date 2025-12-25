@@ -207,8 +207,9 @@
   }
 
   .c-article header {
-    margin-bottom: var(--space-10);
-    padding-bottom: var(--space-8);
+    margin-bottom: var(--space-6);
+    padding-bottom: clamp(0.75rem, 2vw, 1rem);
+    /* 12px -> 16px */
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -229,8 +230,8 @@
 
   /* Article Title */
   .c-article h1 {
-    font-family: var(--font-serif);
-    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    /* Slightly reduced max form 2.75 -> 2.5 */
     font-weight: 800;
     line-height: 1.2;
     letter-spacing: -0.02em;
@@ -238,22 +239,100 @@
     color: var(--color-fg);
   }
 
-  .c-article__meta {
+  /* Use specific selector to override .c-article p */
+  .c-article p.c-article__meta {
     font-size: 1rem;
     color: var(--color-muted);
     display: flex;
     gap: var(--space-3);
     align-items: center;
+    margin-bottom: clamp(0.75rem, 2vw, 1rem);
+    /* Force 16px despite generic p styling */
+    line-height: 1.5;
+    /* Reset line-height to normal for meta */
   }
 
 
   /* Content Typography */
   .c-article p {
-    font-size: 1.125rem;
-    /* 18px */
-    line-height: 1.7;
+    font-size: 1.25rem;
+    /* Increased from 1.125rem (18px) -> 20px */
+    line-height: 1.8;
+    /* Increased line-height for better readability */
     margin-bottom: 1.5em;
-    color: #2c2c2c;
+    color: var(--color-fg);
+    /* Fixed: Use variable instead of hardcoded #2c2c2c */
+  }
+
+  .c-article ul,
+  .c-article ol {
+    font-size: 1.25rem;
+    /* Match paragraph size */
+    line-height: 1.8;
+    margin-bottom: 1.5em;
+    margin-left: 1.5em;
+    /* Restore indentation */
+    padding-left: 0;
+    list-style-position: outside;
+  }
+
+  .c-article ul ul,
+  .c-article ol ol,
+  .c-article ul ol,
+  .c-article ol ul {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
+
+  /* Specific bullet/number styles if base reset removed them? 
+     Base.css usually doesn't strip list-style-type unless explicit. 
+     Let's verify in browser. */
+
+  /* --- Category Tree --- */
+  /* Base details: no indent by default (roots) */
+  .c-tree details {
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Nested details: indent deeper */
+  .c-tree details details {
+    margin-left: 1.5rem;
+  }
+
+  .c-tree summary {
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-fg);
+  }
+
+  .c-tree summary:hover {
+    color: var(--color-accent);
+  }
+
+  .c-tree__posts {
+    margin-top: 0.25rem;
+    margin-bottom: 0.75rem;
+    padding-left: 0;
+    list-style: none;
+    /* Remove bullets for clean file icons */
+  }
+
+  .c-tree__posts li {
+    margin-left: 1.5rem;
+    /* Indent posts */
+    margin-bottom: 0.25rem;
+    color: var(--color-muted);
+  }
+
+  .c-tree__posts li a {
+    text-decoration: none;
+    color: var(--color-fg);
+  }
+
+  .c-tree__posts li a:hover {
+    text-decoration: underline;
   }
 
   .c-article h2 {

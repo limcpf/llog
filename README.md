@@ -43,7 +43,7 @@ python3 -m http.server -d sample-site/dist 8080
 
 ## CLI 명령
 ```
-llog 0.4.15
+llog 0.4.16
 Usage:
   init <dir> [--dry-run] [--verbose]
   build [--src dir] [--out dir] [--config path] [--import-src md_dir] [--dry-run] [--verbose]

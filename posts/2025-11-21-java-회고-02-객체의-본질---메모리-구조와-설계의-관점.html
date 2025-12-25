@@ -50,33 +50,45 @@
 <!--FM_BLOCK_END-->
 <h1>객체?</h1>
 <ul>
-  <li>OOP에서 SW를 구성하는 단위</li>
-  <li>결국 프로그램이란 이 <strong>객체들의 집합체 + 관계</strong></li>
-  <li>객체들의 관계란 결국 <strong>설계(=디자인 패턴)</strong>를 의미함</li>
-  <li>객체는 <strong>고급어</strong> 수준에서만 존재하는 개념이다</li>
-  <li>하드웨어는 해당 개념을 알지 못하며, 함수 + 스택 정도만 알고 있음</li>
-  <li>객체는 <strong>상태와 행동을 가진다.</strong></li>
-  <li>단순한 데이터 집합이 아닌, 상태(데이터)와 그 데이터를 조작하는 행동(메서드)이 묶인 <strong>캡슐화된 단위</strong>이다.</li>
+<li>OOP에서 SW를 구성하는 단위</li>
+<li>결국 프로그램이란 이 <strong>객체들의 집합체 + 관계</strong></li>
+<ul>
+<li>객체들의 관계란 결국 <strong>설계(=디자인 패턴)</strong>를 의미함</li>
+</ul>
+<li>객체는 <strong>고급어</strong> 수준에서만 존재하는 개념이다</li>
+<ul>
+<li>하드웨어는 해당 개념을 알지 못하며, 함수 + 스택 정도만 알고 있음</li>
+</ul>
+<li>객체는 <strong>상태와 행동을 가진다.</strong></li>
+<ul>
+<li>단순한 데이터 집합이 아닌, 상태(데이터)와 그 데이터를 조작하는 행동(메서드)이 묶인 <strong>캡슐화된 단위</strong>이다.</li>
+</ul>
 </ul>
 <h1>항, 식, 구문</h1>
 <h2>항</h2>
 <ul>
-  <li>가장 기본이 되는 구성 요소</li>
-  <li>보통 연산의 대상이 되는 <strong>피연산자</strong>나 독립적인 <strong>변수, 상수</strong> 등을 의미</li>
-  <li><code>x, y, 10</code> 등</li>
+<li>가장 기본이 되는 구성 요소</li>
+<li>보통 연산의 대상이 되는 <strong>피연산자</strong>나 독립적인 <strong>변수, 상수</strong> 등을 의미</li>
+<ul>
+<li><code>x, y, 10</code> 등</li>
+</ul>
 </ul>
 <h2>식</h2>
 <ul>
-  <li>값을 만들어내는 코드의 단위</li>
-  <li><strong>항들이 모여서 하나의 결과값(Value)을 반환</strong>하면 그것을 '식'이라함</li>
-  <li><code>x + y, function()</code> 등</li>
+<li>값을 만들어내는 코드의 단위</li>
+<li><strong>항들이 모여서 하나의 결과값(Value)을 반환</strong>하면 그것을 '식'이라함</li>
+<ul>
+<li><code>x + y, function()</code> 등</li>
+</ul>
 </ul>
 <h2>구문</h2>
 <ul>
-  <li>프로그램이 실행해야 할 <strong>완전한 하나의 명령</strong></li>
-  <li><code>int x = 10;</code></li>
-  <li><code>System.out.println("Hello World!")</code></li>
-  <li>고급어의 실행 단위임</li>
+<li>프로그램이 실행해야 할 <strong>완전한 하나의 명령</strong></li>
+<ul>
+<li><code>int x = 10;</code></li>
+<li><code>System.out.println("Hello World!")</code></li>
+</ul>
+<li>고급어의 실행 단위임</li>
 </ul>
 <pre><code class="language-java">// 예제
 int x = 10; 
@@ -90,87 +102,133 @@ int y = 5;
 <hr />
 <h1>사용자와 작성자를 구분하라</h1>
 <ul>
-  <li>클래스를 만들고, 객체를 다룰때 <strong>사용자와 작성자를 구분</strong></li>
-  <li>우리는 대부분 작성자이자 사용자이기에 사용자를 고려하지 않음</li>
-  <li>하지만 실무에선 아님</li>
-  <li>사용자가 다를 가능성이 클 뿐더러, 내가 작성한 코드도 조금 있으면 잊혀짐</li>
-  <li><strong>기억력을 믿지 말고, 사용자에게 친절하게 작성하라</strong></li>
+<li>클래스를 만들고, 객체를 다룰때 <strong>사용자와 작성자를 구분</strong></li>
+<li>우리는 대부분 작성자이자 사용자이기에 사용자를 고려하지 않음</li>
+<ul>
+<li>하지만 실무에선 아님</li>
+<li>사용자가 다를 가능성이 클 뿐더러, 내가 작성한 코드도 조금 있으면 잊혀짐</li>
+<li><strong>기억력을 믿지 말고, 사용자에게 친절하게 작성하라</strong></li>
+</ul>
 </ul>
 <blockquote>"내가 작성한 코드도 한 달뒤엔 남이 짠 코드와 같다."</blockquote>
 <hr />
 <h1>필드 선언시 초깃값 정의</h1>
 <ul>
-  <li>JVM Memory 기준</li>
-  <li>Stack</li>
-  <li><strong>컴파일타임에 이미 결정된다.</strong></li>
-  <li>지역변수, 자동변수 등</li>
-  <li>Heap</li>
-  <li>주로 클래스를 인스턴스화 하며, <strong>new 연산자를 사용</strong></li>
-  <li><strong>런타임에 유동적으로 사용됨</strong></li>
+<li>JVM Memory 기준</li>
+<ul>
+<li>Stack</li>
+<ul>
+<li><strong>컴파일타임에 이미 결정된다.</strong></li>
+<li>지역변수, 자동변수 등</li>
+</ul>
+<li>Heap</li>
+<ul>
+<li>주로 클래스를 인스턴스화 하며, <strong>new 연산자를 사용</strong></li>
+<li><strong>런타임에 유동적으로 사용됨</strong></li>
+</ul>
+</ul>
 </ul>
 <hr />
 <h1>지시자</h1>
 <ul>
-  <li>네 가지 지시자가 존재한다.</li>
-  <li>public</li>
-  <li>protected</li>
-  <li><strong>외부접근 차단, 같은 패키지(또는 파생 클래스)만 허용</strong></li>
-  <li>default</li>
-  <li><strong>같은 패키지만 허용</strong></li>
-  <li>private</li>
-  <li>접근을 제어하는 이유</li>
-  <li><strong>사용자를 고려</strong>해서 개발해야하기 때문</li>
-  <li>기본적으로 private로 정하고, 쓰임에 따라 차차 넓은 범위로 지시자를 확장하는 방식을 사용하기</li>
+<li>네 가지 지시자가 존재한다.</li>
+<ul>
+<li>public</li>
+<li>protected</li>
+<ul>
+<li><strong>외부접근 차단, 같은 패키지(또는 파생 클래스)만 허용</strong></li>
+</ul>
+<li>default</li>
+<ul>
+<li><strong>같은 패키지만 허용</strong></li>
+</ul>
+<li>private</li>
+</ul>
+<li>접근을 제어하는 이유</li>
+<ul>
+<li><strong>사용자를 고려</strong>해서 개발해야하기 때문</li>
+</ul>
+<li>기본적으로 private로 정하고, 쓰임에 따라 차차 넓은 범위로 지시자를 확장하는 방식을 사용하기</li>
 </ul>
 <h1>왜 private를 쓰는걸까?</h1>
 <ul>
-  <li>public으로만 코딩하면 <strong>편하긴 하나, 제작자가 의도하지 않은 방향으로 사용자가 클래스를 사용할 수 있게됨</strong></li>
-  <li>객체 내부 구현을 숨기고, 허용된 메서드만 사용하게 만듬</li>
-  <li>기본적으로 SW 개발은 생산성, 유지보수성을 따짐</li>
-  <li>생산성 -> 얼마나 빠르게 개발이 가능한가?</li>
-  <li>유지보수성 -> 얼마나 용이하게 수정이 가능한가?</li>
-  <li><strong>위 두가지를 충족하기 위해 우린 프레임워크를 사용한다.</strong></li>
-  <li>private를 사용하고 getter, setter를 쓰는 이유</li>
-  <li>OOP에서 객체 제작 관점, 사용 관점 <strong>두 가지를 분리하여 생각하기에 좋다.</strong></li>
+<li>public으로만 코딩하면 <strong>편하긴 하나, 제작자가 의도하지 않은 방향으로 사용자가 클래스를 사용할 수 있게됨</strong></li>
+<ul>
+<li>객체 내부 구현을 숨기고, 허용된 메서드만 사용하게 만듬</li>
+</ul>
+<li>기본적으로 SW 개발은 생산성, 유지보수성을 따짐</li>
+<ul>
+<li>생산성 -> 얼마나 빠르게 개발이 가능한가?</li>
+<li>유지보수성 -> 얼마나 용이하게 수정이 가능한가?</li>
+<li><strong>위 두가지를 충족하기 위해 우린 프레임워크를 사용한다.</strong></li>
+</ul>
+<li>private를 사용하고 getter, setter를 쓰는 이유</li>
+<ul>
+<li>OOP에서 객체 제작 관점, 사용 관점 <strong>두 가지를 분리하여 생각하기에 좋다.</strong></li>
+</ul>
 </ul>
 <hr />
 <h1>this</h1>
 <blockquote>C++의 포인터와 거의 같다고 봐도 무방하다.</blockquote>
-<p>-</p>
 <ul>
-  <li>하나의 클래스가 있다고 가정하자</li>
-  <li>우린 해당 클래스를 사용하여 인스턴스를 런타임(동적)에 할당한다.</li>
-  <li>= 객체 생성</li>
-  <li>그렇게 생성된 인스턴스는 <strong>메모리에 적재된다.</strong></li>
-  <li>인스턴스가 존재하는 Heap 메모리 구역 하나하나엔 <strong>이름이 없음</strong></li>
-  <li>우린 그 구역을 지칭하기 위한 <strong>참조자</strong>를 사용함</li>
-  <li>왜냐하면 <strong>인스턴스는 컴파일 타임이 아닌 런타임이 생성되기 때문임</strong></li>
-  <li>현재 정해져있지 않고, 미래에 생성된다.</li>
-  <li>우린 미래에 인스턴스가 <strong>어느 메모리 공간에 할당될지 알 수 없다.</strong></li>
-  <li>그래서 그 어디에 대한 정보를 기술한게 <code>this</code> 이다.</li>
-  <li>인스턴스가 여러개라면 <code>this</code>도 각각 존재한다.</li>
-  <li>this는 method에서 유효하다</li>
-  <li>각 스택마다 <code>this</code>값이 정의되어 들어간다.</li>
-  <li>JVM이 정의해준다! 개발자는 신경쓰지 않아도 되는 포인트</li>
-  <li>JVM은 메서드를 컴파일할 때, <strong>첫 번째 파라미터로 몰래 객체 주소를 넘겨준다.</strong></li>
-  <li>이것이 바로 <code>this</code>이다.</li>
-  <li>this는 <code>static</code> 메소드에선 사용할 수 없게 되어있다.</li>
-  <li>Heap이 아닌 Static 메모리 영역을 사용하기 때문</li>
-  <li>이는 객체 생성없이 호출되는 이유로, <code>this</code> 의 정보를 넘겨받을 수 없기 때문</li>
+<li>하나의 클래스가 있다고 가정하자</li>
+<ul>
+<li>우린 해당 클래스를 사용하여 인스턴스를 런타임(동적)에 할당한다.</li>
+<ul>
+<li>= 객체 생성</li>
 </ul>
+</ul>
+<li>그렇게 생성된 인스턴스는 <strong>메모리에 적재된다.</strong></li>
+<ul>
+<li>인스턴스가 존재하는 Heap 메모리 구역 하나하나엔 <strong>이름이 없음</strong></li>
+<li>우린 그 구역을 지칭하기 위한 <strong>참조자</strong>를 사용함</li>
+</ul>
+<li>왜냐하면 <strong>인스턴스는 컴파일 타임이 아닌 런타임이 생성되기 때문임</strong></li>
+<ul>
+<li>현재 정해져있지 않고, 미래에 생성된다.</li>
+</ul>
+<li>우린 미래에 인스턴스가 <strong>어느 메모리 공간에 할당될지 알 수 없다.</strong></li>
+<ul>
+<li>그래서 그 어디에 대한 정보를 기술한게 <code>this</code> 이다.</li>
+<ul>
+<li>인스턴스가 여러개라면 <code>this</code>도 각각 존재한다.</li>
+</ul>
+</ul>
+<li>this는 method에서 유효하다</li>
+<ul>
+<li>각 스택마다 <code>this</code>값이 정의되어 들어간다.</li>
+<ul>
+<li>JVM이 정의해준다! 개발자는 신경쓰지 않아도 되는 포인트</li>
+<li>JVM은 메서드를 컴파일할 때, <strong>첫 번째 파라미터로 몰래 객체 주소를 넘겨준다.</strong></li>
+<ul>
+<li>이것이 바로 <code>this</code>이다.</li>
+</ul>
+</ul>
+</ul>
+<li>this는 <code>static</code> 메소드에선 사용할 수 없게 되어있다.</li>
+<ul>
+<li>Heap이 아닌 Static 메모리 영역을 사용하기 때문</li>
+<ul>
+<li>이는 객체 생성없이 호출되는 이유로, <code>this</code> 의 정보를 넘겨받을 수 없기 때문</li>
+</ul>
+</ul>
+</ul>
+<p>-</p>
 <h1>this의 이해를 돕기 위한 JVM 간략 설명</h1>
 <ul>
-  <li>OS 유저 모드에서는 JVM도 결국 하나의 프로세스임</li>
-  <li>그렇기에 프로세스는 메모리를 점유하며, <strong>JVM 내부에도 메모리 공간들이 있음</strong></li>
-  <li>Stack</li>
-  <li>Heap</li>
-  <li>Method</li>
+<li>OS 유저 모드에서는 JVM도 결국 하나의 프로세스임</li>
+<li>그렇기에 프로세스는 메모리를 점유하며, <strong>JVM 내부에도 메모리 공간들이 있음</strong></li>
+<ul>
+<li>Stack</li>
+<li>Heap</li>
+<li>Method</li>
+</ul>
 </ul>
 <h1>추가 조사 예정</h1>
 <ul>
-  <li>Big endian System</li>
-  <li>심볼릭 상수</li>
-  <li>자바의 Call by Reference vs Call by Value</li>
+<li>Big endian System</li>
+<li>심볼릭 상수</li>
+<li>자바의 Call by Reference vs Call by Value</li>
 </ul>
     </article>
   </main>

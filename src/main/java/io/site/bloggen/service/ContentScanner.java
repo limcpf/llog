@@ -40,6 +40,8 @@ public final class ContentScanner {
                 String series = "";
                 Integer seriesOrder = null;
                 List<String> tags = new ArrayList<>();
+                java.time.LocalDateTime dateTime = date.atStartOfDay(); // Default to filename date
+
                 Path meta = p.resolveSibling(name + ".meta.json");
                 if (Files.exists(meta)) {
                     String mj = Files.readString(meta, StandardCharsets.UTF_8);
@@ -62,6 +64,15 @@ public final class ContentScanner {
                                 tags.add(slugify(tt));
                         }
                     }
+
+                    String createdAt = mm.getOrDefault("CREATED_AT", "");
+                    if (createdAt != null && !createdAt.isBlank()) {
+                        try {
+                            dateTime = java.time.LocalDateTime.parse(createdAt);
+                        } catch (Exception ignore) {
+                            // Fallback to filename date
+                        }
+                    }
                 }
 
                 // Calculate reading time
@@ -70,7 +81,7 @@ public final class ContentScanner {
                 int minutes = Math.max(1, (int) Math.ceil(wordCount / 200.0));
                 String readingTime = minutes + " min read";
 
-                posts.add(new Post(name, url, date, title, List.copyOf(tags), desc, readingTime, catPath,
+                posts.add(new Post(name, url, dateTime, title, List.copyOf(tags), desc, readingTime, catPath,
                         series == null ? "" : series, seriesOrder));
             }
         }

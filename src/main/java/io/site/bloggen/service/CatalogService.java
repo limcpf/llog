@@ -232,7 +232,7 @@ public final class CatalogService {
         StringBuilder sb = new StringBuilder();
         sb.append("<article class=\"c-post-card\">\n");
         sb.append("  <div class=\"c-post-card__header\">\n");
-        sb.append("    <span class=\"c-post-card__date\">").append(p.date()).append("</span>\n");
+        sb.append("    <span class=\"c-post-card__date\">").append(p.date().toLocalDate()).append("</span>\n");
         if (p.readingTime() != null) {
             sb.append("    <span class=\"c-post-card__read\">").append(p.readingTime()).append("</span>\n");
         }
@@ -307,7 +307,8 @@ public final class CatalogService {
             sb.append("          <ul>\n");
             for (Post p : e.getValue()) {
                 sb.append("            <li>\n");
-                sb.append("              <time datetime=\"").append(p.date()).append("\">").append(p.date())
+                sb.append("              <time datetime=\"").append(p.date().toLocalDate()).append("\">")
+                        .append(p.date().toLocalDate())
                         .append("</time>\n");
                 sb.append("              — <a href=\"").append(p.url()).append("\">").append(escape(p.title()))
                         .append("</a>\n");
@@ -422,7 +423,7 @@ public final class CatalogService {
             sb.append("  <article class=\"c-article-item\">\n");
             sb.append("    <div class=\"c-article-item__content\">\n");
             sb.append("      <div class=\"c-article-item__meta\">\n");
-            sb.append("        <time>").append(p.date()).append("</time>\n");
+            sb.append("        <time>").append(p.date().toLocalDate()).append("</time>\n");
             // Show only the first tag as a pill for cleaner UI, or all? Reference showed
             // one.
             if (!p.tags().isEmpty()) {
@@ -500,7 +501,7 @@ public final class CatalogService {
             sb.append("      <link>").append(cfg.domain().replaceAll("/$", "")).append(p.url()).append("</link>\n");
             sb.append("      <guid isPermaLink=\"true\">").append(cfg.domain().replaceAll("/$", "")).append(p.url())
                     .append("</guid>\n");
-            sb.append("      <pubDate>").append(rfc822.format(p.date().atStartOfDay(ZoneId.of("Asia/Seoul"))))
+            sb.append("      <pubDate>").append(rfc822.format(p.date().atZone(ZoneId.of("Asia/Seoul"))))
                     .append("</pubDate>\n");
             if (p.description() != null && !p.description().isBlank())
                 sb.append("      <description>").append(escape(p.description())).append("</description>\n");

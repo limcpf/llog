@@ -47,27 +47,43 @@ public final class MdImportService {
                             io.site.bloggen.util.Log.warn("skip: missing title/date: " + p);
                         continue;
                     }
-                    LocalDate date;
+                    java.time.LocalDateTime dateTime;
                     try {
-                        date = LocalDate.parse(dateStr);
+                        // Try ISO_LOCAL_DATE_TIME first (2025-12-27T00:00:00)
+                        dateTime = java.time.LocalDateTime.parse(dateStr);
                     } catch (Exception ex) {
-                        // try to extract YYYY-MM-DD from a datetime string
-                        java.util.regex.Matcher m = java.util.regex.Pattern.compile("(\\d{4}-\\d{2}-\\d{2})")
-                                .matcher(dateStr);
-                        if (m.find()) {
+                        try {
+                            // Try "yyyy-MM-dd HH:mm:ss"
+                            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            dateTime = java.time.LocalDateTime.parse(dateStr, dtf);
+                        } catch (Exception ex2) {
                             try {
-                                date = LocalDate.parse(m.group(1));
-                            } catch (Exception ex2) {
-                                if (hasFM)
-                                    io.site.bloggen.util.Log.warn("skip: invalid createdDate (YYYY-MM-DD): " + p);
-                                continue;
+                                // Fallback to Date (yyyy-MM-dd)
+                                LocalDate d = LocalDate.parse(dateStr);
+                                dateTime = d.atStartOfDay();
+                            } catch (Exception ex3) {
+                                // Regex fallback for yyyy-MM-dd
+                                java.util.regex.Matcher m = java.util.regex.Pattern.compile("(\\d{4}-\\d{2}-\\d{2})")
+                                        .matcher(dateStr);
+                                if (m.find()) {
+                                    try {
+                                        dateTime = LocalDate.parse(m.group(1)).atStartOfDay();
+                                    } catch (Exception ex4) {
+                                        if (hasFM)
+                                            io.site.bloggen.util.Log.warn("skip: invalid createdDate: " + p);
+                                        continue;
+                                    }
+                                } else {
+                                    if (hasFM)
+                                        io.site.bloggen.util.Log.warn("skip: invalid createdDate: " + p);
+                                    continue;
+                                }
                             }
-                        } else {
-                            if (hasFM)
-                                io.site.bloggen.util.Log.warn("skip: invalid createdDate (YYYY-MM-DD): " + p);
-                            continue;
                         }
                     }
+
+                    LocalDate date = dateTime.toLocalDate(); // For filename
+
                     String slug = slugFromFile(p.getFileName().toString(), title);
                     String htmlContent = Markdown.toHtml(md);
                     // Optional frontmatter block (always embedded; visibility controlled at build)
@@ -114,6 +130,7 @@ public final class MdImportService {
                                         ? "\n,  \"SERIES_ORDER\": \"" + escape(seriesOrder) + "\""
                                         : "")
                                 + (!tags.isBlank() ? "\n,  \"TAGS\": \"" + escape(tags) + "\"" : "")
+                                + "\n,  \"CREATED_AT\": \"" + dateTime.toString() + "\""
                                 + "\n}\n";
                         Files.writeString(meta, metaJson, StandardCharsets.UTF_8);
                         io.site.bloggen.util.Log.info("imported: " + p + " -> " + out);
@@ -213,27 +230,36 @@ public final class MdImportService {
         StringBuilder rows = new StringBuilder();
 
         // Keys to exclude from the info block (redundant or internal)
+        // Normalize keys to lowercase and remove non-alphanumeric chars for comparison
         java.util.Set<String> exclude = java.util.Set.of(
                 "title", "subject", "name",
                 "date", "created", "created_at", "createddate", "createdate",
                 "publish", "published", "draft",
-                "series", "series-order", "series_order", "order" // Series info is handled separately
+                "series", "seriesorder", "order" // Normalized keys
         );
 
         for (String k : keys) {
-            if (exclude.contains(k.toLowerCase().replaceAll("[^a-z]", "")))
+            String normKey = k.toLowerCase().replaceAll("[^a-z0-9]", "");
+            if (exclude.contains(normKey))
                 continue;
 
             String v = fm.get(k);
             if (v == null || v.isBlank())
                 continue;
 
-            String key = escape(sanitizeVisible(labelKoForFmKey(k)));
-            String val = escape(sanitizeVisible(v));
+            String label = escape(sanitizeVisible(labelKoForFmKey(k)));
+            String content;
+
+            // Special handling for tags to render as chips
+            if ("tags".equals(normKey) || "tag".equals(normKey) || "keywords".equals(normKey)) {
+                content = renderTags(v);
+            } else {
+                content = escape(sanitizeVisible(v));
+            }
 
             rows.append("    <div class=\"c-fm__item\">\n")
-                    .append("      <dt>").append(key).append("</dt>\n")
-                    .append("      <dd>").append(val).append("</dd>\n")
+                    .append("      <dt>").append(label).append("</dt>\n")
+                    .append("      <dd>").append(content).append("</dd>\n")
                     .append("    </div>\n");
         }
 
@@ -249,6 +275,33 @@ public final class MdImportService {
                 "</details>\n" +
                 "<hr class=\"c-fm__sep\" />\n" +
                 "<!--FM_BLOCK_END-->\n";
+    }
+
+    private static String renderTags(String raw) {
+        if (raw == null || raw.isBlank())
+            return "";
+        // Simple parsing: separate by comma, or handle YAML list like [a, b] or - a
+        String s = raw.trim();
+        s = s.replaceAll("^\\[|\\]$", ""); // Remove [ ]
+
+        String[] tokens;
+        if (s.contains(",")) {
+            tokens = s.split(",");
+        } else if (s.contains("- ")) {
+            // Handle "- a - b" format if squeezed, or "- a\n- b"
+            tokens = s.split("- ");
+        } else {
+            tokens = new String[] { s };
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (String t : tokens) {
+            String tag = t.trim();
+            if (!tag.isBlank()) {
+                sb.append("<span class=\"c-fm__tag\">").append(escape(tag)).append("</span>");
+            }
+        }
+        return sb.toString();
     }
 
     private static String labelKoForFmKey(String key) {

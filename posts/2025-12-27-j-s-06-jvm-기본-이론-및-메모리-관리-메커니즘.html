@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>J-S-06 JVM 기본 이론 및 메모리 관리 메커니즘 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="J-S-06 JVM 기본 이론 및 메모리 관리 메커니즘 — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">J-S-06 JVM 기본 이론 및 메모리 관리 메커니즘</h1>
+        <p class="c-article__meta">
+          2025-12-27 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <dl class="c-fm__list">
+    <div class="c-fm__item">
+      <dt>카테고리</dt>
+      <dd>Programming/Java/Starter</dd>
+    </div>
+    <div class="c-fm__item">
+      <dt>태그</dt>
+      <dd><span class="c-fm__tag">Java</span><span class="c-fm__tag">Level2</span></dd>
+    </div>
+  </dl>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h2>1. JVM의 본질과 시스템 내 위치</h2>
+<h3>1.1. 컴퓨터 구조와 JVM (User Space vs Kernel Space)</h3>
+<p>가장 먼저 이해해야 할 것은 <strong>"JVM은 어디에 있는가?"</strong>입니다.</p>
+<p>PC 시스템은 크게 물리적인 <strong>하드웨어(HW)</strong>와 논리적인 <strong>소프트웨어(SW)</strong>로 나뉩니다.</p>
+<ul>
+<li><strong>User Space (사용자 영역):</strong> <strong>JVM</strong>은 이곳에서 하나의 <strong>프로세스(Process)</strong>로 실행됩니다.</li>
+<li><strong>Kernel Space (커널 영역):</strong> 운영체제(OS)가 상주하며 하드웨어(CPU, Memory)를 제어합니다.</li>
+<li><strong>Native 영역:</strong> OS와 하드웨어를 합쳐 네이티브 영역이라 부르며, JVM은 원칙적으로 이 영역에 직접 명령을 내릴 수 없습니다. (단, JNI를 통하는 경우는 예외)</li>
+</ul>
+<p><img src="https://imgs.limc.dev/J/S/06/J-S-06-01.webp" /></p>
+<p>즉, JVM은 <strong>"OS 이론과 컴퓨터 구조론을 소프트웨어적으로 구현(짬뽕)해 놓은 가상 머신"</strong> 입니다.</p>
+<p>실제 하드웨어가 없지만, 소프트웨어적으로 CPU, Register, Memory 등을 흉내 내어 만든 <strong>논리적 컴퓨터</strong>라고 볼 수 있습니다.</p>
+<h3>1.2. C++와 Java의 메모리 관리 철학 차이</h3>
+<p>두 언어는 메모리를 대하는 태도가 정반대입니다.</p>
+<ul>
+<li><strong>C++ (개발자 중심):</strong></li>
+<ul>
+<li>객체의 생성부터 해제까지 개발자가 코드 레벨에서 모두 관여해야 합니다.</li>
+<li><strong>장점:</strong> 극한의 성능 최적화가 가능합니다.</li>
+<li><strong>단점:</strong> 실수할 경우 메모리 누수(Memory Leak) 등 치명적인 문제가 발생합니다.</li>
+</ul>
+<li><strong>Java (JVM 위임):</strong></li>
+<ul>
+<li><strong>"비즈니스 로직에만 집중하세요."</strong></li>
+<li>실제 메모리 해제는 전적으로 <strong>JVM(Garbage Collector)</strong>의 몫입니다.</li>
+<ul>
+<li>개발자에게 메모리 제어 권한(해제 권한)을 주지 않았습니다.</li>
+</ul>
+<li>(이로 인해 개발 생산성이 높아지고 안정성이 확보됩니다.)</li>
+</ul>
+</ul>
+<hr />
+<h2>2. JVM의 핵심 아키텍처 (Architecture)</h2>
+<p>JVM은 크게 <strong>Class Loader</strong>, <strong>Runtime Data Area</strong>, <strong>Execution Engine</strong>의 세 부분으로 구성됩니다. <img src="https://imgs.limc.dev/J/S/06/J-S-06-02.webp" /></p>
+<h3>2.1. Class Loader (클래스 로더)</h3>
+<p>자바 컴파일러(<code>javac</code>)가 만든 <code>.class</code> 파일(바이트코드)을 런타임에 메모리로 가져오는 역할을 합니다.</p>
+<ul>
+<li><strong>특징:</strong> 모든 클래스를 한 번에 불러오지 않고, <strong>애플리케이션 실행 중 필요한 시점에 동적으로 로드(Dynamic Loading)</strong>합니다.</li>
+<li><strong>로딩 과정 (3단계):</strong></li>
+<ol>
+<li><strong>Loading (로딩):</strong> 클래스 파일을 찾아서 JVM 메모리에 올립니다.</li>
+<ul>
+<li>Bootstrap -> Extension -> Application Class Loader 순서</li>
+</ul>
+<li><strong>Linking (링킹):</strong> 로드된 클래스를 검증하고 사용할 준비를 합니다.</li>
+<ul>
+<li>_Verify:_ 바이트코드가 유효한지 검증 (보안 위협 체크).</li>
+<li>_Prepare:_ 클래스 변수(static 변수)를 위한 메모리를 확보하고 기본값으로 초기화.</li>
+<li>_Resolve:_ 심볼릭 레퍼런스를 실제 메모리 주소(Direct Reference)로 교체.</li>
+</ul>
+<li><strong>Initialization (초기화):</strong> static 블록을 실행하고 static 변수에 실제 값을 할당합니다.</li>
+</ol>
+<li><strong>java.lang.Class:</strong> 클래스 로딩이 완료되면, 해당 클래스의 정보를 담은 <code>Class</code> 객체가 힙에 생성됩니다. (우리가 리플렉션(Reflection)을 사용할 때 쓰는 그 객체입니다.)</li>
+</ul>
+<p><img src="https://imgs.limc.dev/J/S/06/J-S-06-03.webp" /></p>
+<h3>2.2. Runtime Data Area (런타임 데이터 영역)</h3>
+<p>JVM이 OS로부터 할당받은 메모리 공간입니다.</p>
+<ul>
+<li><strong>공유 영역 (모든 스레드 공통):</strong></li>
+<ul>
+<li><strong>Method Area:</strong> 클래스 정보, static 변수, 상수 풀(Constant Pool) 등이 저장됩니다.</li>
+<ul>
+<li>(PermGen -> Metaspace로 변경됨)</li>
+</ul>
+<li><strong>Heap Area:</strong> <code>new</code> 연산자로 생성된 <strong>모든 인스턴스(객체)</strong>가 저장됩니다.</li>
+<ul>
+<li>GC의 주 무대이며 가장 큰 공간을 차지합니다.</li>
+</ul>
+</ul>
+<li><strong>스레드별 영역 (스레드마다 생성):</strong></li>
+<ul>
+<li><strong>Stack Area:</strong> 메서드 호출 시 생성되는 프레임(지역변수, 매개변수) 저장.</li>
+<li><strong>PC Register:</strong> 현재 실행 중인 명령 주소 저장.</li>
+<li><strong>Native Method Stack:</strong> 자바 외의 언어(C/C++) 호출 시 사용.</li>
+</ul>
+</ul>
+<p><img src="https://imgs.limc.dev/J/S/06/J-S-06-04.webp" /></p>
+<h3>2.3. Execution Engine (실행 엔진)</h3>
+<p>메모리에 로드된 바이트코드를 실제로 실행하는 장치입니다. 바이트코드는 기계어가 아니므로 CPU가 이해할 수 있도록 변환이 필요합니다.</p>
+<ul>
+<li><strong>Interpreter (인터프리터):</strong> 바이트코드를 한 줄씩 읽어서 기계어로 번역하고 실행합니다. (초기 실행 속도는 느릴 수 있음)</li>
+<li><strong>JIT Compiler (Just-In-Time):</strong> 인터프리터의 단점을 보완합니다. 자주 실행되는 코드(Hot Spot)를 발견하면, 이를 통째로 네이티브 코드로 컴파일하여 캐싱해 둡니다. 이후에는 컴파일된 코드를 바로 실행하여 성능을 비약적으로 높입니다.</li>
+<li><strong>Garbage Collector (GC):</strong> 힙 영역에서 더 이상 참조되지 않는 객체를 찾아 메모리를 회수합니다.</li>
+</ul>
+<p><img src="https://imgs.limc.dev/J/S/06/J-S-06-05.webp" /></p>
+<hr />
+<h2>3. 심화: 객체 생성과 실행의 세부 과정</h2>
+<h3>3.1. 객체 생성의 내부 메커니즘 (Heap Allocation)</h3>
+<p>코드에서 <code>new MyClass()</code>를 호출하면 힙 영역에서는 다음과 같은 일이 벌어집니다.</p>
+<ol>
+<li><strong>메모리 공간 확보:</strong> 객체를 저장할 연속된 메모리를 할당합니다. (견적서 제외, 실제 내용물 크기만큼)</li>
+<li><strong>객체 헤더 설정:</strong> 객체 관리를 위한 필수 정보를 헤더에 기록합니다.</li>
+<ul>
+<li>_Identity HashCode:_ 객체 고유의 해시값.</li>
+<li>_GC Age:_ GC가 몇 번이나 지나갔는지 기록 (오래 살아남은 객체 구분을 위해).</li>
+<li>_Lock 정보:_ 스레드 동기화를 위한 락 상태.</li>
+</ul>
+<li><strong>생성자(Constructor) 호출:</strong> 필드 값을 초기화합니다. (기본값보다 생성자에서 설정한 값이 우선시되는 이유)</li>
+</ol>
+<h3>3.2. Bytecode와 상수 풀 (Constant Pool)</h3>
+<p><code>.class</code> 파일은 JVM이 읽을 수 있는 <strong>16진수 파일</strong>입니다.</p>
+<ul>
+<li><strong>LDC (Load Constant):</strong> 바이트코드 명령어 중 하나로, "스트링 같은 상수를 상수 풀(Constant Pool)에 넣어라" 또는 "상수 풀에서 가져와라"라는 의미입니다.</li>
+<li>IntelliJ 같은 IDE의 "Show Bytecode" 기능을 통해 이 내용을 직접 확인할 수 있습니다.</li>
+</ul>
+<hr />
+<h2>4. 결론 및 주의사항</h2>
+<h3>4.1. JNI (Java Native Interface)</h3>
+<p>기본적으로 JVM은 OS와 분리되어 있지만, <strong>JNI</strong>를 통해 Native Method Library(C/C++로 작성된 라이브러리)를 사용할 수 있습니다.</p>
+<p>이를 통해 OS의 고유 기능을 직접 제어하거나 하드웨어 성능을 극한으로 끌어올릴 수 있습니다.</p>
+<h3>4.2. 마지막 강조: GC에 개입하지 말 것</h3>
+<p>메모 정리 과정에서 가장 중요한 원칙이 있습니다.</p>
+<blockquote><strong>"코드에서 <code>System.gc()</code>를 명시적으로 호출하지 마세요."</strong></blockquote>
+<ul>
+<li><strong>이유 1:</strong> GC는 JVM의 고유 권한이자 정교한 알고리즘(Stop The World 최소화 등)에 의해 스케줄링됩니다.</li>
+<li><strong>이유 2:</strong> 개발자가 강제로 호출하면 전체 시스템 성능이 심각하게 저하되거나, 예측 불가능한 동작을 유발할 수 있습니다.</li>
+</ul>
+<pre><code class="language-java">public class GCAntiPattern {
+    
+    public void processData() {
+        // 1. 객체 생성 및 사용
+        String tempData = new String("잠시 사용하는 데이터");
+        System.out.println(tempData);
+
+        // 2. 사용 종료 (참조 해제)
+        // 변수에 null을 대입하거나, 메서드가 종료되면 알아서 수거 대상이 됩니다.
+        tempData = null; 
+
+        // 🚫 [BAD] 명시적 GC 호출 금지
+        // "지금 당장 청소해!"라고 강요하는 이 코드는 
+        // 전체 애플리케이션을 순간적으로 멈추게(Stop-The-World) 할 수 있습니다.
+        System.gc(); 
+    }
+}
+</code></pre>
+<ul>
+<li><strong>결론:</strong> 메모리 로딩과 해제는 JVM(Loading & GC)에게 맡기고, 개발자는 비즈니스 로직의 완성도에 집중해야 합니다.</li>
+</ul>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

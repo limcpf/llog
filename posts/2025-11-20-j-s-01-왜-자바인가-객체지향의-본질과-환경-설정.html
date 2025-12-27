@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>J-S-01 왜 자바인가? 객체지향의 본질과 환경 설정 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="J-S-01 왜 자바인가? 객체지향의 본질과 환경 설정 — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">J-S-01 왜 자바인가? 객체지향의 본질과 환경 설정</h1>
+        <p class="c-article__meta">
+          2025-11-20 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <dl class="c-fm__list">
+    <div class="c-fm__item">
+      <dt>카테고리</dt>
+      <dd>Programming/Java/Starter</dd>
+    </div>
+    <div class="c-fm__item">
+      <dt>태그</dt>
+      <dd><span class="c-fm__tag">Java</span><span class="c-fm__tag">Level1</span></dd>
+    </div>
+  </dl>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h2>1. 자바를 왜 쓰는가? (Why Java?)</h2>
+<p>우리는 흔히 "자바는 객체지향 언어다"라고 말합니다. 하지만 실무에서 자바를 선택하는 진짜 이유는 <strong>대규모 소프트웨어 개발에 최적화</strong>되어 있기 때문입니다.</p>
+<ul>
+<li><strong>대규모 협업 환경:</strong> 회사에서는 수십, 수백 명의 개발자가 하나의 시스템을 함께 관리하고 개발합니다.</li>
+<li><strong>엔터프라이즈 개발의 핵심 요소:</strong> 이런 환경에서는 나만 알아보는 코드가 아닌, 아래 요소들이 필수적입니다.</li>
+<ul>
+<li><strong>코드 재사용성:</strong> 이미 만든 기능을 또 만들지 않기</li>
+<li><strong>모듈화:</strong> 기능을 독립적인 단위로 나누기</li>
+<li><strong>확장성과 유연성:</strong> 새로운 요구사항을 쉽게 반영하기</li>
+<li><strong>복잡도 관리:</strong> 추상화를 통해 시스템의 복잡성을 낮추기</li>
+<li><strong>유지 보수:</strong> 고장 난 곳을 쉽게 찾고 고치기</li>
+</ul>
+</ul>
+<p>자바는 이러한 문제들을 <strong>캡슐화, 상속, 다형성, 추상화</strong>라는 강력한 객체지향 메커니즘을 통해 해결해 줍니다. 즉, 자바를 쓰는 이유는 <strong>'함께 일하고, 오래 쓸 수 있는 소프트웨어'</strong>를 만들기 위함입니다.</p>
+<h2>2. 객체지향의 개념 (The Essence of OOP)</h2>
+<p>많은 입문자가 자바 문법(Syntax)을 외우는 데 급급합니다. 하지만 문법은 도구일 뿐입니다.</p>
+<ul>
+<li><strong>문법 vs 본질:</strong> <code>if</code>, <code>for</code>문을 아는 것보다 <strong>"이 상황에서 왜 객체를 나눠야 하는가?", "왜 인터페이스를 써야 하는가?"</strong>를 이해하는 것이 핵심입니다.</li>
+<li><strong>학습 방향:</strong> '어떻게(How)' 구현하는가보다 <strong>'왜(Why)'</strong> 사용하는지에 집중해야 진짜 객체지향 프로그래밍을 할 수 있습니다.</li>
+</ul>
+<h2>3. 스프링은 어렵다? (Is Spring Hard?)</h2>
+<p>스프링 프레임워크를 배우며 좌절하는 경우가 많습니다. 하지만 스프링의 본질을 알면 접근이 달라집니다.</p>
+<ul>
+<li><strong>스프링의 정의:</strong> 스프링은 <strong>Java의 객체지향 개념(OCP, DIP 등)을 개발자가 더 쉽고 편하게 적용할 수 있도록 도와주는 도구</strong>입니다.</li>
+<li><strong>어려운 이유:</strong> 자바의 객체지향 원리를 제대로 이해하지 못한 채 문법 위주로만 학습했다면, 스프링이 제공하는 추상화와 설계 철학이 당연히 어렵게 느껴질 수밖에 없습니다.</li>
+<li><strong>결론:</strong> 자바의 객체지향을 깊이 이해하면, 스프링은 어렵지 않습니다. 오히려 고마운 도구가 됩니다.</li>
+</ul>
+<h2>4. 개발 환경 설정 (IntelliJ Setup)</h2>
+<p>효율적인 학습과 개발을 위해 아래와 같이 환경을 구성했습니다.</p>
+<ul>
+<li><strong>테마:</strong> 라이트 모드 (Light Mode) 선호</li>
+<ul>
+<li>_개인의 취향에 맞춰 눈이 편안한 환경을 구성했습니다._</li>
+</ul>
+<li><strong>JDK:</strong> Zulu JDK 21</li>
+<ul>
+<li>_최신 LTS(Long Term Support) 버전을 사용하여 안정성과 최신 기능을 확보했습니다._</li>
+</ul>
+<li><strong>언어 설정:</strong> 영어(English) 사용 권장</li>
+<ul>
+<li>_처음엔 어색할 수 있지만, 에러 로그나 필요한 기능을 구글링할 때 영어 검색 결과가 압도적으로 정확하고 많습니다. 개발자로서의 성장을 위해 영어 환경에 익숙해지는 것이 좋습니다._</li>
+</ul>
+</ul>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

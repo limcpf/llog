@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>J-S-02 메모리 구조와 설계의 관점 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="J-S-02 메모리 구조와 설계의 관점 — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">J-S-02 메모리 구조와 설계의 관점</h1>
+        <p class="c-article__meta">
+          2025-11-21 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <dl class="c-fm__list">
+    <div class="c-fm__item">
+      <dt>카테고리</dt>
+      <dd>Programming/Java/Starter</dd>
+    </div>
+    <div class="c-fm__item">
+      <dt>태그</dt>
+      <dd><span class="c-fm__tag">Java</span><span class="c-fm__tag">Level1</span></dd>
+    </div>
+  </dl>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h2>1. 객체(Object)란 무엇인가?</h2>
+<p>우리는 흔히 객체를 "현실 세계의 반영"이라고 하지만, 개발자 관점에서는 조금 더 구체적인 정의가 필요합니다.</p>
+<ul>
+<li><strong>SW의 구성 단위:</strong> 프로그램은 결국 <strong>'객체들의 집합'</strong>이며, 이 객체들 간의 <strong>'관계'</strong>가 시스템을 만듭니다. 이 관계를 효율적으로 정의하는 것이 곧 <strong>설계(Design Pattern)</strong>입니다.</li>
+<li><strong>고급어(High-Level)의 산물:</strong> 하드웨어(CPU, RAM)는 '객체'를 모릅니다. 오직 함수와 스택 프레임 정도만 이해할 뿐입니다. 객체는 인간이 이해하기 쉽도록 만든 고수준의 추상화 개념입니다.</li>
+<li><strong>상태와 행동의 캡슐:</strong> 단순한 데이터 덩어리가 아닙니다. <strong>상태(Data/Field)</strong>와 그 상태를 조작하는 <strong>행동(Method)</strong>이 하나로 묶여, 외부로부터 보호받는 <strong>캡슐화된 단위</strong>입니다.</li>
+</ul>
+<h2>2. 코드의 해부: 항, 식, 구문</h2>
+<p>코드를 작성할 때 이 세 가지 용어를 명확히 구분하면 문법 이해가 빨라집니다.</p>
+<ol>
+<li><strong>항 (Term):</strong> 연산의 대상이 되는 가장 기본적인 요소 (피연산자, 변수, 상수).</li>
+<ul>
+<li>_예: <code>x</code>, <code>y</code>, <code>10</code>_</li>
+</ul>
+<li><strong>식 (Expression):</strong> 항들이 모여 연산 후 <strong>하나의 결과값(Value)</strong>을 만들어내는 단위.</li>
+<ul>
+<li>_예: <code>x + y</code> (결과로 15 같은 값을 남김), <code>function()</code>_</li>
+</ul>
+<li><strong>구문 (Statement):</strong> 프로그램이 실행하는 <strong>완전한 하나의 명령 단위</strong>. 보통 세미콜론(<code>;</code>)으로 끝납니다.</li>
+<ul>
+<li>_예: <code>int sum = x + y;</code>_</li>
+</ul>
+</ol>
+<pre><code class="language-java">// 예제 코드로 보는 차이
+int x = 10; 
+int y = 5;
+
+// x, y, 10 : 항 (Term)
+// x + y    : 식 (Expression) -&gt; 값 15 반환
+// int sum = x + y; : 구문 (Statement) -&gt; 실행 단위
+</code></pre>
+<h2>3. 작성자(Creator)와 사용자(User)를 구분하라</h2>
+<p>이 파트는 실무에서 가장 중요한 마인드셋입니다.</p>
+<ul>
+<li><strong>역할의 분리:</strong> 클래스를 설계하는 사람(작성자)과 그 클래스를 가져다 쓰는 사람(사용자)은 다를 수 있습니다.</li>
+<li><strong>미래의 나를 배려하라:</strong> "내가 짠 코드도 한 달 뒤에 보면 남이 짠 코드와 같다."라는 말이 있듯, 기억력에 의존하지 말고 <strong>코드 자체로 의도가 드러나게(친절하게)</strong> 작성해야 합니다.</li>
+<li><strong>접근 제어의 이유:</strong> 사용자가 내 클래스를 잘못된 방식으로 사용하는 것을 막기 위해, 우리는 <code>private</code>과 같은 접근 제어자를 사용합니다.</li>
+</ul>
+<h2>4. 메모리와 초기화 (Stack vs Heap)</h2>
+<p>필드 선언과 초기화는 JVM의 메모리 영역과 밀접한 관련이 있습니다.</p>
+<ul>
+<li><strong>Stack (스택):</strong></li>
+<ul>
+<li><strong>컴파일 타임</strong>에 크기와 생명주기가 어느 정도 결정됩니다.</li>
+<li>지역 변수, 매개 변수 등이 저장됩니다.</li>
+</ul>
+<li><strong>Heap (힙):</strong></li>
+<ul>
+<li><strong>런타임(실행 중)</strong>에 <code>new</code> 연산자를 통해 동적으로 할당됩니다.</li>
+<li>객체의 인스턴스가 살아 숨 쉬는 공간이며, 크기가 유동적입니다.</li>
+</ul>
+</ul>
+<h2>5. 캡슐화와 접근 제어자 (Why Private?)</h2>
+<p>자바는 4가지 지시자(<code>public</code>, <code>protected</code>, <code>default</code>, <code>private</code>)를 제공합니다. 실무에서는 <strong>기본적으로 <code>private</code></strong>으로 시작하고, 필요에 따라 범위를 넓히는 전략이 유효합니다.</p>
+<ul>
+<li><strong>왜 감추는가?:</strong> 모든 것을 <code>public</code>으로 열어두면 당장은 편하지만, 사용자가 <strong>제작자의 의도와 다르게 객체를 조작</strong>할 위험이 생깁니다.</li>
+<li><strong>생산성 vs 유지보수성:</strong> 우리는 이 두 마리 토끼를 잡기 위해 프레임워크와 캡슐화를 사용합니다. 내부 구현을 숨기고(Information Hiding), 정해진 메서드(Getter/Setter 등)로만 소통하게 함으로써 <strong>유지보수성</strong>을 극대화합니다.</li>
+</ul>
+<h2>6. <code>this</code>의 정체: 런타임의 나침반</h2>
+<p><code>this</code>는 단순한 키워드가 아니라, <strong>메모리 주소를 가리키는 포인터</strong>와 같습니다.</p>
+<ul>
+<li><strong>존재의 이유:</strong> 클래스는 설계도일 뿐, 실제 객체(인스턴스)는 <strong>런타임에 Heap 영역 어딘가</strong>에 생성됩니다. 우리는 코드를 칠 때 그 미래의 주소를 알 수 없습니다. 그래서 <strong>"미래에 생성될 나 자신의 주소"</strong>를 가리키기 위해 <code>this</code>를 씁니다.</li>
+<li><strong>숨겨진 파라미터:</strong> JVM이 메서드를 컴파일할 때, 마법을 부립니다. 모든 인스턴스 메서드의 <strong>첫 번째 파라미터로 몰래 객체의 주소(<code>this</code>)를 넘겨줍니다.</strong> 덕분에 메서드 내부에서 멤버 변수를 내 것처럼 쓸 수 있는 것입니다.</li>
+<li><strong>Static에서의 불가:</strong> <code>static</code> 메서드는 객체 생성 없이 클래스 로딩 시점에 호출될 수 있으므로, 특정 인스턴스를 가리키는 <code>this</code>를 넘겨받을 수 없습니다.</li>
+</ul>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

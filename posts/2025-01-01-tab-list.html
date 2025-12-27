@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>Tab Indentation Test — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="Tab Indentation Test — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">Tab Indentation Test</h1>
+        <p class="c-article__meta">
+          2025-01-01 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <table class="c-fm__table">
+    <tbody>
+        <tr><th scope="row">작성일</th><td>2025-01-01</td></tr>
+        <tr><th scope="row">게시 여부</th><td>true</td></tr>
+        <tr><th scope="row">고유주소</th><td>tab-list-test</td></tr>
+        <tr><th scope="row">제목</th><td>Tab Indentation Test</td></tr>
+    </tbody>
+  </table>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h1>Tab Indentation Test</h1>
+<ul>
+<li>Level 1</li>
+<ul>
+<li>Level 2 (1 Tab)</li>
+<ul>
+<li>Level 3 (2 Tabs)</li>
+</ul>
+</ul>
+<li>Level 1</li>
+<ul>
+<li>Level 2</li>
+</ul>
+</ul>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>J-O-01 실무에서 사용하는 JavaDoc — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="J-O-01 실무에서 사용하는 JavaDoc — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">J-O-01 실무에서 사용하는 JavaDoc</h1>
+        <p class="c-article__meta">
+          2025-12-12 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <dl class="c-fm__list">
+    <div class="c-fm__item">
+      <dt>카테고리</dt>
+      <dd>Programming/Java/Other</dd>
+    </div>
+    <div class="c-fm__item">
+      <dt>태그</dt>
+      <dd><span class="c-fm__tag">Java</span></dd>
+    </div>
+  </dl>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h1>JavaDoc?</h1>
+<ul>
+<li>자바 소스 코드 내 특정한 규칙으로 주석을 작성</li>
+<ul>
+<li>API 문서(HTML)을 자동으로 생성해주는 도구</li>
+<li>또는 표준 주석 양식을 뜻함</li>
+</ul>
+<li>Java에서 주석에 대한 표준으로 <strong>기존 IDE(Intellij, Eclipse)와 연동성이 좋음</strong></li>
+</ul>
+<h1>양식(태그)</h1>
+<table>
+  <thead><tr>
+    <th>태그</th>
+    <th>설명</th>
+    <th>필수여부</th>
+    <th>작성 가이드</th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td><code>@author</code></td>
+      <td>작성자</td>
+      <td>O</td>
+      <td>실명, 사번(문의 대상 식별)</td>
+    </tr>
+    <tr>
+      <td><code>@since</code></td>
+      <td>작성일/버전</td>
+      <td>O</td>
+      <td>YYYY.MM.DD나 프로젝트의 버전</td>
+    </tr>
+    <tr>
+      <td><code>@param</code></td>
+      <td>파라미터 설명</td>
+      <td>O</td>
+      <td>파라미터 의미, ~~Null 허용 여부~~, 포맷 등</td>
+    </tr>
+    <tr>
+      <td><code>@return</code></td>
+      <td>반환값 설명</td>
+      <td>O</td>
+      <td>반환되는 데이터 의미</td>
+    </tr>
+    <tr>
+      <td><code>@throws</code></td>
+      <td>예외 발생</td>
+      <td>X</td>
+      <td>비즈니스 로직상 발생할 수 있는 주요 Exception</td>
+    </tr>
+    <tr>
+      <td><code>@see</code><br></td>
+      <td>참조 링크</td>
+      <td>X</td>
+      <td>AS-IS 클래스, 연관된 유틸리티/상수 클래스 연결</td>
+    </tr>
+    <tr>
+      <td><code>@deprecated</code></td>
+      <td>사용 금지</td>
+      <td>X</td>
+      <td>삭제 예정인 경우 표시</td>
+    </tr>
+  </tbody>
+</table>
+<ul>
+<li><code>@param</code>에서 Null 허용 여부는 <code>@Nullable</code>, <code>@NotNull</code>로도 표현이 가능하다</li>
+</ul>
+<h1>실무 특징</h1>
+<ul>
+<li>차세대의 경우 AS-IS를 추적가능한 꼬리표 역할을 하면 좋음</li>
+<ul>
+<li>이력 추적: 기존 시스템의 어떤 로직, 왜 변경되었는지 근거 남기기</li>
+</ul>
+<li>주석으로 추가적인 이해가 가능하여 <strong>커뮤니케이션 비용이 절감되는 효과</strong>가 있음</li>
+<li>기존 프로젝트라면 이미 IDE에 저장된 관련 양식 정보가 있음</li>
+<ul>
+<li>신규 프로젝트라면 IDE에 간단한 룰을 정하고 가면 좋음</li>
+<ul>
+<li><code>@since</code>의 날짜 포맷이라던가 <code>@author</code>에서 실명이 들어가는지 사번이 들어가는지...</li>
+</ul>
+</ul>
+</ul>
+<h1>예시</h1>
+<h2>1. Controller</h2>
+<pre><code class="language-java">/**
+ * [${화면명/기능명}] ${기능_상세_설명}
+ *
+ * @author 00010001
+ * @param request  ${요청_데이터_설명_및_필수여부}
+ * @param bindingResult ${유효성_검증_결과}
+ * @return ${응답_데이터_구조_및_화면이동_경로}
+ * @throws Exception ${발생_가능한_주요_예외}
+ *
+ * ----------------------------------------------------
+ * Prj AS-IS Reference:
+ * - Method: ${OldController.oldMethodName()}
+ * - Note: ${파라미터 구조 변경됨}
+ * ----------------------------------------------------
+ */
+@PostMapping("/submit")
+public ResponseEntity&lt;?&gt; submit(@RequestBody NewVO request) { ... }
+
+</code></pre>
+<h2>2. Service</h2>
+<pre><code class="language-java">/**
+ * ${비즈니스_로직_명}
+ *
+ * @author 00010001
+ * @param userId ${사용자_ID}
+ * @param amount ${계산할_금액}
+ * @return ${계산_결과_값}
+ * @throws BizException ${잔액_부족_등_비즈니스_예외_조건}
+ *
+ * ----------------------------------------------------
+ * Prj AS-IS Reference:
+ * - Method: ${OldService.processLogic()}
+ * - Note: ${파라미터 구조 변경됨}
+ * ----------------------------------------------------
+ */
+public ResultVO processLogic(String userId, BigDecimal amount) { ... }
+</code></pre>
+<h2>3. DAO / Mapper (DB쿼리)</h2>
+<pre><code class="language-java">/**
+ * ${쿼리_질의_목적}
+ *
+ * @param paramMap ${검색_조건_Map (startDate, endDate 필수)}
+ * @return ${조회된_목록_List}
+ *
+ * ----------------------------------------------------
+ * Prj AS-IS Reference:
+ * - Query ID: ${sqlMap_user.xml -&gt; selectUserList}
+ * ----------------------------------------------------
+ */
+List&lt;UserVO&gt; selectUserList(Map&lt;String, Object&gt; paramMap);
+</code></pre>
+<h2>4. Provider / Utility</h2>
+<pre><code class="language-java">/**
+ * ${기능}
+ *
+ * @param rawData ${가공 전 데이터}
+ * @return ${가공 후 데이터 (실패 시 null 반환 여부 명시)}
+ * @throws ExternalApiException ${연동_타임아웃_등}
+ *
+ * ----------------------------------------------------
+ * Prj AS-IS Reference:
+ * - Method: ${OldUtil.convertData()}
+ * ----------------------------------------------------
+ */
+public String sendToLegacy(String rawData) { ... }
+</code></pre>
+<h2>5. VO</h2>
+<pre><code class="language-java">/**
+ * 주민번호 마스킹 처리 후 반환
+ *
+ * @return ${123456-1****** 형태의 문자열}
+ * ----------------------------------------------------
+ * Prj AS-IS Reference: 신규 추가 (AS-IS에는 화면에서 처리함)
+ * ----------------------------------------------------
+ */
+public String getMaskedSsn() { ... }
+</code></pre>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

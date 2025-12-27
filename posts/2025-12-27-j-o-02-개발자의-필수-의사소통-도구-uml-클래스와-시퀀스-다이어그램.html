@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>J-O-02 개발자의 필수 의사소통 도구 UML 클래스와 시퀀스 다이어그램 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="J-O-02 개발자의 필수 의사소통 도구 UML 클래스와 시퀀스 다이어그램 — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">J-O-02 개발자의 필수 의사소통 도구 UML 클래스와 시퀀스 다이어그램</h1>
+        <p class="c-article__meta">
+          2025-12-27 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <dl class="c-fm__list">
+    <div class="c-fm__item">
+      <dt>카테고리</dt>
+      <dd>Programming/Java/Other</dd>
+    </div>
+    <div class="c-fm__item">
+      <dt>태그</dt>
+      <dd><span class="c-fm__tag">Java</span></dd>
+    </div>
+  </dl>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h2>1. UML(Unified Modeling Language)</h2>
+<p>개발자라면 코드를 작성하는 것만큼 구조를 설계하고 소통하는 능력이 중요합니다.</p>
+<p>이때 <strong>Class Diagram(클래스 다이어그램)</strong>과 <strong>Sequence Diagram(시퀀스 다이어그램)</strong>은 반드시 알아야 할 필수 요소입니다.</p>
+<p>UML은 모델링 언어의 표준입니다.</p>
+<p>복잡한 클래스 구조와 그들 간의 연관 관계를 <strong>시각화</strong>하여 보여주는 강력한 도구이기 때문입니다.</p>
+<p>UML에서 클래스 관계를 어떻게 표현하는지 아래 예시를 통해 알아보겠습니다. <img src="https://imgs.limc.dev/J/O/02/J-O-02-01.webp" /></p>
+<h3>1.1. UML로 보는 클래스 간의 관계</h3>
+<p>다이어그램에서 가장 헷갈리는 부분은 관계를 나타내는 선과 화살표의 모양입니다. 각 기호가 의미하는 바를 명확히 구분해야 합니다.</p>
+<ul>
+<li><strong>일반화(Generalization/상속):</strong> "자식은 부모이다(Is-A)" 관계를 나타냅니다. </li>
+<ul>
+<li><strong>실선 화살표</strong>로 표현하며, 부모 클래스의 기능을 자식이 그대로 물려받습니다.</li>
+</ul>
+<li><strong>실체화(Realization):</strong> 추상적인 인터페이스를 구체적으로 구현하는 관계입니다. </li>
+<ul>
+<li><strong>점선 화살표</strong>로 표현합니다.</li>
+</ul>
+<li><strong>합성(Composition) vs 집합(Aggregation):</strong> 두 관계는 비슷해 보이지만 '의존성'의 강도에서 차이가 있습니다.</li>
+<ul>
+<li><strong>합성:</strong> "부분이 전체에 종속된 상태"입니다. 전체가 사라지면 부분도 함께 사라지는 강력한 의존성을 가집니다. (<strong>속이 찬 마름모</strong>)</li>
+<li><strong>집합:</strong> "독립적인 객체들의 모임"입니다. 한시적으로 관계를 맺지만 생명주기는 독립적입니다. (<strong>속이 빈 마름모</strong>)</li>
+</ul>
+</ul>
+<blockquote><strong>💡 설계 격언: "상속보다는 합성(Composition)을 사용하라"</strong>  유지보수 측면에서 매우 중요한 원칙입니다. 상속은 부모가 바뀌면 자식 코드까지 깨질 수 있는 '강한 결합'을 만들기 때문입니다.</blockquote>
+<h3>1.2. 시퀀스 다이어그램</h3>
+<p>클래스 다이어그램이 정적인 구조를 보여준다면, 시퀀스 다이어그램은 동적인 흐름을 보여줍니다.</p>
+<p>이 다이어그램은 특정 로직이 시간 순서대로 <strong>어떻게 이루어지는지</strong>, 그리고 그 과정에서 <strong>개입하는 클래스가 무엇인지</strong> 한눈에 파악할 때 유용합니다.</p>
+<p>물론 로직의 흐름을 보는 것도 중요하지만, 개인적으로는 이를 통해 <strong>모듈 간의 의존성을 파악하는 것</strong>이 설계 관점에서 더 중요하다고 생각합니다.</p>
+<p>아래는 시퀀스 다이어그램 예시입니다.</p>
+<p><img src="https://imgs.limc.dev/J/O/02/J-O-02-02.webp" /></p>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

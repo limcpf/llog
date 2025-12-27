@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>J-S-03 클래스와 인스턴스, 그리고 복사의 기술 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="J-S-03 클래스와 인스턴스, 그리고 복사의 기술 — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">J-S-03 클래스와 인스턴스, 그리고 복사의 기술</h1>
+        <p class="c-article__meta">
+          2025-12-18 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <dl class="c-fm__list">
+    <div class="c-fm__item">
+      <dt>카테고리</dt>
+      <dd>Programming/Java/Starter</dd>
+    </div>
+    <div class="c-fm__item">
+      <dt>태그</dt>
+      <dd><span class="c-fm__tag">Java</span><span class="c-fm__tag">Level1</span></dd>
+    </div>
+  </dl>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h2>1. 클래스, 객체, 인스턴스의 정립</h2>
+<p>우리는 흔히 이 세 용어를 혼용하지만, 메모리 관점에서 명확한 구분이 필요합니다.</p>
+<ul>
+<li><strong>클래스 (Class)</strong>: 객체를 만들어 내기 위한 <strong>설계도, 문법, 형식</strong>입니다. <code>.class</code> 파일 형태로 존재하며 정적입니다.</li>
+<li><strong>객체 (Object)</strong>: 구현할 대상이자 추상적인 단위입니다.</li>
+<li><strong>인스턴스 (Instance)</strong>: 설계도(클래스)를 바탕으로 <strong>Heap 메모리에 실체화</strong>된 것입니다.</li>
+<ul>
+<li><strong>참조자 (Reference)</strong>: Stack 영역에 존재하며, Heap에 있는 인스턴스의 <strong>주소(Address)</strong>를 가리키는 리모컨입니다.</li>
+</ul>
+</ul>
+<h2>2. 생성자 (Constructor): 객체의 탄생</h2>
+<p>생성자는 객체가 <code>new</code> 키워드를 통해 Heap에 할당되는 순간, <strong>가장 먼저 실행되어 초기화를 담당하는 특수 메서드</strong>입니다.</p>
+<h3>2.1. 생성자의 규칙과 특징</h3>
+<ol>
+<li><strong>리턴 타입 없음</strong>: <code>void</code>조차 적지 않습니다. 리턴 타입이 있다면 그것은 생성자가 아닌 일반 메서드입니다.</li>
+<li><strong>이름 일치</strong>: 반드시 클래스명과 동일해야 합니다.</li>
+<li><strong>초기화 우선순위</strong>: 필드 선언 시 대입한 값보다 <strong>생성자 내부의 코드가 우선</strong>합니다. (덮어쓰기)</li>
+<li><strong>기본 생성자</strong>: 작성하지 않으면 컴파일러가 빈 생성자(<code>Default Constructor</code>)를 자동으로 추가합니다.</li>
+</ol>
+<h3>2.2. <code>this</code>와 생성자 연결</h3>
+<p>생성자는 오버로딩(Overloading)이 가능하며, <code>this()</code>를 통해 다른 생성자를 호출할 수 있습니다. 단, <strong>반드시 첫 줄에 위치</strong>해야 합니다.</p>
+<pre><code class="language-java">class Box {
+    int size;
+    
+    // 기본값 설정을 위해 다른 생성자 호출
+    Box() { 
+        this(10); // 아래의 Box(int size)를 호출
+    } 
+    
+    Box(int size) { 
+        this.size = size; 
+    }
+}
+</code></pre>
+<h2>3. 참조자(Reference)와 실체</h2>
+<p>자바에서 변수(참조자)는 인스턴스 그 자체가 아닙니다. <strong>단순한 포인터(주소값 보관함)</strong>일 뿐입니다.</p>
+<ul>
+<li><strong>식별자</strong>: 이름이 있는 것은 오직 참조자뿐입니다. Heap에 있는 인스턴스는 이름 없이 주소로만 식별됩니다.</li>
+<li><strong>착각의 늪</strong>: <code>Member p2 = p1;</code>은 인스턴스를 복사하는 것이 아니라, <strong>주소값만 복사</strong>하는 것입니다. 즉, 하나의 인스턴스를 두 개의 리모컨이 가리키게 됩니다.</li>
+</ul>
+<h2>4. 핵심 이슈: 얕은 복사(Shallow) vs 깊은 복사(Deep)</h2>
+<p>이 파트는 실무에서 <strong>데이터 꼬임(Side Effect)</strong>을 방지하기 위해 가장 중요합니다.</p>
+<h3>4.1. 얕은 복사 (Shallow Copy)</h3>
+<ul>
+<li><strong>방식</strong>: 객체의 참조값(주소)만 복사합니다.</li>
+<li><strong>위험성</strong>: 복사본을 수정했는데 원본이 같이 변경되는 <strong>사이드 이펙트</strong>가 발생합니다.</li>
+<li><strong>예시</strong>: <code>clone()</code> 메서드의 기본 동작, 단순 변수 할당.</li>
+</ul>
+<h3>4.2. 깊은 복사 (Deep Copy)</h3>
+<ul>
+<li><strong>방식</strong>: 원본 인스턴스의 <strong>값(Value) 자체를 복사</strong>하여, 아예 <strong>새로운 메모리 공간(Heap)에 독립적인 인스턴스</strong>를 만듭니다.</li>
+<li><strong>해결책: 복사 생성자 (Copy Constructor)</strong></li>
+<ul>
+<li>자바는 C++처럼 복사 생성자를 자동으로 지원하지 않으므로, <strong>직접 구현</strong>해야 합니다.</li>
+<li><strong>RHS (Right Hand Side)</strong>: 원본 객체</li>
+<li><strong>LHS (Left Hand Side)</strong>: 복사될 새 객체 (<code>this</code>)</li>
+<li><strong>참조형 필드 처리</strong>: 내부의 참조형 필드(예: <code>Address</code>)까지 <code>new</code>를 통해 재귀적으로 새로 만들어야 진정한 깊은 복사입니다.</li>
+</ul>
+</ul>
+<pre><code class="language-java">// Deep Copy의 정석: 복사 생성자 패턴
+class Member {
+    String name;
+    Address addr; // 참조형 변수
+
+    // 일반 생성자
+    Member(String name, Address addr) {
+        this.name = name;
+        this.addr = addr;
+    }
+
+    // 복사 생성자 (Deep Copy)
+    Member(Member rhs) {
+        this.name = rhs.name; // String은 불변이라 참조 복사도 무관
+        
+        // [핵심] 참조형은 반드시 new로 새로 생성해서 연결해야 함
+        // rhs.addr의 값을 가진 새로운 Address 객체를 만듦
+        this.addr = new Address(rhs.addr); 
+    }
+}
+</code></pre>
+<h2>5. 임시 객체 (Temporary Object)와 메모리</h2>
+<p>참조 변수에 담기지 않고 즉시 사용되고 버려지는 객체를 의미합니다.</p>
+<ul>
+<li><strong>예시</strong>: <code>new Point(10, 20).print();</code></li>
+<li><strong>특징</strong>: 문장이 끝나는 즉시 참조가 사라지므로 <strong>GC(Garbage Collection)의 대상</strong>이 됩니다. 과도한 임시 객체 생성은 GC 부하를 일으켜 성능 저하의 원인이 됩니다.</li>
+</ul>
+<h2>6. String의 두 얼굴: Heap vs Constant Pool</h2>
+<p>String은 클래스이지만 리터럴(<code>""</code>) 생성을 지원하는 특수 녀석입니다.</p>
+<ul>
+<li><strong><code>new String("Java")</code></strong>: 무조건 <strong>Heap</strong> 영역에 새로운 객체 생성. (비효율적, 주소값 다름)</li>
+<li><strong><code>"Java"</code> (리터럴)</strong>: <strong>Runtime Constant Pool</strong>에 생성. 같은 문자열이 있으면 재사용. (효율적)</li>
+</ul>
+<h3>문자열 연결(<code>+</code>)의 함정</h3>
+<pre><code class="language-java">String result = "Hello" + "World" + "!!";
+</code></pre>
+<p>위 코드는 실행 과정에서 <code>"HelloWorld"</code>라는 <strong>임시 객체</strong>를 Heap에 만들고, 최종 결과인 <code>"HelloWorld!!"</code>를 만든 뒤 버려집니다. 반복문 안에서의 문자열 연결이 치명적인 이유가 바로 이 <strong>불필요한 임시 객체 생성</strong> 때문입니다.</p>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

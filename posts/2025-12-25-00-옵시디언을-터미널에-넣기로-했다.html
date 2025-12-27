@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>옵시디언을 터미널에 넣기로 했다. — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="옵시디언을 터미널에 넣기로 했다. — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">옵시디언을 터미널에 넣기로 했다.</h1>
+        <p class="c-article__meta">
+          2025-12-25 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <table class="c-fm__table">
+    <tbody>
+        <tr><th scope="row">카테고리</th><td>Programming/Neovim</td></tr>
+        <tr><th scope="row">작성일</th><td>2025-12-25</td></tr>
+        <tr><th scope="row">게시 여부</th><td>true</td></tr>
+        <tr><th scope="row">series</th><td>Neovim-입문기</td></tr>
+        <tr><th scope="row">series-order</th><td>1</td></tr>
+        <tr><th scope="row">제목</th><td>옵시디언을 터미널에 넣기로 했다.</td></tr>
+    </tbody>
+  </table>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h2>1. 생활 패턴이 바뀌었어요</h2>
+<p>예전에는 책상 앞에 각 잡고 앉아 있었죠. 32인치 모니터를 보며 쾌적하게 작업했습니다.</p>
+<p>하지만 요즘은 달라졌어요. 침대에 기대어 15인치 맥북 하나로 모든 걸 해결합니다. 공부도, 코딩도, 노트 정리도요. 야외 카페는 말할 것도 없고요.</p>
+<p><strong>문제는 '화면 크기'였습니다.</strong> 15인치 화면에 브라우저, 터미널, 옵시디언 노트를 동시에 띄우려니 너무 벅차더라고요.</p>
+<p>그래서 결심했습니다. <strong>"노트(옵시디언)를 아예 터미널(Neovim) 안으로 합치자!"</strong></p>
+<h2>2. 터미널과 친해져야 하니까요</h2>
+<p>개발자라면 CLI(명령어 인터페이스)와 친해져야 한다고 생각해요.</p>
+<p>마침 집에 있는 홈서버에도 <strong>NixOS minimal</strong> 버전을 쓰고 있습니다. GUI가 없는 서버를 자유자재로 다루려면, CLI 환경이 손에 익어야겠죠.</p>
+<p>작업 도구를 Neovim으로 바꾸면? 매일 강제로라도 터미널을 써야 하니, 실력이 늘 수밖에 없습니다.</p>
+<h2>3. 그리고, 가볍잖아요!</h2>
+<p>단순한 이유지만 중요합니다. Obsidian 클라이언트도 훌륭하지만, 터미널 환경의 가벼움은 못 따라갑니다. 리소스도 적게 먹고, 빠릿빠릿하니까요.</p>
+<h2>4. 앞으로의 목표</h2>
+<h3><strong>목표 1: 옵시디언 완벽 대체</strong></h3>
+<p>일단 Neovim만으로 옵시디언을 대체하는 게 1차 목표입니다. 지금은 <strong><a href="https://github.com/epwalsh/obsidian.nvim">obsidian.nvim</a></strong> 플러그인으로 최대한 흉내를 내보고 있어요.</p>
+<p>가장 큰 고민은 '동기화'네요. 편하게 쓰던 Obsidian Sync를 터미널에서 어떻게 대체할지 연구 중입니다.</p>
+<h3><strong>목표 2: Java, TypeScript 개발 환경</strong></h3>
+<p>노트 작성이 익숙해지면, 다음은 코딩입니다. Neovim에서 Java와 TypeScript를 작성하는 게 최종 목표예요.</p>
+<p>예전에도 시도했지만, 항상 설정이 꼬여서 포기했었는데요. 이번에는 설정들이 서로 싸우지 않게 '잘 격리'하는 것이 관건일 것 같습니다.</p>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

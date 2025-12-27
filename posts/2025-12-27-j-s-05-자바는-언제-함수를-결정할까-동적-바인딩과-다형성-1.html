@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ko" data-theme="{{SITE_THEME}}">
+
+<head>
+  <!-- @include partials/head-shared.html -->
+  <title>J-S-05 자바는 언제 함수를 결정할까? 동적 바인딩과 다형성 — {{SITE_NAME}}</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}" />
+  <link rel="canonical" href="{{PAGE_URL}}" />
+  <meta property="og:title" content="J-S-05 자바는 언제 함수를 결정할까? 동적 바인딩과 다형성 — {{SITE_NAME}}" />
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta property="article:section" content="{{ARTICLE_SECTION}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}}" href="/feed.xml" />
+  {{POST_JSONLD}}
+</head>
+
+<body>
+  <a class="u-sr-only u-sr-only--focusable" href="#main">본문 바로가기</a>
+  <!-- @include partials/site-header.html -->
+
+  <main id="main" class="l-reading" role="main">
+    {{SERIES_NAV}}
+    <!-- <nav class="c-breadcrumb" aria-label="breadcrumb">{{BREADCRUMB}}</nav> -->
+    <article class="c-article u-flow" aria-labelledby="post-title">
+      <header>
+        {{SERIES_BADGE}}
+        <h1 id="post-title">J-S-05 자바는 언제 함수를 결정할까? 동적 바인딩과 다형성</h1>
+        <p class="c-article__meta">
+          2025-12-27 <span class="c-article__meta-sep">|</span> {{BREADCRUMB}}
+        </p>
+      </header>
+      <!--FM_BLOCK_START-->
+<details class="c-fm" {{FM_OPEN_ATTR}}>
+  <summary>글 정보</summary>
+  <dl class="c-fm__list">
+    <div class="c-fm__item">
+      <dt>카테고리</dt>
+      <dd>Programming/Java/Starter</dd>
+    </div>
+    <div class="c-fm__item">
+      <dt>태그</dt>
+      <dd><span class="c-fm__tag">Java</span><span class="c-fm__tag">Level2</span></dd>
+    </div>
+  </dl>
+</details>
+<hr class="c-fm__sep" />
+<!--FM_BLOCK_END-->
+<h2>1. 동적 바인딩 (Dynamic Binding)</h2>
+<p>함수 호출과 실제 실행될 코드를 연결하는 것을 <strong>'바인딩'</strong> 이라고 합니다.</p>
+<p>이 연결이 언제 일어나는지가 핵심입니다.</p>
+<ul>
+<li><strong>정적 바인딩 (Static Binding):</strong> <code>컴파일</code> 시점에 결정됩니다. 빠르지만 뻣뻣합니다.</li>
+<li><strong>동적 바인딩 (Dynamic Binding):</strong> <code>런타임(실행)</code> 시점에 결정됩니다. <strong>'지연 바인딩(Late Binding)'</strong>이라고도 합니다.</li>
+</ul>
+<p>자바는 <strong>동적 바인딩</strong>을 사용합니다. JVM이 실행 중에 어떤 메서드를 돌릴지 결정해주기 때문에 코드가 훨씬 유연해집니다.</p>
+<hr />
+<h2>2. 자바의 메서드는 모두 '가상 함수(Virtual Function)'다</h2>
+<p>C++ 개발자가 자바로 넘어왔을 때 가장 놀라는 점 중 하나입니다.</p>
+<p>C++에서는 <code>virtual</code> 키워드를 붙여야 가상 함수가 되지만, <strong>자바는 모든 메서드가 기본적으로 가상 함수</strong>입니다.</p>
+<p>이것이 자바가 유연한 다형성을 가질 수 있는 비결입니다.</p>
+<p>컴파일 시점이 아닌, 실행 시점(Runtime)에 어떤 메서드를 호출할지 결정하기 때문입니다.</p>
+<p><strong>(단, <code>final</code> 키워드가 붙은 메서드는 재정의가 불가능하므로 예외입니다.)</strong></p>
+<blockquote><strong>가상 함수는 "실행되는 순간, 진짜 주인을 찾아가는 함수"입니다.</strong> 코드에선 부모(껍데기)의 함수를 부르는 것처럼 보여도, 실제 프로그램이 돌아갈 땐 <strong>"너 원래 누구였어?"</strong> 라고 물어보고 <strong>자식(알맹이)이 재정의한 기능</strong>을 우선적으로 실행합니다.  덕분에 개발자는 일일이 타입을 확인하지 않고 버튼만 누르면, 연결된 객체가 알아서 제 몫을 해내게 됩니다.</blockquote>
+<h3>2.1 가상 함수 테이블(vtable)의 정체</h3>
+<p>인스턴스가 생성되면 JVM은 이 객체의 메서드 호출을 관리하기 위해 메모리에 <strong>'가상 함수 테이블(Virtual Method Table)'</strong>이라는 지도를 만듭니다.</p>
+<p>이 테이블은 메서드의 이름과 실제 코드가 위치한 메모리 주소를 연결해 주는 역할을 합니다. (쉽게 말해 "이 함수 이름 부르면, 저 주소에 있는 코드 실행해!"라고 적혀 있는 주소록과 같습니다.)</p>
+<h3>2.2 테이블은 어떻게 채워질까? (Overwriting)</h3>
+<p>가상 함수 테이블이 만들어지는 과정은 <strong>'덮어쓰기(Overwrite)'</strong>의 연속입니다.</p>
+<ol>
+<li><strong>부모의 유산:</strong> 먼저 부모 클래스의 메서드 주소들을 테이블에 그대로 등록합니다.</li>
+<li><strong>자식의 반란:</strong> 자식 클래스에서 재정의(Override)한 메서드가 있다면, 기존 부모 메서드의 주소를 지우고 <strong>자식 메서드의 주소로 덮어씌웁니다.</strong></li>
+<li><strong>결과:</strong> 재정의하지 않은 메서드는 여전히 부모의 주소를 가리키고, 재정의한 메서드는 자식의 주소를 가리키게 됩니다.</li>
+</ol>
+<p>이 덕분에 우리가 상위 타입인 <code>Parent</code> 변수에 담아서 메서드를 호출해도, 테이블에 이미 자식의 주소로 덮어씌워져 있기 때문에 자식의 메서드가 실행되는 것입니다.</p>
+<p><img src="https://imgs.limc.dev/J/S/05/J-S-05-01.webp" /></p>
+<h3>2.3 핵심은 '호출'이 아닌 '실행' 순서</h3>
+<p>이 테이블 구성과 객체 초기화 과정을 이해할 때 가장 혼동되는 것이 바로 <strong>순서</strong>입니다. 반드시 <strong>생성자의 실행(Execution) 순서</strong>를 기준으로 생각해야 합니다.</p>
+<ul>
+<li><strong>호출(Call) 순서:</strong> <code>Child</code> -> <code>Parent</code> -> <code>Object</code></li>
+<ul>
+<li>코드상으로는 <code>new Child()</code>를 했으니 자식 생성자가 먼저 호출되는 것처럼 보입니다.</li>
+</ul>
+<li><strong>실행(Execution) 순서:</strong> <code>Object</code> -> <code>Parent</code> -> <code>Child</code></li>
+<ul>
+<li>하지만 실제로는 <code>super()</code>를 통해 최상위 부모까지 거슬러 올라간 뒤, <strong>위에서부터 아래로 내려오며 초기화가 실행</strong>됩니다.</li>
+</ul>
+</ul>
+<p><img src="https://imgs.limc.dev/J/S/05/J-S-05-02.webp" /></p>
+<p><strong>즉, 부모가 먼저 실행되어 뼈대(기본 테이블 정보)를 만들고, 그 다음에 자식이 실행되면서 살(오버라이딩된 정보)을 붙이는 식입니다.</strong> </p>
+<p>이 순서가 보장되기 때문에 자식 클래스에서 안전하게 부모의 기능을 덮어쓸 수 있는 것입니다.</p>
+<hr />
+<h2>3. 다형성: 객체지향의 꽃</h2>
+<p>다형성은 단순히 '여러 모양'을 뜻하는 게 아닙니다.</p>
+<p>핵심은 <strong>추상화와 구체화</strong>입니다.</p>
+<ul>
+<li><strong>추상화(Abstraction):</strong> 복잡한 것을 단순화(일반화)하는 것</li>
+<li><strong>구체화:</strong> 단순한 개념을 실제 동작으로 만드는 것</li>
+</ul>
+<pre><code class="language-java">// [추상화] 복잡한 이동 수단을 '탈 것'이라는 하나의 개념으로 단순화
+interface Vehicle {
+    void move();
+}
+
+// [구체화 A] 단순한 개념을 실제 '버스'의 동작으로 구현
+class Bus implements Vehicle {
+    @Override
+    public void move() {
+        System.out.println("버스가 도로를 달립니다.");
+    }
+}
+
+// [구체화 B] 단순한 개념을 실제 '비행기'의 동작으로 구현
+class Airplane implements Vehicle {
+    @Override
+    public void move() {
+        System.out.println("비행기가 하늘을 날아갑니다.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // [다형성의 핵심]
+        // 변수의 타입은 추상적인 'Vehicle'이지만, 실제 담긴 것은 구체적인 객체들입니다.
+        Vehicle v1 = new Bus();
+        Vehicle v2 = new Airplane();
+
+        // 똑같이 move()를 호출해도, 실제 객체에 따라 결과가 달라집니다.
+        v1.move(); // 출력: 버스가 도로를 달립니다.
+        v2.move(); // 출력: 비행기가 하늘을 날아갑니다.
+    }
+}
+</code></pre>
+<h3>3.1. 프레임워크의 원리</h3>
+<p>우리가 쓰는 Spring 같은 프레임워크가 바로 이 원리로 돌아갑니다.</p>
+<p>프레임워크는 <strong>추상화된 인터페이스</strong>로 큰 흐름을 잡고, 개발자는 이를 <strong>구체화</strong>하여 기능을 완성합니다.</p>
+<hr />
+<h2>4. 상속과 업캐스팅</h2>
+<p>다형성을 구현하는 가장 쉬운 방법은 상속입니다.</p>
+<ul>
+<li><strong>업캐스팅 (Upcasting):</strong> 자식 클래스는 언제든 부모 클래스 타입으로 변신할 수 있습니다.</li>
+<ul>
+<li>예: <code>Parent p = new Child();</code></li>
+<li>이는 <strong>항상 성공</strong>하며 안전합니다.</li>
+</ul>
+</ul>
+<p>결국 자바의 모든 객체는 <code>Object</code>의 자식입니다.</p>
+<p>모든 것이 <code>Object</code>로 통한다는 점이 자바 다형성의 시작입니다.</p>
+<pre><code class="language-java">class Animal { }
+class Cat extends Animal { }
+
+public class Main {
+    public static void main(String[] args) {
+        // [업캐스팅]
+        // 고양이는 동물이므로, Animal 타입 변수에 담을 수 있습니다.
+        Animal a = new Cat(); 
+        
+        // [모든 객체의 조상 Object]
+        // 자바의 모든 클래스는 묵시적으로 Object를 상속받습니다.
+        // 따라서 어떤 객체든 Object 타입에 담을 수 있습니다.
+        Object o = new Cat(); 
+    }
+}
+</code></pre>
+<h2>5. 다운 캐스팅 (Downcasting)과 올바른 설계</h2>
+<p><strong>다운 캐스팅</strong>이란 부모 클래스 타입의 참조 변수가 가리키는 인스턴스를, 다시 특정 파생(자식) 클래스 타입으로 변환하는 것을 말합니다.</p>
+<p>하지만 이는 주의해서 사용해야 합니다.</p>
+<p>적절하지 않은 타입으로 캐스팅을 시도하면 실행 시 오류(ClassCastException)가 발생하기 때문입니다.</p>
+<h3>5.1. 설계 시 주의할 점: 의존성 역전</h3>
+<p>공부를 하며 가장 인상 깊었던 부분은 설계에 관한 것이었습니다.</p>
+<p>만약 모든 파생 클래스가 부모 클래스에 의존하고 있는데, 반대로 <strong>"부모 클래스 코드 안에서 자식 클래스로 다운 캐스팅을 하는 로직이 있다면?"</strong></p>
+<p>이는 의존성 역전 원칙에 위배되는, 잘못된 설계일 가능성이 큽니다.</p>
+<p>부모가 자식의 구체적인 내용까지 알고 있어야 하기 때문입니다.</p>
+<p>따라서 다운 캐스팅이 꼭 필요한 상황인지, 설계가 잘못된 것은 아닌지 항상 의존성 역전을 고민해봐야 합니다.</p>
+<h3>5.2. 안전한 사용을 위한 RTTI</h3>
+<p>물론 다운 캐스팅을 해야만 하는 경우도 있습니다. 이때는 <strong>RTTI(RunTime Type Information)</strong>, 즉 런타임에 타입 정보를 조회하는 기술을 활용해야 합니다.</p>
+<p>Java에서는 <code>instanceof</code> 연산자가 그 역할을 합니다. 이를 통해 해당 객체가 캐스팅하려는 타입이 맞는지 안전하게 확인 후 진행해야 합니다.</p>
+<blockquote>(참고: <code>if (obj instanceof Circle)</code>와 같이 타입을 먼저 검사한 뒤 캐스팅하는 방어 코드를 작성하는 습관을 들이는 것이 좋습니다.)</blockquote>
+<h3>5.3. 예시 코드</h3>
+<pre><code class="language-java">class Animal { /* 공통 기능 */ }
+
+class Dog extends Animal {
+    void bark() { System.out.println("멍멍!"); } // 개만의 고유 기능
+}
+
+class Cat extends Animal {
+    void meow() { System.out.println("야옹~"); }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal myPet = new Dog(); // 업캐스팅 된 상태
+
+        // [위험한 코드]
+        // myPet이 Dog인지 확신할 수 없는데 무작정 변환하면 에러가 날 수 있습니다.
+        // Cat c = (Cat) myPet; // (실행 시 ClassCastException 발생!)
+
+        // [안전한 다운 캐스팅: RTTI]
+        // 1. 먼저 실제 객체 타입을 확인합니다. (instanceof)
+        if (myPet instanceof Dog) {
+            // 2. 안전함이 확인되면 변환합니다. (Downcasting)
+            Dog d = (Dog) myPet;
+            d.bark(); // 이제 Dog만의 기능을 사용할 수 있습니다.
+        }
+    }
+}
+</code></pre>
+<h2>6. 추상 클래스 (Abstract Class)</h2>
+<p>추상 클래스는 <code>new</code> 연산자를 통해 직접 인스턴스(객체)를 생성할 수 없는 불완전한 클래스입니다.</p>
+<p>이는 철저히 <strong>설계적인 관점</strong>에서 존재합니다.</p>
+<h3>6.1. 추상 메서드의 강제성</h3>
+<p>추상 클래스는 보통 하나 이상의 <strong>'추상 메서드(구현부 없이 선언만 있는 메서드)'</strong> 를 가집니다.</p>
+<p>이것이 중요한 이유는 컴파일러가 강력한 제약을 걸어주기 때문입니다.</p>
+<ul>
+<li><strong>컴파일 타임:</strong> 자식 클래스가 추상 메서드를 구현하지 않으면 문법 오류가 발생합니다.</li>
+<li><strong>런타임:</strong> 실행 시점에는 이미 모든 메서드가 구현된 상태임이 보장됩니다.</li>
+</ul>
+<p>결국 추상 클래스는 "무조건 해당 기능을 구현하라"고 자식 클래스에게 강제하는 역할을 수행합니다.</p>
+<p>(템플릿 메서드 패턴 등에서 공통 로직을 묶고 핵심 기능만 자식에게 위임할 때 유용하게 쓰입니다.)</p>
+<h3>6.2. 예시 코드</h3>
+<pre><code class="language-java">// 1. 클래스 앞에 'abstract'를 붙여야 합니다.
+abstract class Animal {
+
+    // [추상 메서드]
+    // - 'abstract' 키워드를 붙입니다.
+    // - 중괄호 {} 없이 세미콜론(;)으로 끝냅니다. (구현부 없음)
+    // - 자식 클래스에서 반드시 오버라이딩(재정의)해야 합니다.
+    abstract void cry();
+
+    // [일반 메서드]
+    // - 추상 클래스라도 일반 메서드를 가질 수 있습니다.
+    // - 자식 클래스들이 공통으로 사용할 기능을 정의합니다.
+    void breathe() {
+        System.out.println("숨을 쉽니다.");
+    }
+}
+
+// 2. 상속 및 구현
+class Cat extends Animal {
+    
+    // 부모의 추상 메서드를 구체적으로 구현(Override)해야만 에러가 나지 않습니다.
+    @Override
+    void cry() {
+        System.out.println("야옹");
+    }
+}
+</code></pre>
+<h2>7. 인터페이스 (Interface)</h2>
+<p>'필드가 없는 추상 클래스'라고 볼 수 있지만, 그 본질은 <strong>"구현 객체가 같은 동작을 한다는 것을 보장하는 약속"</strong> 에 있습니다.</p>
+<h3>7.1. 구체적 정의가 없는 '순수한 선언'</h3>
+<p>인터페이스는 밑그림만 있는 설계도와 같습니다. 메서드의 원형(Prototype)만 기술되어 있고, 실제 구현 내용은 전혀 없는 <strong>'순수한 선언'</strong> 의 집합입니다.</p>
+<ul>
+<li><strong>강제성:</strong> 인터페이스를 구현(<code>implements</code>)하는 클래스는 인터페이스에 정의된 모든 메서드를 반드시 구현해야 합니다. (이로 인해 개발자 간의 <strong>'구현 강제' 효과가 발생</strong>하여 코드의 표준화가 가능해집니다.)</li>
+<li><strong>다중 상속:</strong> 클래스는 오직 하나만 상속받을 수 있지만, <strong>인터페이스는 여러 개를 동시에 구현할 수 있습니다</strong>. (구현 코드가 없으므로, 다중 상속의 치명적인 문제인 '다이아몬드 문제'가 발생하지 않기 때문입니다.)</li>
+</ul>
+<blockquote><strong>다이아몬드 문제?</strong> A, B 두 클래스가 같은 부모를 상속받고 같은 메서드를 재정의했을 때, 이 둘을 동시에 상속받는 자식 클래스는 어떤 메서드를 써야 할지 모호해지는 현상입니다.  Java는 클래스 다중 상속을 금지함으로써 이 문제를 구조적으로 차단했습니다.</blockquote>
+<ul>
+<li><strong>필드:</strong> 인스턴스 변수는 가질 수 없으며, <code>public static final</code>로 선언된 상수만 가질 수 있습니다.</li>
+</ul>
+<blockquote><strong>(참고)</strong> Java 8부터는 <code>default</code> 메서드와 <code>static</code> 메서드를 통해 인터페이스 안에서도 일부 구현 코드를 가질 수 있게 되었습니다. 하지만 인터페이스의 본질인 <strong>'다형성'</strong>과 <strong>'유연한 설계'</strong>를 위해 여전히 '명세(Spec)'로서의 역할이 가장 중요합니다.</blockquote>
+<h3>7.2. 함수의 시그니처(Signature)</h3>
+<p>함수의 시그니처란 <code>시그니처 = 메서드 이름 + 매개변수 리스트 (타입, 개수, 순서)</code>  를 의미한다.</p>
+<p>인터페이스는 바로 이 시그니처들의 모음집인 셈입니다.</p>
+<pre><code class="language-java">// 1. 기준 메서드
+public int calculate(int a, int b) { ... }
+// -&gt; 시그니처: calculate(int, int)
+
+// 2. 메서드 오버로딩 (성공)
+public int calculate(double a, double b) { ... }
+// -&gt; 시그니처: calculate(double, double)
+// (이름은 같지만 매개변수 타입이 다르므로 '다른 함수'로 인정! -&gt; 오버로딩 가능)
+
+// 3. 문법 에러 발생 (실패)
+public void calculate(int x, int y) { ... }
+// -&gt; 시그니처: calculate(int, int)
+// (리턴 타입이 int에서 void로 바뀌었지만, 시그니처(이름+매개변수)가 1번과 똑같으므로 중복! 에러!)
+</code></pre>
+<h3>7.3. 인터페이스 예시 코드</h3>
+<pre><code class="language-java">// 1. 인터페이스 선언 (껍데기만 존재)
+interface Payable {
+    // 구체적인 내용 없이 메서드 이름과 형태만 정의합니다. (public abstract 생략 가능)
+    void pay(int amount); 
+}
+
+// 2. 구현 클래스 (implements)
+class CreditCard implements Payable {
+    // 인터페이스의 메서드를 반드시 재정의(Override)해야 합니다.
+    @Override
+    public void pay(int amount) {
+        System.out.println("신용카드로 " + amount + "원을 결제합니다.");
+    }
+}
+
+class Cash implements Payable {
+    @Override
+    public void pay(int amount) {
+        System.out.println("현금으로 " + amount + "원을 지불합니다.");
+    }
+}
+
+// 사용 예시
+public class Main {
+    public static void main(String[] args) {
+        // 다형성: 인터페이스 타입으로 구현 객체를 받음
+        Payable payment = new CreditCard();
+        payment.pay(10000); // 출력: 신용카드로 10000원을 결제합니다.
+    }
+}
+</code></pre>
+<h3>7.4 다중상속 인터페이스 예시 코드</h3>
+<pre><code class="language-java">interface Camera {
+    void takePhoto();
+}
+
+interface Phone {
+    void call(String number);
+}
+
+// 쉼표(,)를 사용하여 여러 인터페이스를 동시에 구현합니다.
+class SmartPhone implements Camera, Phone {
+    
+    @Override
+    public void takePhoto() {
+        System.out.println("사진을 촬영합니다.");
+    }
+
+    @Override
+    public void call(String number) {
+        System.out.println(number + "로 전화를 겁니다.");
+    }
+}
+</code></pre>
+<h3>7.3. API Interface vs Java Interface?</h3>
+<p>공부를 하다가 문득 <strong>"API의 Interface와 Java의 interface 문법이 개념적으로 같은 것인가?"</strong> 라는 의문이 들었습니다.</p>
+<p>조사해본 결과, 본질적인 '개념'은 같습니다. 둘 다 <strong>"사용법에 대한 약속(Contract)"</strong> 을 의미합니다.</p>
+<blockquote>- <strong>Java Interface:</strong> 객체 간의 통신 방식을 코드로 정의한 규약. "이 메서드를 호출하면 이런 결과를 줄게." - <strong>API Interface:</strong> 클라이언트와 서버 간의 통신 규약. "이 URL로 요청을 보내면 이런 데이터를 줄게." 둘 다 내부 구현은 숨기고, 외부와 소통하는 '접점'을 정의한다는 면에서 맥락이 통합니다.)</blockquote>
+    </article>
+  </main>
+
+  <!-- @include partials/site-footer.html -->
+</body>
+
+</html>

@@ -211,22 +211,41 @@ public final class MdImportService {
         java.util.List<String> keys = new java.util.ArrayList<>(fm.keySet());
         java.util.Collections.sort(keys);
         StringBuilder rows = new StringBuilder();
+
+        // Keys to exclude from the info block (redundant or internal)
+        java.util.Set<String> exclude = java.util.Set.of(
+                "title", "subject", "name",
+                "date", "created", "created_at", "createddate", "createdate",
+                "publish", "published", "draft",
+                "series", "series-order", "series_order", "order" // Series info is handled separately
+        );
+
         for (String k : keys) {
+            if (exclude.contains(k.toLowerCase().replaceAll("[^a-z]", "")))
+                continue;
+
             String v = fm.get(k);
-            if (v == null)
-                v = "";
+            if (v == null || v.isBlank())
+                continue;
+
             String key = escape(sanitizeVisible(labelKoForFmKey(k)));
             String val = escape(sanitizeVisible(v));
-            rows.append("        <tr><th scope=\"row\">").append(key).append("</th><td>").append(val)
-                    .append("</td></tr>\n");
+
+            rows.append("    <div class=\"c-fm__item\">\n")
+                    .append("      <dt>").append(key).append("</dt>\n")
+                    .append("      <dd>").append(val).append("</dd>\n")
+                    .append("    </div>\n");
         }
+
+        if (rows.length() == 0)
+            return "";
+
         return "<!--FM_BLOCK_START-->\n" +
                 "<details class=\"c-fm\" {{FM_OPEN_ATTR}}>\n" +
                 "  <summary>글 정보</summary>\n" +
-                "  <table class=\"c-fm__table\">\n" +
-                "    <tbody>\n" + rows.toString() +
-                "    </tbody>\n" +
-                "  </table>\n" +
+                "  <dl class=\"c-fm__list\">\n" +
+                rows.toString() +
+                "  </dl>\n" +
                 "</details>\n" +
                 "<hr class=\"c-fm__sep\" />\n" +
                 "<!--FM_BLOCK_END-->\n";

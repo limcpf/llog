@@ -141,6 +141,9 @@
     background: var(--color-code-bg);
     padding: 0 0.25em;
     border-radius: var(--radius-1);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    /* Backwards compatibility */
   }
 
   pre {

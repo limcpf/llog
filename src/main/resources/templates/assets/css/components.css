@@ -132,7 +132,7 @@
 
   .c-article-item {
     display: block;
-    padding-block: var(--space-8);
+    padding-block: var(--space-10);
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -152,21 +152,23 @@
   /* Pill Tag inside Row List */
   .c-article-item__tag {
     display: inline-block;
-    background: var(--color-fg);
-    color: var(--color-surface);
+    background: var(--color-surface);
+    color: var(--color-muted);
     font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.15rem 0.5rem;
+    font-weight: 500;
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--color-border);
     border-radius: 999px;
     vertical-align: middle;
   }
 
   .c-article-item__title {
     font-family: var(--font-serif);
-    font-size: 2rem;
-    /* Large title for rows */
-    font-weight: 700;
-    line-height: 1.2;
+    font-size: 1.85rem;
+    /* Refined size */
+    font-weight: 500;
+    /* Reduced weight for elegance */
+    line-height: 1.3;
     letter-spacing: -0.02em;
     margin: 0;
   }
@@ -367,6 +369,9 @@
   .c-article img {
     border-radius: var(--radius-2);
     box-shadow: var(--shadow-md);
+    height: auto;
+    display: block;
+    margin-inline: auto;
   }
 
   /* Code Blocks */
@@ -380,6 +385,14 @@
     font-size: 0.9rem;
     line-height: 1.5;
     margin-block: var(--space-8);
+  }
+
+  /* Mobile adjustment for code blocks */
+  @media (max-width: 768px) {
+    .c-article pre {
+      padding: var(--space-4);
+      border-radius: var(--radius-1);
+    }
   }
 
 

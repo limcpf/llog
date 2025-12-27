@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap');
+
 :root {
   /* Clean, Warm, Modern Palette */
   --color-bg: #fdfdfc;
@@ -16,7 +18,8 @@
   --color-selection: #d0d0d0;
 
   /* Typography */
-  --font-serif: "Pretendard Variable",
+  --font-serif: "Noto Serif KR",
+    "Pretendard Variable",
     Pretendard,
     -apple-system,
     BlinkMacSystemFont,
@@ -25,12 +28,11 @@
     "Helvetica Neue",
     "Segoe UI",
     "Apple SD Gothic Neo",
-    "Noto Sans KR",
     "Malgun Gothic",
     "Apple Color Emoji",
     "Segoe UI Emoji",
     "Segoe UI Symbol",
-    sans-serif;
+    serif;
   --font-sans: "Pretendard Variable",
     Pretendard,
     -apple-system,

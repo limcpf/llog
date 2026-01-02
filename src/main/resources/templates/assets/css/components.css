@@ -338,7 +338,6 @@
   }
 
   .c-article h2 {
-    font-family: var(--font-serif);
     font-size: 2rem;
     font-weight: 700;
     margin-top: 2.5em;
@@ -349,7 +348,6 @@
   }
 
   .c-article h3 {
-    font-family: var(--font-serif);
     font-size: 1.5rem;
     font-weight: 600;
     margin-top: 2em;
